@@ -77,11 +77,11 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionID := utils.GenerateSessionID()
+	sessionId := utils.GenerateSessionID()
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_id",
-		Value:   sessionID,
+		Value:   sessionId,
 		Expires: time.Now().Add(24 * time.Hour),
 	})
 }

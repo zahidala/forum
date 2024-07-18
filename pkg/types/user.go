@@ -7,3 +7,11 @@ type User struct {
 	Email    string
 	Password string
 }
+
+type Session struct {
+	ID        string
+	UserID    int
+	Data      string
+	CreatedAt string
+	ExpiresAt string
+}
