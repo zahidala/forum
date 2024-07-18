@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"forum/pkg/db"
 	"log"
 	"net/http"
 	"os"
@@ -15,14 +13,6 @@ func main() {
 		log.Println("forum.db does not exist!")
 		return
 	}
-
-	db, dbErr := db.GetDB()
-	if dbErr != nil {
-		log.Println("Error connecting to the database")
-		return
-	}
-
-	fmt.Println(db)
 
 	log.Println("Connected to the database")
 	log.Println("Server started on port 8080")

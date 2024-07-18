@@ -18,12 +18,11 @@ func init() {
 	}
 
 	if err := db.Ping(); err != nil {
-		dbErrors = err
 		log.Printf("Error connecting to the database: %s", err)
 		return
 	}
 }
 
-func GetDB() (*sql.DB, error) {
-	return db, dbErrors
+func GetDB() *sql.DB {
+	return db
 }
