@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"forum/pkg/db"
+	"forum/pkg/utils"
 	"log"
 	"net/http"
-
-	bcrypt "golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,15 +19,12 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 
-	bytePass := []byte(password)
-
-	hash, err := bcrypt.GenerateFromPassword(bytePass, bcrypt.DefaultCost)
-	if err != nil {
-		log.Println(err)
+	hashedPassword, hashErr := utils.HashPassword(password)
+	if hashErr != nil {
+		log.Println(hashErr)
 		http.Error(w, "Error generating password hash", http.StatusInternalServerError)
 		return
 	}
-	hashedPassword := string(hash)
 
 	query := "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
 
@@ -39,8 +36,8 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(username, email, hashedPassword)
-	if err != nil {
+	_, addUserErr := stmt.Exec(username, email, hashedPassword)
+	if addUserErr != nil {
 		log.Println(err)
 		http.Error(w, "Error executing query", http.StatusInternalServerError)
 		return
@@ -53,8 +50,6 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	bytePass := []byte(password)
-
 	query := "SELECT password FROM users WHERE username = ?"
 
 	stmt, err := db.GetDB().Prepare(query)
@@ -66,21 +61,27 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	var hashedPassword string
 
-	err = stmt.QueryRow(username).Scan(&hashedPassword)
+	findUserErr := stmt.QueryRow(username).Scan(&hashedPassword)
 	switch {
-	case err == sql.ErrNoRows:
+	case findUserErr == sql.ErrNoRows:
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
-	case err != nil:
+	case findUserErr != nil:
 		http.Error(w, "Error querying database", http.StatusInternalServerError)
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), bytePass)
-	if err != nil {
+	compareErr := utils.CompareHashAndPassword(hashedPassword, password)
+	if compareErr != nil {
 		http.Error(w, "Invalid password", http.StatusUnauthorized)
 		return
 	}
 
-	// handle successful login
+	sessionID := utils.GenerateSessionID()
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_id",
+		Value:   sessionID,
+		Expires: time.Now().Add(24 * time.Hour),
+	})
 }
