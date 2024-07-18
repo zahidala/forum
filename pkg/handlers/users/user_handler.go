@@ -3,7 +3,6 @@ package users
 import (
 	"database/sql"
 	"fmt"
-	"forum/pkg/db"
 	"forum/pkg/utils"
 	"log"
 	"net/http"
@@ -23,7 +22,7 @@ func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
 	// sessionId := cookie.Value
 }
 
-func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+func CreateUserHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
@@ -37,7 +36,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	query := "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
 
-	stmt, err := db.GetDB().Prepare(query)
+	stmt, err := db.Prepare(query)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Error preparing query", http.StatusInternalServerError)
@@ -55,13 +54,13 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(username, email, hashedPassword)
 }
 
-func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
+func UserLoginHandler(db *sql.DB, w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
 	userQuery := "SELECT password FROM users WHERE username = ?"
 
-	userStmt, userErr := db.GetDB().Prepare(userQuery)
+	userStmt, userErr := db.Prepare(userQuery)
 	if userErr != nil {
 		http.Error(w, "Error preparing query", http.StatusInternalServerError)
 		return
@@ -96,7 +95,7 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionsQuery := "INSERT INTO sessions (id, userId, createdAt, expiresAt) VALUES (?, ?, ?, ?)"
 
-	sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
+	sessionStmt, sessionErr := db.Prepare(sessionsQuery)
 	if sessionErr != nil {
 		http.Error(w, "Error preparing query", http.StatusInternalServerError)
 		return
