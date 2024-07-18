@@ -24,5 +24,9 @@ func init() {
 }
 
 func GetDB() *sql.DB {
+	if db == nil {
+		log.Println("Database connection is not initialized")
+		return nil
+	}
 	return db
 }
