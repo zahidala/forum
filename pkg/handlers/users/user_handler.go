@@ -59,9 +59,9 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	query := "SELECT password FROM users WHERE username = ?"
+	userQuery := "SELECT password FROM users WHERE username = ?"
 
-	userStmt, userErr := db.GetDB().Prepare(query)
+	userStmt, userErr := db.GetDB().Prepare(userQuery)
 	if userErr != nil {
 		http.Error(w, "Error preparing query", http.StatusInternalServerError)
 		return
@@ -94,9 +94,9 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(24 * time.Hour),
 	})
 
-	query = "INSERT INTO sessions (id, userId, createdAt, expiresAt) VALUES (?, ?, ?, ?)"
+	sessionsQuery := "INSERT INTO sessions (id, userId, createdAt, expiresAt) VALUES (?, ?, ?, ?)"
 
-	sessionStmt, sessionErr := db.GetDB().Prepare(query)
+	sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
 	if sessionErr != nil {
 		http.Error(w, "Error preparing query", http.StatusInternalServerError)
 		return
