@@ -59,7 +59,7 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	userQuery := "SELECT password FROM users WHERE username = ?"
+	userQuery := "SELECT id, password FROM users WHERE username = ?"
 
 	userStmt, userErr := db.GetDB().Prepare(userQuery)
 	if userErr != nil {
@@ -68,9 +68,10 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer userStmt.Close()
 
+	var userId int
 	var hashedPassword string
 
-	findUserErr := userStmt.QueryRow(username).Scan(&hashedPassword)
+	findUserErr := userStmt.QueryRow(username).Scan(&userId, &hashedPassword)
 	switch {
 	case findUserErr == sql.ErrNoRows:
 		http.Error(w, "User not found", http.StatusNotFound)
@@ -88,10 +89,13 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionId := utils.GenerateSessionID()
 
+	createdAt := time.Now()
+	expiresAt := createdAt.Add(24 * time.Hour)
+
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_id",
 		Value:   sessionId,
-		Expires: time.Now().Add(24 * time.Hour),
+		Expires: expiresAt,
 	})
 
 	sessionsQuery := "INSERT INTO sessions (id, userId, createdAt, expiresAt) VALUES (?, ?, ?, ?)"
@@ -102,4 +106,10 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer sessionStmt.Close()
+
+	_, addSessionErr := sessionStmt.Exec(sessionId, userId, createdAt, expiresAt)
+	if addSessionErr != nil {
+		http.Error(w, "Error executing query", http.StatusInternalServerError)
+		return
+	}
 }
