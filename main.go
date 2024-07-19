@@ -14,6 +14,9 @@ func main() {
 	db.Init()
 	defer db.CloseDB()
 
+	// Initialize the templates
+	templates.Init()
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
 
