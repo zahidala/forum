@@ -3,6 +3,7 @@ package types
 import (
 	"database/sql"
 	"sync"
+	"time"
 )
 
 type Database struct {
@@ -31,6 +32,6 @@ type Session struct {
 	ID        string
 	UserID    int
 	Data      string
-	CreatedAt string
-	ExpiresAt string
+	CreatedAt time.Time
+	ExpiresAt time.Time
 }
