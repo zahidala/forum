@@ -38,7 +38,7 @@ func AuthRequired(next http.Handler) http.Handler {
 
 		err := sessionStmt.QueryRow(cookie.Value).Scan(&expiresAt)
 		if err != nil {
-			log.Default().Panic(err)
+			log.Println(err)
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
