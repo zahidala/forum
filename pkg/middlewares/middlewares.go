@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"forum/pkg/db"
+	"log"
 	"net/http"
 	"time"
 )
@@ -24,28 +25,30 @@ func AuthRequired(next http.Handler) http.Handler {
 			return
 		}
 
-		sessionsQuery := "SELECT expiresAt FROM sessions WHERE session_id = ?"
+		sessionsQuery := "SELECT expiresAt FROM sessions WHERE id = ?"
 		var expiresAt time.Time
 
 		sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
 		if sessionErr != nil {
+			log.Println(sessionErr)
 			http.Error(w, "Error preparing query", http.StatusInternalServerError)
 			return
 		}
 		defer sessionStmt.Close()
 
 		err := sessionStmt.QueryRow(cookie.Value).Scan(&expiresAt)
-
 		if err != nil {
+			log.Default().Panic(err)
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 
 		if time.Now().After(expiresAt) {
-			deleteSessionQuery := "DELETE FROM sessions WHERE session_id = ?"
+			deleteSessionQuery := "DELETE FROM sessions WHERE id = ?"
 
 			sessionExecErr := db.PrepareAndExecute(deleteSessionQuery, cookie.Value)
 			if sessionExecErr != nil {
+				log.Println(sessionExecErr)
 				http.Error(w, "Error deleting session", http.StatusInternalServerError)
 				return
 			}

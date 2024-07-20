@@ -90,7 +90,7 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	expiresAt := createdAt.Add(24 * time.Hour)
 
 	http.SetCookie(w, &http.Cookie{
-		Name:    "session_id",
+		Name:    "sessionId",
 		Value:   sessionId,
 		Expires: expiresAt,
 	})
