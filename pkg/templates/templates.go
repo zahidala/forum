@@ -1,7 +1,9 @@
 package templates
 
 import (
+	Types "forum/pkg/types"
 	"log"
+	"net/http"
 	"sync"
 	"text/template"
 )
@@ -21,4 +23,14 @@ func GetTemplate() *template.Template {
 		log.Fatal("Templates not initialized. Call Init() first.")
 	}
 	return templates
+}
+
+func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
+	w.WriteHeader(data.Error.Code)
+
+	err := GetTemplate().ExecuteTemplate(w, "error.html", nil)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 }

@@ -9,6 +9,16 @@ type Database struct {
 	Conn *sql.DB
 	Mu   sync.Mutex
 }
+
+type Error struct {
+	Message string
+	Code    int
+}
+type ErrorPageProps struct {
+	Error Error
+	Title string
+}
+
 type User struct {
 	ID       int
 	Name     string
