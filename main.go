@@ -17,14 +17,32 @@ func main() {
 	// Initialize the templates
 	templates.Init()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
-
+	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		err := templates.GetTemplate().ExecuteTemplate(w, "login.html", nil)
 		if err != nil {
 			log.Println(err)
 			return
 		}
 	})
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	})
+
+	// An example of using the AuthRequired middleware to protect the index page
+
+	// http.Handle("/", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 	err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
+
+	// 	if err != nil {
+	// 		log.Println(err)
+	// 		return
+	// 	}
+	// })))
 
 	log.Println("Connected to the database")
 	log.Println("Server started on port 8080")
