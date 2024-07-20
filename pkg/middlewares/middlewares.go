@@ -44,15 +44,8 @@ func AuthRequired(next http.Handler) http.Handler {
 		if time.Now().After(expiresAt) {
 			deleteSessionQuery := "DELETE FROM sessions WHERE session_id = ?"
 
-			deleteSessionStmt, deleteSessionErr := db.GetDB().Prepare(deleteSessionQuery)
-			if deleteSessionErr != nil {
-				http.Error(w, "Error preparing query", http.StatusInternalServerError)
-				return
-			}
-			defer deleteSessionStmt.Close()
-
-			_, deleteSessionExecErr := deleteSessionStmt.Exec(cookie.Value)
-			if deleteSessionExecErr != nil {
+			sessionExecErr := db.PrepareAndExecute(deleteSessionQuery, cookie.Value)
+			if sessionExecErr != nil {
 				http.Error(w, "Error deleting session", http.StatusInternalServerError)
 				return
 			}

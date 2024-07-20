@@ -37,18 +37,13 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	query := "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
 
-	stmt, err := db.GetDB().Prepare(query)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Error preparing query", http.StatusInternalServerError)
-		return
-	}
-	defer stmt.Close()
-
-	_, addUserErr := stmt.Exec(username, email, hashedPassword)
-	if addUserErr != nil {
-		log.Println(err)
-		http.Error(w, "Error executing query", http.StatusInternalServerError)
+	userAddExecErr := db.PrepareAndExecute(query,
+		username,
+		email,
+		hashedPassword,
+	)
+	if userAddExecErr != nil {
+		http.Error(w, "Error creating user", http.StatusInternalServerError)
 		return
 	}
 
@@ -98,18 +93,11 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: expiresAt,
 	})
 
-	sessionsQuery := "INSERT INTO sessions (id, userId, createdAt, expiresAt) VALUES (?, ?, ?, ?)"
+	sessionsAddQuery := "INSERT INTO sessions (id, userId, createdAt, expiresAt) VALUES (?, ?, ?, ?)"
 
-	sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
-	if sessionErr != nil {
-		http.Error(w, "Error preparing query", http.StatusInternalServerError)
-		return
-	}
-	defer sessionStmt.Close()
-
-	_, addSessionErr := sessionStmt.Exec(sessionId, userId, createdAt, expiresAt)
-	if addSessionErr != nil {
-		http.Error(w, "Error executing query", http.StatusInternalServerError)
+	sessionAddExecErr := db.PrepareAndExecute(sessionsAddQuery, sessionId, userId, createdAt, expiresAt)
+	if sessionAddExecErr != nil {
+		http.Error(w, "Error creating session", http.StatusInternalServerError)
 		return
 	}
 }

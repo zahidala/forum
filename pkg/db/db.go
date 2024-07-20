@@ -50,3 +50,21 @@ func CloseDB() {
 		}
 	}
 }
+
+func PrepareAndExecute(query string, args ...interface{}) error {
+	stmt, stmtErr := GetDB().Prepare(query)
+	if stmtErr != nil {
+		log.Printf("Error preparing query: %s", stmtErr)
+		return stmtErr
+	}
+
+	defer stmt.Close()
+
+	_, execErr := stmt.Exec(args...)
+	if execErr != nil {
+		log.Printf("Error executing query: %s", execErr)
+		return execErr
+	}
+
+	return nil
+}
