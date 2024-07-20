@@ -11,6 +11,7 @@ import (
 var templates *template.Template
 var once sync.Once
 
+// Init initializes the templates
 func Init() *template.Template {
 	once.Do(func() {
 		templates = template.Must(template.ParseGlob("templates/*.html"))
@@ -18,6 +19,7 @@ func Init() *template.Template {
 	return templates
 }
 
+// GetTemplate returns the template instance
 func GetTemplate() *template.Template {
 	if templates == nil {
 		log.Fatal("Templates not initialized. Call Init() first.")
@@ -25,6 +27,7 @@ func GetTemplate() *template.Template {
 	return templates
 }
 
+// ErrorTemplate renders the error page
 func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
 	w.WriteHeader(data.Error.Code)
 
