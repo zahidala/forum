@@ -17,7 +17,7 @@ func main() {
 	// Initialize the templates
 	templates.Init()
 
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("GET /login", func(w http.ResponseWriter, r *http.Request) {
 		err := templates.GetTemplate().ExecuteTemplate(w, "login.html", nil)
 		if err != nil {
 			log.Println(err)
@@ -25,7 +25,7 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
 		if err != nil {
 			log.Println(err)
@@ -35,7 +35,7 @@ func main() {
 
 	// An example of using the AuthRequired middleware to protect the index page
 
-	// http.Handle("/", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	// 	err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
 
 	// 	if err != nil {
