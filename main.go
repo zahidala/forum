@@ -30,6 +30,10 @@ func main() {
 		users.UserLoginHandler(w, r)
 	})
 
+	http.HandleFunc("GET /logout", func(w http.ResponseWriter, r *http.Request) {
+		users.UserLogoutHandler(w, r)
+	})
+
 	http.HandleFunc("GET /register", func(w http.ResponseWriter, r *http.Request) {
 		err := templates.GetTemplate().ExecuteTemplate(w, "register.html", nil)
 		if err != nil {

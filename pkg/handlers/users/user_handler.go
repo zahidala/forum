@@ -103,3 +103,27 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func UserLogoutHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, cookieErr := r.Cookie("sessionId")
+	if cookieErr != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	sessionId := cookie.Value
+
+	sessionDeleteQuery := "DELETE FROM sessions WHERE id = ?"
+
+	sessionDeleteExecErr := db.PrepareAndExecute(sessionDeleteQuery, sessionId)
+	if sessionDeleteExecErr != nil {
+		http.Error(w, "Error deleting session", http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "sessionId",
+		Value:   "",
+		Expires: time.Now(),
+	})
+}

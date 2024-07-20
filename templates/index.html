@@ -7,5 +7,12 @@
   </head>
   <body>
     <h1>hello world</h1>
+    <a href="/logout" id="logout">logout</a>
+    <a href="/login" id="login">login</a>
   </body>
+  <script>
+    const cookie = document.cookie.includes("sessionId");
+    document.getElementById("logout").style.display = cookie ? "block" : "none";
+    document.getElementById("login").style.display = cookie ? "none" : "block";
+  </script>
 </html>
