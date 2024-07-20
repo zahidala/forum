@@ -2,6 +2,7 @@ package main
 
 import (
 	"forum/pkg/db"
+	"forum/pkg/handlers/users"
 	"forum/pkg/templates"
 	"log"
 	"net/http"
@@ -23,6 +24,18 @@ func main() {
 			log.Println(err)
 			return
 		}
+	})
+
+	http.HandleFunc("GET /register", func(w http.ResponseWriter, r *http.Request) {
+		err := templates.GetTemplate().ExecuteTemplate(w, "register.html", nil)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	})
+
+	http.HandleFunc("POST /register", func(w http.ResponseWriter, r *http.Request) {
+		users.CreateUserHandler(w, r)
 	})
 
 	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {

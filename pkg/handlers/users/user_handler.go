@@ -25,6 +25,7 @@ func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
+	name := r.FormValue("name")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 
@@ -35,9 +36,10 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := "INSERT INTO users (username, email, password) VALUES (?, ?, ?)"
+	query := "INSERT INTO users (name, username, email, password) VALUES (?, ?, ?, ?)"
 
 	userAddExecErr := db.PrepareAndExecute(query,
+		name,
 		username,
 		email,
 		hashedPassword,
