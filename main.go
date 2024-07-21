@@ -18,6 +18,10 @@ func main() {
 	// Initialize the templates
 	templates.Init()
 
+	http.Handle("GET /static/",
+		http.StripPrefix("/static/",
+			http.FileServer(http.Dir("static"))))
+
 	http.HandleFunc("GET /login", func(w http.ResponseWriter, r *http.Request) {
 		err := templates.GetTemplate().ExecuteTemplate(w, "login.html", nil)
 		if err != nil {

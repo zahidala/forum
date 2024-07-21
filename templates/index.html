@@ -1,18 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>hello world</h1>
-    <a href="/logout" id="logout">logout</a>
-    <a href="/login" id="login">login</a>
-  </body>
-  <script>
-    const cookie = document.cookie.includes("sessionId");
-    document.getElementById("logout").style.display = cookie ? "block" : "none";
-    document.getElementById("login").style.display = cookie ? "none" : "block";
-  </script>
-</html>
+{{template "header" }}
+
+<div style="padding: 20px; padding-top: 0px">
+  <h1>hello world</h1>
+</div>
+
+{{template "footer" }}
