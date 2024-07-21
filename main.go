@@ -22,52 +22,21 @@ func main() {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir("static"))))
 
-	http.HandleFunc("GET /login", func(w http.ResponseWriter, r *http.Request) {
-		err := templates.GetTemplate().ExecuteTemplate(w, "login.html", nil)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	})
+	http.HandleFunc("GET /login", templates.LoginTemplateHandler)
+	http.HandleFunc("POST /login", users.UserLoginHandler)
 
-	http.HandleFunc("POST /login", func(w http.ResponseWriter, r *http.Request) {
-		users.UserLoginHandler(w, r)
-	})
+	http.HandleFunc("GET /logout", users.UserLogoutHandler)
 
-	http.HandleFunc("GET /logout", func(w http.ResponseWriter, r *http.Request) {
-		users.UserLogoutHandler(w, r)
-	})
-
-	http.HandleFunc("GET /register", func(w http.ResponseWriter, r *http.Request) {
-		err := templates.GetTemplate().ExecuteTemplate(w, "register.html", nil)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	})
-
+	http.HandleFunc("GET /register", templates.RegisterTemplateHandler)
 	http.HandleFunc("POST /register", func(w http.ResponseWriter, r *http.Request) {
 		users.CreateUserHandler(w, r)
 	})
 
-	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	})
+	http.HandleFunc("GET /", templates.IndexTemplateHandler)
 
 	// An example of using the AuthRequired middleware to protect the index page
 
-	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	// 	err := templates.GetTemplate().ExecuteTemplate(w, "index.html", nil)
-
-	// 	if err != nil {
-	// 		log.Println(err)
-	// 		return
-	// 	}
-	// })))
+	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(templates.IndexTemplateHandler)))
 
 	log.Println("Connected to the database")
 	log.Println("Server started on port 8080")

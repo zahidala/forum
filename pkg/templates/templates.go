@@ -58,6 +58,34 @@ func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
 	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
 	if err != nil {
 		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	err := GetTemplate().ExecuteTemplate(w, "index.html", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func LoginTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	err := GetTemplate().ExecuteTemplate(w, "login.html", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	err := GetTemplate().ExecuteTemplate(w, "register.html", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
