@@ -2,19 +2,43 @@ package templates
 
 import (
 	Types "forum/pkg/types"
+	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"sync"
-	"text/template"
 )
 
 var templates *template.Template
 var once sync.Once
 
+// parseTemplates walks through the directory structure and parses all .html files
+func parseTemplates(rootDir string) (*template.Template, error) {
+	tmpl := template.New("")
+	err := filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".html" {
+			_, err := tmpl.ParseFiles(path)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	return tmpl, err
+}
+
 // Init initializes the templates
 func Init() *template.Template {
 	once.Do(func() {
-		templates = template.Must(template.ParseGlob("templates/*.html"))
+		var err error
+		templates, err = parseTemplates("templates")
+		if err != nil {
+			log.Fatal("Failed to parse templates:", err)
+		}
 	})
 	return templates
 }
@@ -31,7 +55,7 @@ func GetTemplate() *template.Template {
 func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
 	w.WriteHeader(data.Error.Code)
 
-	err := GetTemplate().ExecuteTemplate(w, "error.html", nil)
+	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
 	if err != nil {
 		log.Println(err)
 		return
