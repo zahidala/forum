@@ -1,12 +1,51 @@
 {{template "header"}}
 
-<h1 style="margin: 0">register</h1>
-<form action="/register" method="POST">
-  <input type="text" name="name" placeholder="Name" required />
-  <input type="text" name="username" placeholder="Username" required />
-  <input type="email" name="email" placeholder="Email" required />
-  <input type="password" name="password" placeholder="Password" required />
-  <input type="submit" value="Register" />
-</form>
+<div class="card-container" style="top: 55%">
+  <div class="card">
+    <h1 style="margin: 0; color: white">Register</h1>
+    <form action="/register" method="POST">
+      <div class="outer-container-input">
+        <div class="container-input">
+          <label for="name" style="color: white">Name</label>
+          <input type="text" name="name" placeholder="Name" class="input" />
+        </div>
+
+        <div class="container-input">
+          <label for="username" style="color: white">Username</label>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            class="input"
+          />
+        </div>
+
+        <div class="container-input">
+          <label for="email" style="color: white">Email</label>
+          <input type="email" name="email" placeholder="Email" class="input" />
+        </div>
+
+        <div class="container-input">
+          <label for="password" style="color: white">Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <input
+            type="submit"
+            value="Register"
+            class="btn-primary"
+            style="font-size: medium; padding: 10px 15px"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 {{template "footer" }}

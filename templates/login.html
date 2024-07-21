@@ -1,10 +1,43 @@
 {{template "header" }}
 
-<h1 style="margin: 0">login</h1>
-<form action="/login" method="post">
-  <input type="text" name="username" placeholder="Username" />
-  <input type="password" name="password" placeholder="Password" />
-  <button type="submit">login</button>
-</form>
+<div class="card-container">
+  <div class="card">
+    <h1 style="margin: 0; color: white">Log In</h1>
+
+    <form action="/login" method="post">
+      <div class="outer-container-input">
+        <div class="container-input">
+          <label for="username" style="color: white">Username</label>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            class="input"
+          />
+        </div>
+
+        <div class="container-input">
+          <label for="username" style="color: white">Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="btn-primary"
+            style="font-size: medium; padding: 10px 15px"
+          >
+            Log In
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 {{template "footer" }}
