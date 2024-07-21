@@ -30,11 +30,15 @@ func main() {
 	http.HandleFunc("GET /register", templates.RegisterTemplateHandler)
 	http.HandleFunc("POST /register", users.CreateUserHandler)
 
-	http.HandleFunc("GET /", templates.IndexTemplateHandler)
+	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		templates.ExecuteTemplateByName(w, "index", nil)
+	})
 
 	// An example of using the AuthRequired middleware to protect the index page
 
-	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(templates.IndexTemplateHandler)))
+	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 	templates.ExecuteTemplateByName(w, "index", nil)
+	// })))
 
 	log.Println("Connected to the database")
 	log.Println("Server started on port 8080")
