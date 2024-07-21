@@ -28,9 +28,7 @@ func main() {
 	http.HandleFunc("GET /logout", users.UserLogoutHandler)
 
 	http.HandleFunc("GET /register", templates.RegisterTemplateHandler)
-	http.HandleFunc("POST /register", func(w http.ResponseWriter, r *http.Request) {
-		users.CreateUserHandler(w, r)
-	})
+	http.HandleFunc("POST /register", users.CreateUserHandler)
 
 	http.HandleFunc("GET /", templates.IndexTemplateHandler)
 
