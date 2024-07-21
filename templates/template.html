@@ -21,9 +21,13 @@
       <div class="nav-links">
         <a href="/logout" id="logout">Log Out</a>
         <a href="/login" id="login">Log In</a>
-        <a href="/register" class="btn-outline" style="color: white"
-          >Register</a
+        <a
+          href="/register"
+          class="btn-outline"
+          style="color: white; font-weight: bold"
         >
+          Register
+        </a>
       </div>
     </nav>
 
@@ -38,10 +42,6 @@
     const cookie = document.cookie.includes("sessionId");
     document.getElementById("logout").style.display = cookie ? "block" : "none";
     document.getElementById("login").style.display = cookie ? "none" : "block";
-
-    document.getElementById("login").addEventListener("click", () => {
-      document.getElementById("dialog").showModal();
-    });
   </script>
 </html>
 {{end}}
