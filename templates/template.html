@@ -8,14 +8,20 @@
     <title>Document</title>
   </head>
   <body>
-    <nav style="display: flex; justify-content: space-between; padding: 20px">
-      <span style="font-weight: bold">Forum</span>
+    <nav class="navbar">
+      <div style="display: flex; gap: 3rem">
+        <span style="font-weight: bold; color: white">Car Forum</span>
 
-      <div style="display: flex; gap: 0.5rem">
-        <a href="/">home</a>
-        <a href="/register">register</a>
-        <a href="/logout" id="logout">logout</a>
-        <a href="/login" id="login">login</a>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/">Categories</a>
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="/logout" id="logout">Log Out</a>
+        <a href="/login" id="login">Log In</a>
+        <a href="/register" class="btn-outline">Register</a>
       </div>
     </nav>
 
@@ -30,6 +36,10 @@
     const cookie = document.cookie.includes("sessionId");
     document.getElementById("logout").style.display = cookie ? "block" : "none";
     document.getElementById("login").style.display = cookie ? "none" : "block";
+
+    document.getElementById("login").addEventListener("click", () => {
+      document.getElementById("dialog").showModal();
+    });
   </script>
 </html>
 {{end}}
