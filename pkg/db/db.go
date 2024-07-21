@@ -51,6 +51,8 @@ func CloseDB() {
 	}
 }
 
+// PrepareAndExecute prepares and executes a query. It returns an error if the query fails.
+// May be expanded to return the result of the query in the future.
 func PrepareAndExecute(query string, args ...interface{}) error {
 	stmt, stmtErr := GetDB().Prepare(query)
 	if stmtErr != nil {
