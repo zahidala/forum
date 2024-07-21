@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"fmt"
 	Types "forum/pkg/types"
 	"html/template"
 	"log"
@@ -82,7 +83,7 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ExecuteTemplateByName(w http.ResponseWriter, name string, data interface{}) {
-	err := GetTemplate().ExecuteTemplate(w, name, data)
+	err := GetTemplate().ExecuteTemplate(w, fmt.Sprintf("%s.html", name), data)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
