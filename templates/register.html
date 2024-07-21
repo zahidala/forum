@@ -1,14 +1,12 @@
 {{template "header"}}
 
-<div style="padding: 20px">
-  <span>register</span>
-  <form action="/register" method="POST">
-    <input type="text" name="name" placeholder="Name" required />
-    <input type="text" name="username" placeholder="Username" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="password" name="password" placeholder="Password" required />
-    <input type="submit" value="Register" />
-  </form>
-</div>
+<h1 style="margin: 0">register</h1>
+<form action="/register" method="POST">
+  <input type="text" name="name" placeholder="Name" required />
+  <input type="text" name="username" placeholder="Username" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <input type="password" name="password" placeholder="Password" required />
+  <input type="submit" value="Register" />
+</form>
 
 {{template "footer" }}
