@@ -5,14 +5,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/static/stylesheets/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <title>Document</title>
   </head>
   <body>
     <nav class="navbar">
-      <div style="display: flex; gap: 3rem">
-        <span style="font-weight: bold; color: white">Car Forum</span>
+      <div style="display: flex; align-items: center; gap: 3rem">
+        <div style="display: flex; align-items: center; gap: 1rem">
+          <!-- <i
+            class="fa-solid fa-bars"
+            style="color: white; font-size: 1.5rem"
+          ></i> -->
 
-        <div class="nav-links">
+          <!-- For forum sidebar -->
+
+          <span style="font-weight: bold; color: white">Car Forum</span>
+        </div>
+
+        <div class="nav-links" style="gap: 1.5rem">
           <a href="/">Home</a>
           <a href="/">Categories</a>
         </div>
@@ -23,6 +39,7 @@
         <a href="/login" id="login">Log In</a>
         <a
           href="/register"
+          id="register"
           class="btn-outline"
           style="color: white; font-weight: bold"
         >
@@ -42,6 +59,9 @@
     const cookie = document.cookie.includes("sessionId");
     document.getElementById("logout").style.display = cookie ? "block" : "none";
     document.getElementById("login").style.display = cookie ? "none" : "block";
+    document.getElementById("register").style.display = cookie
+      ? "none"
+      : "block";
   </script>
 </html>
 {{end}}
