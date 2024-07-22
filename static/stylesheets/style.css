@@ -57,7 +57,7 @@ html, body {
 
 .input {
   background: transparent;
-  border: 1px solid #ccc;
+  border: 1px solid #424242;
   border-radius: 5px;
   padding: 10px;
   padding-inline: 10px;
@@ -65,7 +65,7 @@ html, body {
 }
 
 .input:hover {
-  border-color: #E0E0E0;
+  border-color: #e0e0e0e9;
 }
 
 .input:focus-visible {
@@ -84,8 +84,8 @@ html, body {
 .card {
   width: 300px;
   padding: 30px;
-  border: 1px solid #ccc;
-  background-color: #2e3035;
+  border: 1px solid #424242;
+  background-color: #1f2125;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
