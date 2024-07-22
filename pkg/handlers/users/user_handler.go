@@ -2,7 +2,6 @@ package users
 
 import (
 	"database/sql"
-	"fmt"
 	"forum/pkg/db"
 	"forum/pkg/utils"
 	"log"
@@ -49,7 +48,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(username, email, hashedPassword)
+	http.Redirect(w, r, "/login", http.StatusOK)
 }
 
 func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -102,6 +101,8 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error creating session", http.StatusInternalServerError)
 		return
 	}
+
+	http.Redirect(w, r, "/", http.StatusOK)
 }
 
 func UserLogoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -126,4 +127,6 @@ func UserLogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Value:   "",
 		Expires: time.Now(),
 	})
+
+	http.Redirect(w, r, "/", http.StatusOK)
 }
