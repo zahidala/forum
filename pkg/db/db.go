@@ -26,6 +26,8 @@ func Init() {
 			return
 		}
 
+		log.Println("Connected to the database")
+
 		instance = &Types.Database{
 			Conn: conn,
 		}

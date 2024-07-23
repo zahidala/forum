@@ -40,7 +40,6 @@ func main() {
 	// 	templates.ExecuteTemplateByName(w, "index", nil)
 	// })))
 
-	log.Println("Connected to the database")
 	log.Println("Server started on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
