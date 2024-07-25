@@ -118,6 +118,12 @@ html, body {
   gap: 2rem
 }
 
+.column-2 {
+  display: flex; 
+  flex-direction: column; 
+  gap: 2rem
+}
+
 .container-categories-label {
   height: 50px;
   padding: 10px;
@@ -153,6 +159,7 @@ html, body {
 }
 
 .subcategory-content {
+  font-size: 0.8rem;
   color: #A1A3AE;
 }
 
@@ -189,7 +196,6 @@ html, body {
 
 .card-subcategory-icon {
   flex: 1;
-  border: 1px solid #413e3e;
   border-radius: 5px;
   padding: 20px;
   background-color: black;
@@ -199,6 +205,43 @@ html, body {
   flex-direction: column; 
   display: flex; 
   gap: 0.5rem;
+}
+
+.container-new-posts {
+  display: flex; 
+  align-items: center; 
+  height: 50px; 
+  gap: 1rem;
+}
+
+.new-post {
+  display: flex; 
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.new-post-content {
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.5rem;
+}
+
+.post-title {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.post-created {
+  color: #A1A3AE;
+  font-size: 0.7rem;
+}
+
+.post-topic {
+  color: #A1A3AE;
+  font-size: 0.7rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 @media (max-width: 768px) {

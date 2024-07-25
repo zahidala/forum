@@ -35,3 +35,27 @@ type Session struct {
 	CreatedAt time.Time
 	ExpiresAt time.Time
 }
+
+type Category struct {
+	ID          int
+	Name        string
+	Description string
+	Icon        string
+}
+
+type Subcategory struct {
+	ID          int
+	Name        string
+	Description string
+	Icon        string
+	CategoryID  int
+}
+
+type Post struct {
+	ID            int
+	Title         string
+	Content       string
+	AuthorID      int
+	SubcategoryID int
+	CreatedAt     time.Time
+}
