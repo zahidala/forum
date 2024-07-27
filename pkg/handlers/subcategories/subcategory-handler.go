@@ -1,1 +1,1 @@
-package subcategory
+package subcategories
