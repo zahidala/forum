@@ -1,7 +1,6 @@
 package templates
 
 import (
-	"fmt"
 	"forum/pkg/handlers/categories"
 	Types "forum/pkg/types"
 	"html/template"
@@ -80,16 +79,6 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	err := GetTemplate().ExecuteTemplate(w, "register.html", nil)
 	if err != nil {
 		log.Println("Failed to execute template: register.html")
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-func ExecuteTemplateByName(w http.ResponseWriter, name string, data interface{}) {
-	err := GetTemplate().ExecuteTemplate(w, fmt.Sprintf("%s.html", name), data)
-	if err != nil {
-		log.Printf("Failed to execute template: %s.html", name)
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
