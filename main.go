@@ -2,6 +2,7 @@ package main
 
 import (
 	"forum/pkg/db"
+	"forum/pkg/handlers/categories"
 	"forum/pkg/handlers/users"
 	"forum/pkg/templates"
 	"log"
@@ -31,7 +32,12 @@ func main() {
 	http.HandleFunc("POST /register", users.CreateUserHandler)
 
 	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		templates.ExecuteTemplateByName(w, "index", nil)
+		categories := categories.GetCategoriesWithSubcategoriesHandler(w, r)
+		data := map[string]interface{}{
+			"Categories": categories,
+		}
+
+		templates.ExecuteTemplateByName(w, "index", data)
 	})
 
 	// An example of using the AuthRequired middleware to protect the index page

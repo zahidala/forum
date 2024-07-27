@@ -6,67 +6,26 @@
       <span class="categories-label">Categories</span>
     </div>
 
+    {{range .Categories}}
     <div class="container-category">
-      <span class="category-label">General Discussion</span>
+      <span class="category-label">{{.Name}}</span>
 
       <div class="container-subcategory">
-        <div class="card-subcategory">
+        {{range .Subcategories}}
+        <a href="/subcategory/{{.ID}}" class="card-subcategory">
           <div class="card-subcategory-icon">
             <i class="fas fa-comments fa-xl" style="color: #a1a3ae"></i>
           </div>
 
           <div class="card-subcategory-content">
-            <span class="subcategory-label">Off-Topic</span>
-            <span class="subcategory-content"
-              >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Explicabo, in animi!</span
-            >
+            <span class="subcategory-label">{{.Name}}</span>
+            <span class="subcategory-content">{{.Description}}</span>
           </div>
-        </div>
-
-        <div class="card-subcategory">
-          <div class="card-subcategory-icon">
-            <i class="fas fa-comments fa-xl" style="color: #a1a3ae"></i>
-          </div>
-
-          <div class="card-subcategory-content">
-            <span class="subcategory-label">Off-Topic</span>
-            <span class="subcategory-content"
-              >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Explicabo, in animi!</span
-            >
-          </div>
-        </div>
-
-        <div class="card-subcategory">
-          <div class="card-subcategory-icon">
-            <i class="fas fa-comments fa-xl" style="color: #a1a3ae"></i>
-          </div>
-
-          <div class="card-subcategory-content">
-            <span class="subcategory-label">Off-Topic</span>
-            <span class="subcategory-content"
-              >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Explicabo, in animi!</span
-            >
-          </div>
-        </div>
-
-        <div class="card-subcategory">
-          <div class="card-subcategory-icon">
-            <i class="fas fa-comments fa-xl" style="color: #a1a3ae"></i>
-          </div>
-
-          <div class="card-subcategory-content">
-            <span class="subcategory-label">Off-Topic</span>
-            <span class="subcategory-content"
-              >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Explicabo, in animi!</span
-            >
-          </div>
-        </div>
+        </a>
+        {{end}}
       </div>
     </div>
+    {{end}}
   </div>
 
   <div class="column-2">

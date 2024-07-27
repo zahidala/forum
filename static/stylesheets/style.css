@@ -187,7 +187,7 @@ html, body {
   border-radius: 5px;
   background-color: #1f2125;
   padding: 1rem;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 .card-subcategory:hover {
@@ -195,7 +195,6 @@ html, body {
 }
 
 .card-subcategory-icon {
-  flex: 1;
   border-radius: 5px;
   padding: 20px;
   background-color: black;
@@ -205,6 +204,7 @@ html, body {
   flex-direction: column; 
   display: flex; 
   gap: 0.5rem;
+  flex: 1;
 }
 
 .container-new-posts {

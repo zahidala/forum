@@ -58,6 +58,7 @@ func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
 
 	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
 	if err != nil {
+		log.Println("Failed to execute template: error.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -67,6 +68,7 @@ func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
 func LoginTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	err := GetTemplate().ExecuteTemplate(w, "login.html", nil)
 	if err != nil {
+		log.Println("Failed to execute template: login.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -76,6 +78,7 @@ func LoginTemplateHandler(w http.ResponseWriter, r *http.Request) {
 func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	err := GetTemplate().ExecuteTemplate(w, "register.html", nil)
 	if err != nil {
+		log.Println("Failed to execute template: register.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -85,6 +88,7 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request) {
 func ExecuteTemplateByName(w http.ResponseWriter, name string, data interface{}) {
 	err := GetTemplate().ExecuteTemplate(w, fmt.Sprintf("%s.html", name), data)
 	if err != nil {
+		log.Printf("Failed to execute template: %s.html", name)
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

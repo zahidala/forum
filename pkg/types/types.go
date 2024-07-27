@@ -37,18 +37,18 @@ type Session struct {
 }
 
 type Category struct {
-	ID          int
-	Name        string
-	Description string
-	Icon        string
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Icon        string `json:"icon"`
 }
 
 type Subcategory struct {
-	ID          int
-	Name        string
-	Description string
-	Icon        string
-	CategoryID  int
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Icon        string `json:"icon"`
+	CategoryID  int    `json:"categoryId"`
 }
 
 type Post struct {
