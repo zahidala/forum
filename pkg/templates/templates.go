@@ -2,6 +2,7 @@ package templates
 
 import (
 	"fmt"
+	"forum/pkg/handlers/categories"
 	Types "forum/pkg/types"
 	"html/template"
 	"log"
@@ -89,6 +90,21 @@ func ExecuteTemplateByName(w http.ResponseWriter, name string, data interface{})
 	err := GetTemplate().ExecuteTemplate(w, fmt.Sprintf("%s.html", name), data)
 	if err != nil {
 		log.Printf("Failed to execute template: %s.html", name)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	categories := categories.GetCategoriesWithSubcategoriesHandler(w, r)
+	data := map[string]interface{}{
+		"Categories": categories,
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "index.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: index.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
