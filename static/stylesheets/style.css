@@ -134,7 +134,16 @@ html, body {
   align-items: center;
 }
 
-.categories-label {
+.container-subcategory-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  height: 100%;
+  background-color: #1b1d21;
+}
+
+.categories-label, .sub-category-label {
   color: white;
   font-size: 1.5rem;
   font-weight: 700;
@@ -242,6 +251,40 @@ html, body {
   font-size: 0.7rem;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.breadcrumb-container {
+  display: flex; 
+  gap: 1rem;
+  align-items: center;
+  background-color: #2e3037;
+  border: 1px solid #474c54;
+  padding: 5px;
+  padding-inline: 10px;
+  height: 20px;
+}
+
+.home-link {
+  text-decoration: none;
+}
+
+.home-icon {
+  color: #a2a3ae;
+}
+
+.home-icon:hover {
+  color: #90919b;
+}
+
+.forums-link{
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: #a2a3ae;
+}
+
+.forums-link:hover {
+  color: #90919b;
 }
 
 @media (max-width: 768px) {

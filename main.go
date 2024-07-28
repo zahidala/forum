@@ -32,6 +32,16 @@ func main() {
 
 	http.HandleFunc("GET /", templates.IndexTemplateHandler)
 
+	http.HandleFunc("GET /subcategory", func(w http.ResponseWriter, r *http.Request) {
+		err := templates.GetTemplate().ExecuteTemplate(w, "subcategory.html", nil)
+		if err != nil {
+			log.Println("Failed to execute template: subcategory.html")
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	})
+
 	// An example of using the AuthRequired middleware to protect the index page
 
 	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
