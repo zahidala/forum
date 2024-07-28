@@ -52,10 +52,19 @@ type Subcategory struct {
 }
 
 type Post struct {
-	ID            int
-	Title         string
-	Content       string
-	AuthorID      int
-	SubcategoryID int
-	CreatedAt     time.Time
+	ID            int       `json:"id"`
+	Title         string    `json:"title"`
+	Content       string    `json:"content"`
+	AuthorID      int       `json:"authorId"`
+	SubcategoryID int       `json:"subcategoryId"`
+	CreatedAt     time.Time `json:"createdAt"`
+}
+
+type Comment struct {
+	ID        int       `json:"id"`
+	PostID    int       `json:"postId"`
+	Content   string    `json:"content"`
+	AuthorID  int       `json:"authorId"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
