@@ -1,7 +1,7 @@
 {{template "header" }}
 
 <div style="display: flex; flex-direction: column; gap: 1.5rem">
-  <div class="container-subcategory-label">
+  <div class="container-subcategory-label" style="border-radius: 5px">
     <span class="sub-category-label">General</span>
     <span class="subcategory-content"
       >General discussion about electric cars</span
@@ -25,6 +25,61 @@
 
     <span class="subcategory-label">General</span>
   </div>
-</div>
 
-{{template "footer" }}
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      background-color: #2e3037;
+    "
+  >
+    <div
+      style="
+        padding: 20px;
+        background-color: #2e3037;
+        border-bottom: 1px solid #474c54;
+      "
+    ></div>
+
+    <div
+      style="padding: 10px; display: flex; gap: 1rem; flex-direction: column"
+    >
+      <div
+        style="
+          padding: 10px 20px;
+          background-color: #1b1d21;
+          border-bottom: 1px solid #474c54;
+        "
+      >
+        <span style="color: #a2a3ae; font-size: 0.85rem; font-weight: bold"
+          >ALL POSTS</span
+        >
+      </div>
+
+      <div class="new-post" style="padding-inline: 10px">
+        <img
+          src="https://via.placeholder.com/150"
+          alt=""
+          style="border-radius: 5px"
+          width="50"
+          height="50"
+        />
+
+        <div class="new-post-content">
+          <span style="color: white; font-size: 0.8rem">
+            [Discussion] What's your next smartphone / What should I buy
+          </span>
+
+          <span style="color: #a2a3ae; font-size: 0.8rem">poseidon5213</span>
+
+          <span style="color: #a2a3ae; font-size: 0.8rem">Apr 26 2012</span>
+        </div>
+      </div>
+
+      <div style="flex: 1; border: 0.5px solid #474c54"></div>
+    </div>
+  </div>
+
+  {{template "footer" }}
+</div>
