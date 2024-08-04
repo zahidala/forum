@@ -22,6 +22,8 @@ func GetPostsFromSubCategoryHandler(w http.ResponseWriter, r *http.Request) []Po
 		'id', p.id,
 		'title', p.title,
 		'content', p.content,
+		'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
+    'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
 		'author', json_object(
 						'id', u.id,
 						'name', u.name,
