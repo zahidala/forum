@@ -2,6 +2,7 @@ package templates
 
 import (
 	"forum/pkg/handlers/categories"
+	"forum/pkg/handlers/posts"
 	Types "forum/pkg/types"
 	"html/template"
 	"log"
@@ -94,6 +95,24 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	err := GetTemplate().ExecuteTemplate(w, "index.html", data)
 	if err != nil {
 		log.Println("Failed to execute template: index.html")
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func SubcategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	posts := posts.GetPostsFromSubCategoryHandler(w, r)
+
+	data := map[string]interface{}{
+		"Posts":       posts,
+		"Subcategory": posts[0].Subcategory,
+		"Category":    posts[0].Subcategory.Category,
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "subcategory.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: subcategory.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -21,11 +21,12 @@ type ErrorPageProps struct {
 }
 
 type User struct {
-	ID       int
-	Name     string
-	Username string
-	Email    string
-	Password string
+	ID             int    `json:"id"`
+	Name           string `json:"name"`
+	Username       string `json:"username"`
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	ProfilePicture string `json:"profilePicture"`
 }
 
 type Session struct {
@@ -44,11 +45,12 @@ type Category struct {
 }
 
 type Subcategory struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Icon        string `json:"icon"`
-	CategoryID  int    `json:"categoryId"`
+	ID          int      `json:"id"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Icon        string   `json:"icon"`
+	Category    Category `json:"category"`
+	CategoryID  int      `json:"categoryId"`
 }
 
 type Post struct {
@@ -58,6 +60,7 @@ type Post struct {
 	AuthorID      int       `json:"authorId"`
 	SubcategoryID int       `json:"subcategoryId"`
 	CreatedAt     time.Time `json:"createdAt"`
+	UpdatedAt     time.Time `json:"updatedAt"`
 }
 
 type Comment struct {

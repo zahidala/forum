@@ -2,10 +2,8 @@
 
 <div style="display: flex; flex-direction: column; gap: 1.5rem">
   <div class="container-subcategory-label" style="border-radius: 5px">
-    <span class="sub-category-label">General</span>
-    <span class="subcategory-content"
-      >General discussion about electric cars</span
-    >
+    <span class="sub-category-label">{{.Subcategory.Name}}</span>
+    <span class="subcategory-content">{{.Subcategory.Description}}</span>
   </div>
 
   <div class="breadcrumb-container">
@@ -19,11 +17,15 @@
 
     <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
 
-    <span class="subcategory-label">General Discussion</span>
+    <a href="/category/{{.Category.ID}}" style="text-decoration: none">
+      <span class="subcategory-label">{{.Category.Name}}</span>
+    </a>
 
     <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
 
-    <span class="subcategory-label">General</span>
+    <a href="/subcategory/{{.Subcategory.ID}}" style="text-decoration: none">
+      <span class="subcategory-label">{{.Subcategory.Name}}</span>
+    </a>
   </div>
 
   <div
@@ -57,27 +59,35 @@
         >
       </div>
 
-      <div class="new-post" style="padding-inline: 10px">
-        <img
-          src="https://via.placeholder.com/150"
-          alt=""
-          style="border-radius: 5px"
-          width="50"
-          height="50"
-        />
+      {{range .Posts}}
 
-        <div class="new-post-content">
-          <span style="color: white; font-size: 0.8rem">
-            [Discussion] What's your next smartphone / What should I buy
-          </span>
+      <a href="/posts/{{.ID}}" class="post-link">
+        <div class="new-post" style="padding-inline: 10px">
+          <img
+            src="{{.Author.ProfilePicture}}"
+            alt=""
+            style="border-radius: 5px"
+            width="50"
+            height="50"
+          />
 
-          <span style="color: #a2a3ae; font-size: 0.8rem">poseidon5213</span>
+          <div class="new-post-content">
+            <span style="color: white; font-size: 0.8rem">{{.Title}}</span>
 
-          <span style="color: #a2a3ae; font-size: 0.8rem">Apr 26 2012</span>
+            <span style="color: #a2a3ae; font-size: 0.8rem">
+              {{.Author.Name}}
+            </span>
+
+            <span style="color: #a2a3ae; font-size: 0.8rem">
+              {{.CreatedAt}}
+            </span>
+          </div>
         </div>
-      </div>
+      </a>
 
       <div style="flex: 1; border: 0.5px solid #474c54"></div>
+
+      {{end}}
     </div>
   </div>
 

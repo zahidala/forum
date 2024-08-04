@@ -287,6 +287,10 @@ html, body {
   color: #90919b;
 }
 
+.post-link {
+  text-decoration: none;
+}
+
 @media (max-width: 768px) {
   .home-page-layout {
     display: flex; 
