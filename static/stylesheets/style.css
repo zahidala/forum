@@ -302,6 +302,7 @@ html, body {
 .post-container {
   display: flex;
   width: 100%;
+  min-height: 200px;
 }
 
 .post-author-container {
@@ -326,6 +327,32 @@ html, body {
   flex: 1;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+
+.post-text-container {
+  display: flex; 
+  flex-direction: column; 
+  flex: 1
+}
+
+.post-action-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.btn-post-action {
+  background-color: #1B1D21;
+  text-decoration: none;
+  border: none;
+  color: #A1A3AE;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.btn-post-action:hover {
+  background-color: #23252a;
+  color: white;
 }
 
 @media (max-width: 768px) {

@@ -72,7 +72,27 @@
         <div style="flex: 1; border: 0.5px solid #474c54"></div>
       </div>
 
-      <span style="color: white; font-size: 0.8rem">{{.Post.Content}}</span>
+      <div class="post-text-container">
+        <span style="color: white; font-size: 0.8rem">{{.Post.Content}}</span>
+      </div>
+
+      <!-- Hide when not signed in -->
+      <div class="post-action-container">
+        <button type="submit" class="btn-post-action" style="cursor: pointer">
+          <i class="fa-regular fa-thumbs-up" style="margin-right: 5px"></i>
+          Like
+        </button>
+
+        <button type="submit" class="btn-post-action" style="cursor: pointer">
+          <i class="fa-regular fa-thumbs-down" style="margin-right: 5px"></i>
+          Dislike
+        </button>
+
+        <button type="submit" class="btn-post-action" style="cursor: pointer">
+          <i class="fa-solid fa-reply" style="margin-right: 5px"></i>
+          Reply
+        </button>
+      </div>
     </div>
   </div>
 
@@ -102,7 +122,27 @@
         <div style="flex: 1; border: 0.5px solid #474c54"></div>
       </div>
 
-      <span style="color: white; font-size: 0.8rem">{{.Content}}</span>
+      <div class="post-text-container">
+        <span style="color: white; font-size: 0.8rem">{{.Content}}</span>
+      </div>
+
+      <!-- Hide when not signed in -->
+      <div class="post-action-container">
+        <button type="submit" class="btn-post-action" style="cursor: pointer">
+          <i class="fa-regular fa-thumbs-up" style="margin-right: 5px"></i>
+          Like
+        </button>
+
+        <button type="submit" class="btn-post-action" style="cursor: pointer">
+          <i class="fa-regular fa-thumbs-down" style="margin-right: 5px"></i>
+          Dislike
+        </button>
+
+        <button type="submit" class="btn-post-action" style="cursor: pointer">
+          <i class="fa-solid fa-reply" style="margin-right: 5px"></i>
+          Reply
+        </button>
+      </div>
     </div>
   </div>
 

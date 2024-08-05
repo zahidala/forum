@@ -90,3 +90,21 @@ type CommentLike struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
+
+type PostDisLike struct {
+	ID        int       `json:"id"`
+	PostID    int       `json:"postId"`
+	UserID    int       `json:"userId"`
+	IsDislike bool      `json:"isDislike"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+type CommentDisLike struct {
+	ID        int       `json:"id"`
+	CommentID int       `json:"commentId"`
+	UserID    int       `json:"userId"`
+	IsDislike bool      `json:"isDislike"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
