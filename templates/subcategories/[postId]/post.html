@@ -1,0 +1,112 @@
+{{template "header" }}
+
+<div style="display: flex; flex-direction: column; gap: 1.5rem; padding: 10px">
+  <div class="container-subcategory-label post-header-container">
+    <div style="display: flex; flex-direction: column; gap: 1rem">
+      <span class="sub-category-label">{{.Post.Title}}</span>
+
+      <div style="display: flex; gap: 1rem">
+        <span class="subcategory-content">
+          <i class="fa-regular fa-user" style="margin-right: 5px"></i>
+          {{.Post.Author.Username}}
+        </span>
+
+        <span class="subcategory-content">
+          <i class="fa-regular fa-clock" style="margin-right: 5px"></i>
+          <span class="date">{{.Post.CreatedAt}}</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Hide when not signed in -->
+    <button
+      type="submit"
+      class="btn-primary"
+      style="font-size: medium; padding: 10px 15px; cursor: pointer"
+    >
+      Reply
+    </button>
+  </div>
+
+  <div class="breadcrumb-container">
+    <a href="/" class="home-link">
+      <i class="fa-solid fa-house fa-xs home-icon"></i>
+    </a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <a href="/" class="forums-link">Forums</a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <a href="/category/{{.Category.ID}}" style="text-decoration: none">
+      <span class="subcategory-label">{{.Category.Name}}</span>
+    </a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <span class="subcategory-label">{{.Subcategory.Name}}</span>
+  </div>
+
+  <div class="post-container">
+    <div class="post-author-container">
+      <img
+        src="{{.Post.Author.ProfilePicture}}"
+        alt=""
+        style="border-radius: 5px"
+        width="50"
+        height="50"
+      />
+
+      <span style="color: #2daae9; font-weight: 700; font-size: 0.8rem"
+        >{{.Post.Author.Username}}</span
+      >
+    </div>
+
+    <div class="post-content-container">
+      <div style="display: flex; flex-direction: column; gap: 1rem">
+        <span class="date" style="color: #a1a3ae; font-size: 0.8rem"
+          >{{.Post.CreatedAt}}</span
+        >
+
+        <div style="flex: 1; border: 0.5px solid #474c54"></div>
+      </div>
+
+      <span style="color: white; font-size: 0.8rem">{{.Post.Content}}</span>
+    </div>
+  </div>
+
+  {{range .Comments}}
+
+  <div class="post-container">
+    <div class="post-author-container">
+      <img
+        src="{{.Author.ProfilePicture}}"
+        alt=""
+        style="border-radius: 5px"
+        width="50"
+        height="50"
+      />
+
+      <span style="color: #2daae9; font-weight: 700; font-size: 0.8rem"
+        >{{.Author.Username}}</span
+      >
+    </div>
+
+    <div class="post-content-container">
+      <div style="display: flex; flex-direction: column; gap: 1rem">
+        <span class="date" style="color: #a1a3ae; font-size: 0.8rem"
+          >{{.CreatedAt}}</span
+        >
+
+        <div style="flex: 1; border: 0.5px solid #474c54"></div>
+      </div>
+
+      <span style="color: white; font-size: 0.8rem">{{.Content}}</span>
+    </div>
+  </div>
+
+  {{end}}
+</div>
+
+{{template "footer" }}

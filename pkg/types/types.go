@@ -70,6 +70,7 @@ type Comment struct {
 	AuthorID  int       `json:"authorId"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
+	Author    User      `json:"author"`
 }
 
 type PostLike struct {

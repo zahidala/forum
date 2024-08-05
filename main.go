@@ -34,6 +34,8 @@ func main() {
 
 	http.HandleFunc("GET /subcategory/{id}", templates.SubcategoryTemplateHandler)
 
+	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
+
 	// An example of using the AuthRequired middleware to protect the index page
 
 	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

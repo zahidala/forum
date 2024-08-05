@@ -118,3 +118,23 @@ func SubcategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	post := posts.GetPostHandler(w, r)
+
+	data := map[string]interface{}{
+		"Post":        post,
+		"Subcategory": post.Subcategory,
+		"Category":    post.Subcategory.Category,
+		"Comments":    post.Comments,
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "post.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: post.html")
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+}
