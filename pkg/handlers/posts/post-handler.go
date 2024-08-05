@@ -17,29 +17,29 @@ type Post struct {
 func GetPostsFromSubCategoryHandler(w http.ResponseWriter, r *http.Request) []Post {
 	subcategoryId := r.PathValue("id")
 
-	// Get posts from subcategory
+	// Prepare the SQL statement
 	query := `SELECT json_object(
-		'id', p.id,
-		'title', p.title,
-		'content', p.content,
-		'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
-    'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
-		'author', json_object(
-						'id', u.id,
-						'name', u.name,
-						'username', u.username,
-						'profilePicture', u.profilePicture
-		),
-		'subcategory', json_object(
-						'id', s.id,
-						'name', s.name,
-						'description', s.description,
-						'category', json_object(
-										'id', c.id,
-										'name', c.name,
-										'description', c.description
-						)
-		)
+			'id', p.id,
+			'title', p.title,
+			'content', p.content,
+			'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
+			'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
+			'author', json_object(
+											'id', u.id,
+											'name', u.name,
+											'username', u.username,
+											'profilePicture', u.profilePicture
+			),
+			'subcategory', json_object(
+											'id', s.id,
+											'name', s.name,
+											'description', s.description,
+											'category', json_object(
+																			'id', c.id,
+																			'name', c.name,
+																			'description', c.description
+											)
+			)
 ) AS post
 
 FROM Posts p
@@ -51,7 +51,15 @@ LEFT JOIN Categories c ON s.categoryId = c.id
 WHERE p.subcategoryId = ?;
 `
 
-	rows, err := db.GetDB().Query(query, subcategoryId)
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return nil
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(subcategoryId)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)

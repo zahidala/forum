@@ -35,8 +35,15 @@ LEFT JOIN
 GROUP BY 
     c.id;
 `
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return nil
+	}
+	defer stmt.Close()
 
-	rows, err := db.GetDB().Query(query)
+	rows, err := stmt.Query()
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)
