@@ -4,6 +4,7 @@ import (
 	"forum/pkg/db"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gofrs/uuid/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -41,19 +42,25 @@ func IsAuthenticated(r *http.Request) bool {
 		return false
 	}
 
-	sessionQuery := "SELECT id FROM sessions WHERE id = ?"
-	var id string
+	sessionsQuery := "SELECT expiresAt FROM sessions WHERE id = ?"
+	var expiresAtSession time.Time
+	expiresAtCookie := cookie.Expires
 
-	stmt, err := db.GetDB().Prepare(sessionQuery)
-	if err != nil {
+	sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
+	if sessionErr != nil {
+		log.Println(sessionErr)
+		return false
+	}
+	defer sessionStmt.Close()
+
+	sessionRowErr := sessionStmt.QueryRow(cookie.Value).Scan(&expiresAtSession)
+
+	if sessionRowErr != nil {
 		log.Println(err)
 		return false
 	}
-	defer stmt.Close()
 
-	err = stmt.QueryRow(cookie.Value).Scan(&id)
-	if err != nil {
-		log.Println(err)
+	if time.Now().After(expiresAtSession) || time.Now().After(expiresAtCookie) {
 		return false
 	}
 
