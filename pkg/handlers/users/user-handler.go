@@ -48,7 +48,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/login", http.StatusOK)
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
 func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -102,7 +102,7 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusOK)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func UserLogoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -128,5 +128,5 @@ func UserLogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now(),
 	})
 
-	http.Redirect(w, r, "/", http.StatusOK)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
