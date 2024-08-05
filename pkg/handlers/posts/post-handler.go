@@ -116,21 +116,21 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
 		'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
 		'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
 		'author', json_object(
-																		'id', u.id,
-																		'name', u.name,
-																		'username', u.username,
-																		'profilePicture', u.profilePicture
+											'id', u.id,
+											'name', u.name,
+											'username', u.username,
+											'profilePicture', u.profilePicture
 		),
 		'subcategory', json_object(
-																		'id', s.id,
-																		'name', s.name,
-																		'description', s.description,
-																		'category', json_object(
-																																		'id', c2.id,
-																																		'name', c2.name,
-																																		'description', c2.description
-																		)
-		),
+											'id', s.id,
+											'name', s.name,
+											'description', s.description,
+											'category', json_object(
+																			'id', c2.id,
+																			'name', c2.name,
+																			'description', c2.description
+											)
+			),
 		'comments', json_group_array(
 				json_object(
 						'id', c.id,
