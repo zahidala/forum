@@ -4,6 +4,7 @@ import (
 	"forum/pkg/handlers/categories"
 	"forum/pkg/handlers/posts"
 	Types "forum/pkg/types"
+	"forum/pkg/utils"
 	"html/template"
 	"log"
 	"net/http"
@@ -123,10 +124,11 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	post := posts.GetPostHandler(w, r)
 
 	data := map[string]interface{}{
-		"Post":        post,
-		"Subcategory": post.Subcategory,
-		"Category":    post.Subcategory.Category,
-		"Comments":    post.Comments,
+		"Post":            post,
+		"Subcategory":     post.Subcategory,
+		"Category":        post.Subcategory.Category,
+		"Comments":        post.Comments,
+		"IsAuthenticated": utils.IsAuthenticated(r),
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "post.html", data)

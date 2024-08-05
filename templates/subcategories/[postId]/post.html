@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <!-- Hide when not signed in -->
+    {{if .IsAuthenticated}}
     <button
       type="submit"
       class="btn-primary"
@@ -26,6 +26,7 @@
     >
       Reply
     </button>
+    {{end}}
   </div>
 
   <div class="breadcrumb-container">
@@ -80,7 +81,7 @@
         <span style="color: white; font-size: 0.8rem">{{.Post.Content}}</span>
       </div>
 
-      <!-- Hide when not signed in -->
+      {{if .IsAuthenticated}}
       <div class="post-action-container">
         <button type="submit" class="btn-post-action" style="cursor: pointer">
           <i class="fa-regular fa-thumbs-up" style="margin-right: 5px"></i>
@@ -97,6 +98,7 @@
           Reply
         </button>
       </div>
+      {{end}}
     </div>
   </div>
 
@@ -130,7 +132,7 @@
         <span style="color: white; font-size: 0.8rem">{{.Content}}</span>
       </div>
 
-      <!-- Hide when not signed in -->
+      {{if $.IsAuthenticated}}
       <div class="post-action-container">
         <button type="submit" class="btn-post-action" style="cursor: pointer">
           <i class="fa-regular fa-thumbs-up" style="margin-right: 5px"></i>
@@ -147,6 +149,7 @@
           Reply
         </button>
       </div>
+      {{end}}
     </div>
   </div>
 
