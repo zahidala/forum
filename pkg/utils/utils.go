@@ -34,7 +34,7 @@ func CompareHashAndPassword(hashedPassword, password string) error {
 }
 
 // IsAuthenticated checks if the user is logged in by checking if the session ID cookie exists in the database
-// Returns true if the user is logged in, false otherwise. If an error occurs, it returns false.
+// Returns true if the user is logged in, false otherwise. If an error occurs, it returns false. Also checks if the session has expired.
 // Used for rendering buttons based on the user's authentication status.
 func IsAuthenticated(r *http.Request) bool {
 	cookie, err := r.Cookie("sessionId")
