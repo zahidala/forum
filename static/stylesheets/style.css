@@ -261,7 +261,7 @@ html, body {
   border: 1px solid #474c54;
   padding: 5px;
   padding-inline: 10px;
-  height: 20px;
+  flex-wrap: wrap;
 }
 
 .home-link {
