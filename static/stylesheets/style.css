@@ -355,6 +355,51 @@ html, body {
   color: white;
 }
 
+.editor-button {
+  background-color: transparent;
+  text-decoration: none;
+  border: none;
+  color: #E2E2E3;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.editor-button:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.post-editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #2e3035;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 20px;
+  flex: 1;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  background-color: #393d43;
+  border-radius: 5px;
+  border: 1px solid #474c54;
+  gap: 1rem;
+  padding: 20px;
+  height: 150px;
+}
+
+.editor-textarea {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 10px;
+  resize: none;
+  font-family: 'Noto Sans', sans-serif;
+}
+
 @media (max-width: 768px) {
   .home-page-layout {
     display: flex; 

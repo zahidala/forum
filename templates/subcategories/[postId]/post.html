@@ -154,6 +154,69 @@
   </div>
 
   {{end}}
+
+  <div style="flex: 1; border: 0.5px solid #474c54"></div>
+
+  <div class="post-container">
+    <div class="post-author-container">
+      <img src=https://xdaforums.com/data/avatars/s/4837/4837581.jpg?1600603599
+      alt="" style="border-radius: 5px" width="50" height="50" />
+
+      <span style="color: #2daae9; font-weight: 700; font-size: 0.8rem"
+        >zahidala</span
+      >
+    </div>
+
+    <div class="post-editor-container">
+      <div class="editor">
+        <div style="display: flex; gap: 0.5rem">
+          <button class="editor-button">
+            <i class="fa-solid fa-bold"></i>
+          </button>
+
+          <button class="editor-button">
+            <i class="fa-solid fa-italic"></i>
+          </button>
+
+          <button class="editor-button">
+            <i class="fa-solid fa-underline"></i>
+          </button>
+
+          <button class="editor-button">
+            <i class="fa-solid fa-strikethrough"></i>
+          </button>
+
+          <button class="editor-button">
+            <i class="fa-solid fa-link"></i>
+          </button>
+
+          <button class="editor-button">
+            <i class="fa-regular fa-image"></i>
+          </button>
+        </div>
+
+        <textarea
+          name="content"
+          id="content"
+          cols="30"
+          rows="10"
+          placeholder="Type your reply here..."
+          class="editor-textarea"
+          contenteditable="true"
+        ></textarea>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          class="btn-primary"
+          style="font-size: medium; padding: 10px 15px; cursor: pointer"
+        >
+          Post Reply
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 {{template "footer" }}
