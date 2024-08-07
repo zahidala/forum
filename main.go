@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"forum/pkg/db"
+	"forum/pkg/env"
+	"forum/pkg/handlers/uploads"
 	"forum/pkg/handlers/users"
 	"forum/pkg/templates"
 	"log"
@@ -11,6 +14,9 @@ import (
 )
 
 func main() {
+	// Initialize the environment variables
+	env.Init()
+
 	// Initialize the database connection
 	db.Init()
 	defer db.CloseDB()
@@ -35,6 +41,12 @@ func main() {
 	http.HandleFunc("GET /subcategory/{id}", templates.SubcategoryTemplateHandler)
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
+
+	http.HandleFunc("POST /upload", func(w http.ResponseWriter, r *http.Request) {
+		x := uploads.UploadImageHandler(w, r)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(x)
+	})
 
 	// An example of using the AuthRequired middleware to protect the index page
 
