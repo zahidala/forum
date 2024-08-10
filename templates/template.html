@@ -133,17 +133,15 @@
     linkButton.addEventListener("click", (e) => {
       const linkDialog = document.getElementById("link-dialog");
 
-      // commented out as it breaks the dialog
-
       // if editor is focused, close the dialog
-      // editor.addEventListener("focus", () => {
-      //   linkDialog.classList.add("link-dialog-closing");
-      //   linkButton.classList.remove("editor-button-active");
-      //   setTimeout(() => {
-      //     linkDialog.close();
-      //     linkDialog.classList.remove("link-dialog-closing");
-      //   }, 200);
-      // });
+      editor.addEventListener("focus", () => {
+        linkDialog.classList.add("link-dialog-closing");
+        linkButton.classList.remove("editor-button-active");
+        setTimeout(() => {
+          linkDialog.close();
+          linkDialog.classList.remove("link-dialog-closing");
+        }, 200);
+      });
 
       if (linkDialog.open) {
         // add the closing class to animate the dialog
