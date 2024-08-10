@@ -3,47 +3,75 @@
 <div class="card-container" style="top: 55%">
   <div class="card">
     <h1 style="margin: 0; color: white">Register</h1>
-    <form action="/register" method="POST">
+    <form id="form" action="/register" method="POST">
       <div class="outer-container-input">
         <div class="container-input">
           <label for="name" style="color: white">Name</label>
-          <input type="text" name="name" placeholder="Name" class="input" />
+          <input type="text"
+            id="name"
+            name="name"
+            class="input"
+            placeholder="Full Name"
+            maxlength="50" />
+          <div class="error"></div>
         </div>
+        <!-- pattern="^[a-zA-Z ]{3,100}$"
+        title="Minimum length: 3, only letters and spaces allowed."
+        required -->
 
         <div class="container-input">
           <label for="username" style="color: white">Username</label>
           <input
             type="text"
+            id="username"
             name="username"
-            placeholder="Username"
             class="input"
-          />
+            placeholder="Username"
+            maxlength="15" />
+          <div class="error"></div>
         </div>
+        <!-- pattern="^[a-zA-Z\d_]{3,15}$"
+        title="Only letters, numbers, and underscores (_) are allowed."
+        required -->
 
         <div class="container-input">
           <label for="email" style="color: white">Email</label>
-          <input type="email" name="email" placeholder="Email" class="input" />
+          <input type="text"
+            id="email"
+            name="email"
+            class="input"
+            placeholder="Email"
+            maxlength="254" />
+          <div class="error"></div>
         </div>
+        <!-- pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$"
+        required -->
 
         <div class="container-input">
           <label for="password" style="color: white">Password</label>
           <input
             type="password"
+            id="password"
             name="password"
-            placeholder="Password"
             class="input"
-          />
+            placeholder="Password"
+            maxlength="64" />
+          <div class="error"></div>
         </div>
+        <!-- pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}"
+        title="Must contain upper-case, lower-case, and a number."
+        required -->
 
         <input
           type="submit"
           value="Register"
           class="btn-primary"
-          style="font-size: medium; padding: 10px 15px; cursor: pointer"
-        />
+          style="font-size: medium; padding: 10px 15px; cursor: pointer" />
       </div>
     </form>
   </div>
 </div>
+
+<script src="/static/validation.js" defer></script>
 
 {{template "footer" }}
