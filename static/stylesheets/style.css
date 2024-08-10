@@ -365,6 +365,10 @@ html, body {
   cursor: pointer;
 }
 
+.editor-button-active {
+  background: rgba(255,255,255,0.15);
+}
+
 .editor-button:hover {
   background: rgba(255,255,255,0.15);
 }
@@ -396,8 +400,49 @@ html, body {
   color: white;
   border: none;
   padding: 10px;
-  resize: none;
+  min-height: 100px;
+  font-size: 0.8rem;
   font-family: 'Noto Sans', sans-serif;
+}
+
+.editor-textarea:focus-visible {
+  outline: none;
+}
+
+
+.placeholder {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #aaa;
+  font-size: 0.8rem;
+  font-family: 'Noto Sans', sans-serif;
+  pointer-events: none;
+}
+
+.editor-wrapper {
+  position: relative;
+}
+
+.editor-textarea:focus + .placeholder,
+.editor-textarea:not(:empty) + .placeholder {
+  display: none;
+}
+
+.link-editor {
+  position: relative;
+}
+
+.link-dialog {
+  position: absolute;
+  top: 30px;
+  background-color: #2E3035;
+  border: none;
+  border-radius: 5px;
+}
+
+.link-dialog-closing {
+  animation: scaleDown 200ms ease forwards;
 }
 
 @media (max-width: 768px) {
@@ -428,5 +473,14 @@ html, body {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+}
+
+@keyframes scaleDown {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
   }
 }
