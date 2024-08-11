@@ -4,8 +4,10 @@ const username = document.getElementById('username')
 const email = document.getElementById('email')
 const password = document.getElementById('password')
 
+
 form.addEventListener('submit', e => {
     e.preventDefault();
+
     const isFormValid = validateInputs();
 
     if (isFormValid) {
@@ -15,24 +17,49 @@ form.addEventListener('submit', e => {
 })
 
 function validateInputs() {
-    let isValid = true
-
     const fullNameValue = fullName.value.trim();
     const usernameValue = username.value.trim();
     const emailValue = email.value.trim();
     const passwordValue = password.value.trim();
 
+    let isValidForm = true
+
+    const isValidName = validateName(fullNameValue)
+    const isValidUsername = validateUsername(usernameValue)
+    const isValidEmail = validateEmail(emailValue)
+    const isValidPassword = validatePassword(passwordValue)
+
+    if (!isValidName || !isValidUsername || !isValidEmail || !isValidPassword) {
+        isValidForm = false
+    }
+
+    return isValidForm
+}
+
+function validateName(fullNameValue) {
+    const regex = /^[a-zA-Z ]{3,50}$/
+
+    let isValid = true
+
     if (fullNameValue === '') {
         setError(fullName, "Please enter your name")
         isValid = false
 
-    } else if (!isValidName(fullNameValue)) {
+    } else if (!regex.test(fullNameValue)) {
         setError(fullName, "Please enter a valid full name")
         isValid = false
 
     } else {
         setSuccess(fullName)
     }
+
+    return isValid
+}
+
+function validateUsername(usernameValue) {
+    const regex = /^[a-zA-Z\d_]{3,15}$/
+
+    let isValid = true
 
     if (usernameValue === '') {
         setError(username, "Username cannot be empty")
@@ -42,15 +69,24 @@ function validateInputs() {
         setError(username, "Username must contain at least 3 characters")
         isValid = false
 
-    } else if (!isValidUsername(usernameValue)) {
+    } else if (!regex.test(usernameValue)) {
         setError(username, "Username must only caontain alphabets, numbers, and/or _")
         isValid = false
 
-    } else {
+    }
+    else {
         setSuccess(username)
     }
 
-    if (!isValidEmail(emailValue)) {
+    return isValid
+}
+
+function validateEmail(emailValue) {
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/
+
+    let isValid = true
+
+    if (!regex.test(emailValue)) {
         setError(email, "Inalid email")
         isValid = false
 
@@ -58,11 +94,19 @@ function validateInputs() {
         setSuccess(email)
     }
 
+    return isValid
+}
+
+function validatePassword(passwordValue) {
+    const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}/
+
+    let isValid = true
+
     if (passwordValue.length < 8) {
         setError(password, "Password must be at least 8 characters long")
         isValid = false
 
-    } else if (!isValidPassword(passwordValue)) {
+    } else if (!regex.test(passwordValue)) {
         setError(password, "Password must caontain lower-case letter, upper-case letter, and number")
         isValid = false
 
@@ -78,35 +122,19 @@ const setError = (element, message) => {
     const errorDisplay = containerInput.querySelector('.error');
 
     containerInput.classList.add('error');
-    // containerInput.classList.remove('success');
     errorDisplay.innerText = message;
+    // errorDisplay.className = 'error'
 }
 
 const setSuccess = (element) => {
     const containerInput = element.parentElement;
     const errorDisplay = containerInput.querySelector('.error');
 
-    // containerInput.classList.add('success');
     containerInput.classList.remove('error');
     errorDisplay.innerText = '';
+    // errorDisplay.className = 'hidden'
 }
 
-function isValidName(nameValue) {
-    const regex = /^[a-zA-Z ]{3,100}$/
-    return regex.test(nameValue)
-}
-
-function isValidUsername(usernameValue) {
-    const regex = /^[a-zA-Z\d_]{3,15}$/
-    return regex.test(usernameValue)
-}
-
-function isValidEmail(emailValue) {
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/
-    return regex.test(emailValue)
-}
-
-function isValidPassword(passwordValue) {
-    const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}/
-    return regex.test(passwordValue)
-}
+// TODO
+// confirm password
+// name should not contain more than one space in bwteen names

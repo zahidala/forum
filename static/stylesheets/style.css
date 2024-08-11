@@ -58,6 +58,10 @@ body {
   color: white;
 }
 
+div.hidden {
+  display: none;
+}
+
 .input {
   background: transparent;
   border: 1px solid #424242;
