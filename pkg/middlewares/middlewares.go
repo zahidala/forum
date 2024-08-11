@@ -27,7 +27,6 @@ func AuthRequired(next http.Handler) http.Handler {
 
 		sessionsQuery := "SELECT expiresAt FROM sessions WHERE id = ?"
 		var expiresAtSession time.Time
-		expiresAtCookie := cookie.Expires
 
 		sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
 		if sessionErr != nil {
@@ -44,7 +43,7 @@ func AuthRequired(next http.Handler) http.Handler {
 			return
 		}
 
-		if time.Now().After(expiresAtSession) || time.Now().After(expiresAtCookie) {
+		if time.Now().After(expiresAtSession) {
 			deleteSessionQuery := "DELETE FROM sessions WHERE id = ?"
 
 			sessionExecErr := db.PrepareAndExecute(deleteSessionQuery, cookie.Value)
