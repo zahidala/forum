@@ -157,13 +157,19 @@
 
   <div style="flex: 1; border: 0.5px solid #474c54"></div>
 
+  {{if .IsAuthenticated}}
   <div class="post-container">
     <div class="post-author-container">
-      <img src=https://xdaforums.com/data/avatars/s/4837/4837581.jpg?1600603599
-      alt="" style="border-radius: 5px" width="50" height="50" />
+      <img
+        src="{{.User.ProfilePicture}}"
+        alt=""
+        style="border-radius: 5px"
+        width="50"
+        height="50"
+      />
 
       <span style="color: #2daae9; font-weight: 700; font-size: 0.8rem"
-        >zahidala</span
+        >{{.User.Username}}</span
       >
     </div>
 
@@ -265,6 +271,7 @@
       </div>
     </div>
   </div>
+  {{end}}
 </div>
 
 {{template "footer" }}

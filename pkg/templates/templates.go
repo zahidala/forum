@@ -123,12 +123,21 @@ func SubcategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	post := posts.GetPostHandler(w, r)
 
+	isAuthenticated := utils.IsAuthenticated(r)
+
+	var user Types.User
+
+	if isAuthenticated {
+		user = utils.GetUserInfoBySession(w, r)
+	}
+
 	data := map[string]interface{}{
 		"Post":            post,
 		"Subcategory":     post.Subcategory,
 		"Category":        post.Subcategory.Category,
 		"Comments":        post.Comments,
-		"IsAuthenticated": utils.IsAuthenticated(r),
+		"IsAuthenticated": isAuthenticated,
+		"User":            user,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "post.html", data)

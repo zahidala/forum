@@ -45,7 +45,6 @@ func IsAuthenticated(r *http.Request) bool {
 
 	sessionsQuery := "SELECT expiresAt FROM sessions WHERE id = ?"
 	var expiresAtSession time.Time
-	expiresAtCookie := cookie.Expires
 
 	sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
 	if sessionErr != nil {
@@ -61,11 +60,7 @@ func IsAuthenticated(r *http.Request) bool {
 		return false
 	}
 
-	if time.Now().After(expiresAtSession) || time.Now().After(expiresAtCookie) {
-		return false
-	}
-
-	return true
+	return !time.Now().After(expiresAtSession)
 }
 
 // Returns the user object based on the session ID cookie
