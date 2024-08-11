@@ -2,6 +2,7 @@ package utils
 
 import (
 	"forum/pkg/db"
+	Types "forum/pkg/types"
 	"log"
 	"net/http"
 	"time"
@@ -65,4 +66,56 @@ func IsAuthenticated(r *http.Request) bool {
 	}
 
 	return true
+}
+
+// Returns the user object based on the session ID cookie
+func GetUserInfoBySession(w http.ResponseWriter, r *http.Request) Types.User {
+	cookie, cookieErr := r.Cookie("sessionId")
+
+	if cookieErr != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return Types.User{}
+	}
+
+	sessionId := cookie.Value
+
+	sessionsQuery := "SELECT userId FROM sessions WHERE id = ?"
+
+	sessionStmt, sessionErr := db.GetDB().Prepare(sessionsQuery)
+	if sessionErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println(sessionErr)
+		return Types.User{}
+	}
+
+	var userId int
+
+	sessionRowErr := sessionStmt.QueryRow(sessionId).Scan(&userId)
+
+	if sessionRowErr != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return Types.User{}
+	}
+
+	userQuery := "SELECT * FROM users WHERE id = ?"
+
+	userStmt, userErr := db.GetDB().Prepare(userQuery)
+
+	if userErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println(userErr)
+		return Types.User{}
+	}
+
+	var user Types.User
+
+	userRowErr := userStmt.QueryRow(userId).Scan(&user.ID, &user.Name, &user.Username, &user.Email, &user.Password, &user.ProfilePicture)
+
+	if userRowErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println(userRowErr)
+		return Types.User{}
+	}
+
+	return user
 }
