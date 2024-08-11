@@ -12,12 +12,10 @@
             name="name"
             class="input"
             placeholder="Full Name"
-            maxlength="50" />
+            maxlength="50"
+            oninput="validateName(this.value.trim())" />
           <div class="error"></div>
         </div>
-        <!-- pattern="^[a-zA-Z ]{3,100}$"
-        title="Minimum length: 3, only letters and spaces allowed."
-        required -->
 
         <div class="container-input">
           <label for="username" style="color: white">Username</label>
@@ -27,12 +25,10 @@
             name="username"
             class="input"
             placeholder="Username"
-            maxlength="15" />
+            maxlength="15"
+            oninput="validateUsername(this.value.trim())" />
           <div class="error"></div>
         </div>
-        <!-- pattern="^[a-zA-Z\d_]{3,15}$"
-        title="Only letters, numbers, and underscores (_) are allowed."
-        required -->
 
         <div class="container-input">
           <label for="email" style="color: white">Email</label>
@@ -41,11 +37,10 @@
             name="email"
             class="input"
             placeholder="Email"
-            maxlength="254" />
+            maxlength="254"
+            oninput="validateEmail(this.value.trim())" />
           <div class="error"></div>
         </div>
-        <!-- pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$"
-        required -->
 
         <div class="container-input">
           <label for="password" style="color: white">Password</label>
@@ -55,12 +50,10 @@
             name="password"
             class="input"
             placeholder="Password"
-            maxlength="64" />
+            maxlength="64"
+            oninput="validatePassword(this.value.trim())" />
           <div class="error"></div>
         </div>
-        <!-- pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}"
-        title="Must contain upper-case, lower-case, and a number."
-        required -->
 
         <input
           type="submit"
