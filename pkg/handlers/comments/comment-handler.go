@@ -2,7 +2,6 @@ package comments
 
 import (
 	"encoding/json"
-	"fmt"
 	"forum/pkg/db"
 	"io"
 	"net/http"
@@ -15,8 +14,6 @@ type CommentBody struct {
 
 func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	postId := r.PathValue("id")
-
-	fmt.Println("Creating comment for post with id: ", postId)
 
 	reqBody, err := io.ReadAll(r.Body)
 	if err != nil {
