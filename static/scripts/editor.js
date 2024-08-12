@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const content = document.getElementById('content');
 
     // Insert the link into the editor content
-    const link = `<a href="${url}" target="_blank">${text}</a>`;
+    const link = `<a href="${url}" class="editor-link" target="_blank">${text}</a>`;
     content.innerHTML += link;
 
     document.getElementById('link-dialog').close();

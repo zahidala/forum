@@ -447,6 +447,12 @@ html, body {
   animation: scaleDown 200ms ease forwards;
 }
 
+.editor-link {
+  color: #2DAAE9;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
 @media (max-width: 768px) {
   .home-page-layout {
     display: flex; 
