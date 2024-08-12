@@ -422,6 +422,7 @@ html, body {
 
 .editor-wrapper {
   position: relative;
+  z-index: 10;
 }
 
 .editor-textarea:focus + .placeholder,
@@ -435,6 +436,7 @@ html, body {
 
 .link-dialog {
   position: absolute;
+  z-index: 1000;
   top: 30px;
   background-color: #2E3035;
   border: none;

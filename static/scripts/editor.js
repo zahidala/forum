@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
       linkButton.classList.remove("editor-button-active");
       setTimeout(() => {
         linkDialog.close();
+        document.getElementById('url').value = '';
+        document.getElementById('text').value = '';
         linkDialog.classList.remove("link-dialog-closing");
       }, 200);
     });
@@ -95,6 +97,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       );
     }
+  });
+
+  const insertLink = document.getElementById("insert-link");
+
+  insertLink.addEventListener("click", () => {
+    const url = document.getElementById('url').value;
+    const text = document.getElementById('text').value;
+    const content = document.getElementById('content');
+
+    // Insert the link into the editor content
+    const link = `<a href="${url}" target="_blank">${text}</a>`;
+    content.innerHTML += link;
+
+    document.getElementById('link-dialog').close();
+
+    document.getElementById('url').value = '';
+    document.getElementById('text').value = '';
   });
 
   const editorContent = document.getElementById("content");
