@@ -123,8 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
           userId,
         }),
       });
-
-      console.log(response.redirected);
       
       if (response.redirected) {
         window.location.href = response.url;
