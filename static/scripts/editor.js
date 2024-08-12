@@ -106,15 +106,42 @@ document.addEventListener('DOMContentLoaded', function() {
     const text = document.getElementById('text').value;
     const content = document.getElementById('content');
 
-    // Insert the link into the editor content
-    const link = `<a href="${url}" class="editor-link" target="_blank">${text}</a>`;
-    content.innerHTML += link;
+    content.focus();
 
+    // Create a range and select the text
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+
+        // Create a new text node with the provided text
+        const textNode = document.createTextNode(text);
+
+        // Insert the text node into the range
+        range.insertNode(textNode);
+
+        // Select the text node
+        range.selectNode(textNode);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Create the link
+        document.execCommand('createLink', false, url);
+
+        // Add the link class to the link
+
+        const link = document.querySelector('a[href="' + url + '"]');
+
+        if (link) link.classList.add('editor-link');
+    }
+
+    // Close the dialog
     document.getElementById('link-dialog').close();
 
+    // Clear the input fields
     document.getElementById('url').value = '';
     document.getElementById('text').value = '';
-  });
+});
 
   const editorContent = document.getElementById("content");
 
