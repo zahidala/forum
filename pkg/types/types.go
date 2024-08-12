@@ -2,6 +2,7 @@ package types
 
 import (
 	"database/sql"
+	"html/template"
 	"sync"
 	"time"
 )
@@ -64,13 +65,13 @@ type Post struct {
 }
 
 type Comment struct {
-	ID        int       `json:"id"`
-	PostID    int       `json:"postId"`
-	Content   string    `json:"content"`
-	AuthorID  int       `json:"authorId"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	Author    User      `json:"author"`
+	ID        int           `json:"id"`
+	PostID    int           `json:"postId"`
+	Content   template.HTML `json:"content"`
+	AuthorID  int           `json:"authorId"`
+	CreatedAt time.Time     `json:"createdAt"`
+	UpdatedAt time.Time     `json:"updatedAt"`
+	Author    User          `json:"author"`
 }
 
 type PostLike struct {
