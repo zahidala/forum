@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"forum/pkg/db"
 	"forum/pkg/env"
+	"forum/pkg/handlers/comments"
 	"forum/pkg/handlers/uploads"
 	"forum/pkg/handlers/users"
 	"forum/pkg/templates"
@@ -41,6 +42,7 @@ func main() {
 	http.HandleFunc("GET /subcategory/{id}", templates.SubcategoryTemplateHandler)
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
+	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
 
 	http.HandleFunc("POST /upload", func(w http.ResponseWriter, r *http.Request) {
 		x := uploads.UploadImageHandler(w, r)

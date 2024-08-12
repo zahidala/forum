@@ -168,6 +168,9 @@
         height="50"
       />
 
+      <input type="hidden" id="postId" value="{{.Post.ID}}" />
+      <input type="hidden" id="userId" value="{{.User.ID}}" />
+
       <span style="color: #2daae9; font-weight: 700; font-size: 0.8rem"
         >{{.User.Username}}</span
       >
@@ -263,6 +266,7 @@
       <div>
         <button
           type="submit"
+          id="post-reply"
           class="btn-primary"
           style="font-size: medium; padding: 10px 15px; cursor: pointer"
         >
@@ -273,5 +277,6 @@
   </div>
   {{end}}
 </div>
+<script src="/static/scripts/editor.js"></script>
 
 {{template "footer" }}
