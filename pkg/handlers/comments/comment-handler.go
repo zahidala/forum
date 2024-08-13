@@ -1,8 +1,7 @@
 package comments
 
 import (
-	"encoding/json"
-	"forum/pkg/db"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -13,7 +12,7 @@ type CommentBody struct {
 }
 
 func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
-	postId := r.PathValue("id")
+	// postId := r.PathValue("id")
 
 	reqBody, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -21,28 +20,30 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var commentBody CommentBody
+	fmt.Println(string(reqBody))
 
-	jsonErr := json.Unmarshal(reqBody, &commentBody)
-	if jsonErr != nil {
-		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
-		return
-	}
+	// var commentBody CommentBody
 
-	query := `INSERT INTO comments (content, postId, authorId) VALUES (?, ?, ?)`
+	// jsonErr := json.Unmarshal(reqBody, &commentBody)
+	// if jsonErr != nil {
+	// 	http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+	// 	return
+	// }
 
-	stmt, err := db.GetDB().Prepare(query)
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
+	// query := `INSERT INTO comments (content, postId, authorId) VALUES (?, ?, ?)`
 
-	_, err = stmt.Exec(commentBody.Content, postId, commentBody.UserID)
+	// stmt, err := db.GetDB().Prepare(query)
+	// if err != nil {
+	// 	http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	// 	return
+	// }
 
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
+	// _, err = stmt.Exec(commentBody.Content, postId, commentBody.UserID)
 
-	http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
+	// if err != nil {
+	// 	http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
 }

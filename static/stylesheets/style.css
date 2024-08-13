@@ -453,6 +453,30 @@ html, body {
   font-size: 0.8rem;
 }
 
+.uploaded-images-container {
+  display: none;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.uploaded-image {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #474c54;
+}
+
+.file-name-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  color: white;
+  font-size: 0.8rem;
+  background-color: #1D1E21;
+}
+
 @media (max-width: 768px) {
   .home-page-layout {
     display: flex; 

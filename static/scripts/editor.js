@@ -155,6 +155,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const postReply = document.getElementById("post-reply");
 
+  const imageButton = document.getElementById("image");
+  const imageInput = document.getElementById("image-input");
+  const uploadedImagesContainer = document.querySelector(".uploaded-images-container");
+
+  imageButton.addEventListener("click", () => {
+    imageInput.click();
+  });
+
+  imageInput.addEventListener("change", async () => {
+    const file = imageInput.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await fetch("/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const imageUrl = data.image.url;
+  
+        // Create a new div for the uploaded image
+        const uploadedImageDiv = document.createElement("div");
+        uploadedImageDiv.className = "uploaded-image";
+  
+        // Create an img element
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.alt = "Uploaded Image";
+        img.width = 100;
+  
+        // Create a div for the file name
+        const fileNameContainer = document.createElement("div");
+        fileNameContainer.className = "file-name-container";
+        const fileNameSpan = document.createElement("span");
+        fileNameSpan.textContent = data.image.name;
+  
+        // Append the img and file name div to the uploaded image div
+        fileNameContainer.appendChild(fileNameSpan);
+        uploadedImageDiv.appendChild(img);
+        uploadedImageDiv.appendChild(fileNameContainer);
+  
+        // Append the uploaded image div to the uploaded images container
+        uploadedImagesContainer.appendChild(uploadedImageDiv);
+
+        uploadedImagesContainer.style.display = "flex";
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
   // post comment to the server
   postReply.addEventListener("click", async () => {
     const postId = document.getElementById("postId").value;

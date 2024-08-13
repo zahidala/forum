@@ -45,9 +45,9 @@ func main() {
 	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
 
 	http.HandleFunc("POST /upload", func(w http.ResponseWriter, r *http.Request) {
-		x := uploads.UploadImageHandler(w, r)
+		uploadedImage := uploads.UploadImageHandler(w, r)
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(x)
+		json.NewEncoder(w).Encode(uploadedImage)
 	})
 
 	// An example of using the AuthRequired middleware to protect the index page
