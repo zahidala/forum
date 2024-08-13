@@ -52,96 +52,96 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  const linkButton = document.getElementById("link");
+//   const linkButton = document.getElementById("link");
 
-  linkButton.addEventListener("click", (e) => {
-    const linkDialog = document.getElementById("link-dialog");
+//   linkButton.addEventListener("click", (e) => {
+//     const linkDialog = document.getElementById("link-dialog");
 
-    // if editor is focused, close the dialog
-    editor.addEventListener("focus", () => {
-      linkDialog.classList.add("link-dialog-closing");
-      linkButton.classList.remove("editor-button-active");
-      setTimeout(() => {
-        linkDialog.close();
-        document.getElementById('url').value = '';
-        document.getElementById('text').value = '';
-        linkDialog.classList.remove("link-dialog-closing");
-      }, 200);
-    });
+//     // if editor is focused, close the dialog
+//     editor.addEventListener("focus", () => {
+//       linkDialog.classList.add("link-dialog-closing");
+//       linkButton.classList.remove("editor-button-active");
+//       setTimeout(() => {
+//         linkDialog.close();
+//         document.getElementById('url').value = '';
+//         document.getElementById('text').value = '';
+//         linkDialog.classList.remove("link-dialog-closing");
+//       }, 200);
+//     });
 
-    if (linkDialog.open) {
-      // add the closing class to animate the dialog
-      linkDialog.classList.add("link-dialog-closing");
+//     if (linkDialog.open) {
+//       // add the closing class to animate the dialog
+//       linkDialog.classList.add("link-dialog-closing");
 
-      // close the dialog after the animation completes
-      setTimeout(() => {
-        linkDialog.close();
-        linkDialog.classList.remove("link-dialog-closing");
-      }, 200);
-    } else {
-      linkDialog.show();
+//       // close the dialog after the animation completes
+//       setTimeout(() => {
+//         linkDialog.close();
+//         linkDialog.classList.remove("link-dialog-closing");
+//       }, 200);
+//     } else {
+//       linkDialog.show();
 
-      // animate the dialog
-      linkDialog.animate(
-        [
-          {
-            transform: "scale(0)",
-          },
-          {
-            transform: "scale(1)",
-          },
-        ],
-        {
-          duration: 200,
-          easing: "ease",
-        }
-      );
-    }
-  });
+//       // animate the dialog
+//       linkDialog.animate(
+//         [
+//           {
+//             transform: "scale(0)",
+//           },
+//           {
+//             transform: "scale(1)",
+//           },
+//         ],
+//         {
+//           duration: 200,
+//           easing: "ease",
+//         }
+//       );
+//     }
+//   });
 
-  const insertLink = document.getElementById("insert-link");
+//   const insertLink = document.getElementById("insert-link");
 
-  insertLink.addEventListener("click", () => {
-    const url = document.getElementById('url').value;
-    const text = document.getElementById('text').value;
-    const content = document.getElementById('content');
+//   insertLink.addEventListener("click", () => {
+//     const url = document.getElementById('url').value;
+//     const text = document.getElementById('text').value;
+//     const content = document.getElementById('content');
 
-    content.focus();
+//     content.focus();
 
-    // Create a range and select the text
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        range.deleteContents();
+//     // Create a range and select the text
+//     const selection = window.getSelection();
+//     if (selection.rangeCount > 0) {
+//         const range = selection.getRangeAt(0);
+//         range.deleteContents();
 
-        // Create a new text node with the provided text
-        const textNode = document.createTextNode(text);
+//         // Create a new text node with the provided text
+//         const textNode = document.createTextNode(text);
 
-        // Insert the text node into the range
-        range.insertNode(textNode);
+//         // Insert the text node into the range
+//         range.insertNode(textNode);
 
-        // Select the text node
-        range.selectNode(textNode);
-        selection.removeAllRanges();
-        selection.addRange(range);
+//         // Select the text node
+//         range.selectNode(textNode);
+//         selection.removeAllRanges();
+//         selection.addRange(range);
 
-        // Create the link
-        document.execCommand('createLink', false, url);
+//         // Create the link
+//         document.execCommand('createLink', false, url);
 
-        // Add the link class to the link
+//         // Add the link class to the link
 
-        const link = document.querySelector('a[href="' + url + '"]');
+//         const link = document.querySelector('a[href="' + url + '"]');
 
-        if (link) link.classList.add('editor-link');
-    }
+//         if (link) link.classList.add('editor-link');
+//     }
 
-    // Close the dialog
-    document.getElementById('link-dialog').close();
+//     // Close the dialog
+//     document.getElementById('link-dialog').close();
 
-    // Clear the input fields
-    document.getElementById('url').value = '';
-    document.getElementById('text').value = '';
-});
+//     // Clear the input fields
+//     document.getElementById('url').value = '';
+//     document.getElementById('text').value = '';
+// });
 
   const editorContent = document.getElementById("content");
 
@@ -155,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const postReply = document.getElementById("post-reply");
 
+  // post comment to the server
   postReply.addEventListener("click", async () => {
     const postId = document.getElementById("postId").value;
     const userId = document.getElementById("userId").value;
