@@ -143,7 +143,8 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
 								'profilePicture', u2.profilePicture
 						),
 						'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', c.createdAt),
-						'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', c.updatedAt)
+						'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', c.updatedAt),
+						'attachments', c.attachments
 				)
 		)
 ) AS post

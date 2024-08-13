@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const imageButton = document.getElementById("image");
   const imageInput = document.getElementById("image-input");
-  const uploadedImagesContainer = document.querySelector(".uploaded-images-container");
+  const uploadedImagesContainer = document.getElementById("uploaded-images");
 
   const imageUrls = [];
 
@@ -214,7 +214,8 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error(error);
     }
   });
-
+  
+  
   // post comment to the server
   postReply.addEventListener("click", async () => {
     const postId = document.getElementById("postId").value;
