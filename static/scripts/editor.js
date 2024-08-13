@@ -159,12 +159,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const imageInput = document.getElementById("image-input");
   const uploadedImagesContainer = document.querySelector(".uploaded-images-container");
 
+  const imageUrls = [];
+
   imageButton.addEventListener("click", () => {
     imageInput.click();
   });
 
   imageInput.addEventListener("change", async () => {
     const file = imageInput.files[0];
+
+    if (!file) return;
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -177,6 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (response.ok) {
         const data = await response.json();
         const imageUrl = data.image.url;
+        imageUrls.push(imageUrl);
   
         // Create a new div for the uploaded image
         const uploadedImageDiv = document.createElement("div");
@@ -213,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
   postReply.addEventListener("click", async () => {
     const postId = document.getElementById("postId").value;
     const userId = document.getElementById("userId").value;
+    const images = imageUrls.join(",");
     try {
       const response = await fetch(`/post/${postId}/comment`, {
         method: "POST",
@@ -222,6 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
         body: JSON.stringify({
           content,
           userId,
+          images: images ? images : undefined,
         }),
       });
       
