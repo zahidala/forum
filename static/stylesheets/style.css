@@ -477,6 +477,19 @@ html, body {
   background-color: #1D1E21;
 }
 
+.comment-reactions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background-color: #393D43;
+  border-left: 3px solid #2DAAE9;
+  padding: 10px;
+}
+
+.dislike {
+  border-left: 3px solid #FF4500;
+}
+
 @media (max-width: 768px) {
   .home-page-layout {
     display: flex; 

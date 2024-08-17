@@ -165,6 +165,32 @@
         class="comment-attachments"
       />
 
+      {{if .Likes}}
+      <div class="comment-reactions">
+        <i class="fa-solid fa-thumbs-up" style="color: white"></i>
+
+        {{range .Likes}}
+
+        <span style="color: #2daae9; font-size: 0.8rem">
+          {{.Author.Username}}
+        </span>
+
+        {{end}}
+      </div>
+      {{end}} {{if .Dislikes}}
+      <div class="comment-reactions dislike">
+        <i class="fa-solid fa-thumbs-down" style="color: white"></i>
+
+        {{range .Dislikes}}
+
+        <span style="color: #2daae9; font-size: 0.8rem">
+          {{.Author.Username}}
+        </span>
+
+        {{end}}
+      </div>
+      {{end}}
+
       <div class="uploaded-images-container comment-images"></div>
     </div>
   </div>
