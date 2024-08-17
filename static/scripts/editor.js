@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const commentsAttachments = document.querySelectorAll(".comment-attachments");
   const commentImages = document.querySelectorAll(".comment-images");
 
-  commentsAttachments.forEach((commentAttachment) => {
+  commentsAttachments.forEach((commentAttachment, index) => {
     const images = commentAttachment.value.split(",").filter((image) => image !== "");
     images.forEach((image) => {
       const img = document.createElement("img");
@@ -238,12 +238,11 @@ document.addEventListener('DOMContentLoaded', function() {
       uploadedImageDiv.appendChild(img);
       uploadedImageDiv.appendChild(fileNameContainer);
 
-      commentImages.forEach((commentImage) => {
-        if (commentImage.id === commentAttachment.id) {
-          commentImage.appendChild(uploadedImageDiv);
-          commentImage.style.display = "flex";
-        }
-      });
+      // Append the image to the corresponding comment's image container
+      if (commentImages[index]) {
+        commentImages[index].appendChild(uploadedImageDiv);
+        commentImages[index].style.display = "flex";
+      }
     });
   });
 
