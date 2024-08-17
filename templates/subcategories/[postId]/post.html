@@ -133,13 +133,21 @@
       </div>
 
       {{if $.IsAuthenticated}}
-      <div class="post-action-container">
-        <button type="submit" class="btn-post-action" style="cursor: pointer">
+      <div class="post-action-container" id="{{.ID}}">
+        <button
+          type="submit"
+          class="btn-post-action like-comment"
+          style="cursor: pointer"
+        >
           <i class="fa-regular fa-thumbs-up" style="margin-right: 5px"></i>
           Like
         </button>
 
-        <button type="submit" class="btn-post-action" style="cursor: pointer">
+        <button
+          type="submit"
+          class="btn-post-action dislike-comment"
+          style="cursor: pointer"
+        >
           <i class="fa-regular fa-thumbs-down" style="margin-right: 5px"></i>
           Dislike
         </button>

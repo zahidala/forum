@@ -29,4 +29,29 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  // Like button logic
+
+  const likeButtons = document.querySelectorAll(".like-comment");
+
+  likeButtons.forEach((likeButton) => {
+    likeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
+      const commentId = likeButton.parentNode.id;
+      const postId = document.getElementById("postId").value;
+
+      try {
+        const response = await fetch(`/comment/${commentId}/like`, {
+          method: "POST",
+          body: JSON.stringify({ userId, postId }),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
 });

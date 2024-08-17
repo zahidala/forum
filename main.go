@@ -44,6 +44,8 @@ func main() {
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
 	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
 
+	http.HandleFunc("POST /comment/{id}/like", comments.CommentLikeHandler)
+
 	http.HandleFunc("POST /upload", func(w http.ResponseWriter, r *http.Request) {
 		uploadedImage := uploads.UploadImageHandler(w, r)
 		w.Header().Set("Content-Type", "application/json")

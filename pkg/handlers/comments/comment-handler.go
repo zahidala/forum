@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"forum/pkg/db"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -46,4 +47,48 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
+}
+
+type CommentLikeBody struct {
+	UserId string `json:"userId"`
+	PostId string `json:"postId"`
+}
+
+func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
+	commentId := r.PathValue("id")
+
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
+		return
+	}
+
+	var commentLikeBody CommentLikeBody
+
+	jsonErr := json.Unmarshal(reqBody, &commentLikeBody)
+	if jsonErr != nil {
+		log.Println(jsonErr)
+		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+		return
+	}
+
+	query := `INSERT INTO commentlikes (commentId, userId, isLike) VALUES (?, ?, ?)`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = stmt.Exec(commentId, commentLikeBody.UserId, 1)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+commentLikeBody.PostId, http.StatusSeeOther)
 }
