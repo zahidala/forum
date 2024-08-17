@@ -98,11 +98,16 @@ WHERE p.subcategoryId = ?;
 	return results
 }
 
+type CommentWithMoreDetails struct {
+	Types.Comment
+	Author Types.User `json:"author"`
+}
+
 type PostWithComments struct {
 	Types.Post
-	Author      Types.User        `json:"author"`
-	Subcategory Types.Subcategory `json:"subcategory"`
-	Comments    []Types.Comment   `json:"comments"`
+	Author      Types.User               `json:"author"`
+	Subcategory Types.Subcategory        `json:"subcategory"`
+	Comments    []CommentWithMoreDetails `json:"comments"`
 }
 
 func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
