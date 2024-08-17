@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const editorContainer = document.querySelector(".editor");
 
+  let content = "";
+
+  const imageUrls = [];
+
+  if (editor) {
   editor.addEventListener("focus", () => {
     editorContainer.style.border = "1px solid #2daae9";
   });
@@ -147,19 +152,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // get content of the editor
 
-  let content = "";
-
   editorContent.addEventListener("input", () => {
     content = editorContent.innerHTML;
   });
 
-  const postReply = document.getElementById("post-reply");
-
   const imageButton = document.getElementById("image");
   const imageInput = document.getElementById("image-input");
   const uploadedImagesContainer = document.getElementById("uploaded-images");
-
-  const imageUrls = [];
 
   imageButton.addEventListener("click", () => {
     imageInput.click();
@@ -214,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error(error);
     }
   });
+};
 
   // show uploaded images in comments from the server
 
@@ -246,8 +246,10 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
-  
-  
+
+  const postReply = document.getElementById("post-reply");
+
+  if (postReply) {
   // post comment to the server
   postReply.addEventListener("click", async () => {
     const postId = document.getElementById("postId").value;
@@ -273,4 +275,5 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error(error);
     }
   });
+  }
 });
