@@ -45,6 +45,7 @@ func main() {
 	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
 
 	http.HandleFunc("POST /comment/{id}/like", comments.CommentLikeHandler)
+	http.HandleFunc("POST /comment/{id}/dislike", comments.CommentDislikeHandler)
 
 	http.HandleFunc("POST /upload", func(w http.ResponseWriter, r *http.Request) {
 		uploadedImage := uploads.UploadImageHandler(w, r)

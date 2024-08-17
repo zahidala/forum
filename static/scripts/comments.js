@@ -54,4 +54,27 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  const dislikeButtons = document.querySelectorAll(".dislike-comment");
+
+  dislikeButtons.forEach((dislikeButton) => {
+    dislikeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
+      const commentId = dislikeButton.parentNode.id;
+      const postId = document.getElementById("postId").value;
+
+      try {
+        const response = await fetch(`/comment/${commentId}/dislike`, {
+          method: "POST",
+          body: JSON.stringify({ userId, postId }),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
 });
