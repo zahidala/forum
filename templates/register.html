@@ -3,7 +3,7 @@
 <div class="card-container" style="top: 55%">
   <div class="card">
     <h1 style="margin: 0; color: white">Register</h1>
-    <form id="form" action="/register" method="POST">
+    <form id="register-form" action="/register" method="POST">
       <div class="outer-container-input">
         <div class="container-input">
           <label for="name" style="color: white">Name</label>
@@ -27,7 +27,9 @@
             placeholder="Username"
             maxlength="15"
             oninput="validateUsername(this.value.trim())" />
-          <div class="error"></div>
+          <div class="error">
+            {{if eq .Title "username"}} {{.Error.Message}} {{end}}
+          </div>
         </div>
 
         <div class="container-input">
@@ -39,7 +41,9 @@
             placeholder="Email"
             maxlength="254"
             oninput="validateEmail(this.value.trim())" />
-          <div class="error"></div>
+          <div class="error">
+            {{if eq .Title "email"}} {{.Error.Message}} {{end}}
+          </div>
         </div>
 
         <div class="container-input">
@@ -65,6 +69,6 @@
   </div>
 </div>
 
-<script src="/static/validation.js" defer></script>
+<script src="/static/scripts/validationRegister.js" defer></script>
 
 {{template "footer" }}

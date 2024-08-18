@@ -3,6 +3,8 @@ package users
 import (
 	"database/sql"
 	"forum/pkg/db"
+	templates "forum/pkg/templates"
+	types "forum/pkg/types"
 	"forum/pkg/utils"
 	"log"
 	"net/http"
@@ -28,6 +30,11 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 
+	isValid, err := RegValidation(w, r)
+	if !isValid || err != nil {
+		return
+	}
+
 	hashedPassword, hashErr := utils.HashPassword(password)
 	if hashErr != nil {
 		log.Println(hashErr)
@@ -51,6 +58,69 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
+func RegValidation(w http.ResponseWriter, r *http.Request) (bool, error) {
+	isValid := true
+
+	username := r.FormValue("username")
+	email := r.FormValue("email")
+
+	userQuery := "SELECT EXISTS(SELECT 1 FROM users WHERE username = ?)"
+
+	userStmt, userErr := db.GetDB().Prepare(userQuery)
+	if userErr != nil {
+		http.Error(w, "Error preparing query", http.StatusInternalServerError)
+		return isValid, userErr
+	}
+	defer userStmt.Close()
+
+	var userExists bool
+	findUserErr := userStmt.QueryRow(username).Scan(&userExists)
+	if findUserErr != nil {
+		log.Println(findUserErr)
+		http.Error(w, "Error querying database", http.StatusInternalServerError)
+		return isValid, findUserErr
+	}
+
+	if userExists {
+		// return user already exists message
+		data := types.ErrorPageProps{
+			Error: types.Error{Message: "User already exists"},
+			Title: "username",
+		}
+		w.WriteHeader(http.StatusConflict)
+		templates.RegisterTemplateHandler(w, r, data)
+		return false, nil
+	}
+
+	emailQuery := "SELECT EXISTS(SELECT 1 FROM users WHERE email = ?)"
+	emailStmt, emailErr := db.GetDB().Prepare(emailQuery)
+	if emailErr != nil {
+		http.Error(w, "Error preparing query", http.StatusInternalServerError)
+		return isValid, emailErr
+	}
+	defer emailStmt.Close()
+
+	var emailExists bool
+	findEmailErr := emailStmt.QueryRow(email).Scan(&emailExists)
+	if findEmailErr != nil {
+		log.Println(findEmailErr)
+		http.Error(w, "Error querying database", http.StatusInternalServerError)
+		return isValid, findEmailErr
+	}
+
+	if emailExists {
+		// return account already exists message
+		data := types.ErrorPageProps{
+			Error: types.Error{Message: "Account already exists! Please log-in"},
+			Title: "email",
+		}
+		w.WriteHeader(http.StatusConflict)
+		templates.RegisterTemplateHandler(w, r, data)
+		return false, nil
+	}
+	return isValid, nil
+}
+
 func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
@@ -70,7 +140,10 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	findUserErr := userStmt.QueryRow(username).Scan(&userId, &hashedPassword)
 	switch {
 	case findUserErr == sql.ErrNoRows:
-		http.Error(w, "User not found", http.StatusNotFound)
+		data := types.Error{Message: "User not found"}
+		w.WriteHeader(http.StatusNotFound)
+		templates.LoginTemplateHandler(w, r, data)
+		// http.Error(w, "User not found", http.StatusNotFound)
 		return
 	case findUserErr != nil:
 		http.Error(w, "Error querying database", http.StatusInternalServerError)
@@ -79,7 +152,10 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	compareErr := utils.CompareHashAndPassword(hashedPassword, password)
 	if compareErr != nil {
-		http.Error(w, "Invalid password", http.StatusUnauthorized)
+		data := types.Error{Message: "Incorrect username/password"}
+		w.WriteHeader(http.StatusUnauthorized)
+		templates.LoginTemplateHandler(w, r, data)
+		// http.Error(w, "Invalid password", http.StatusUnauthorized)
 		return
 	}
 

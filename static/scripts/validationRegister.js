@@ -1,17 +1,17 @@
-const form = document.getElementById('form')
+const registerForm = document.getElementById('register-form')
 const fullName = document.getElementById('name')
 const username = document.getElementById('username')
 const email = document.getElementById('email')
 const password = document.getElementById('password')
 
 
-form.addEventListener('submit', e => {
+registerForm.addEventListener('submit', e => {
     e.preventDefault();
 
     const isFormValid = validateInputs();
 
     if (isFormValid) {
-        form.submit()
+        registerForm.submit()
     }
 
 })
@@ -122,17 +122,17 @@ const setError = (element, message) => {
     const errorDisplay = containerInput.querySelector('.error');
 
     containerInput.classList.add('error');
+    // errorDisplay.style.display = 'block'
     errorDisplay.innerText = message;
-    // errorDisplay.className = 'error'
 }
 
 const setSuccess = (element) => {
     const containerInput = element.parentElement;
     const errorDisplay = containerInput.querySelector('.error');
-
+    
     containerInput.classList.remove('error');
+    // errorDisplay.style.display = 'block'
     errorDisplay.innerText = '';
-    // errorDisplay.className = 'hidden'
 }
 
 // TODO
