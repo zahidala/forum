@@ -3,31 +3,30 @@
 <div class="card-container">
   <div class="card">
     <h1 style="margin: 0; color: white">Log In</h1>
-
-    <form action="/login" method="post">
+    <div class="login-error {{if not .Message}}hidden{{end}}">
+      {{if .Message}} {{.Message}} {{end}}
+    </div>
+    <form id="login-form" action="/login" method="post">
       <div class="outer-container-input">
         <div class="container-input">
-          <label for="username" style="color: white">Username</label>
+          <label for="login-username" style="color: white">Username</label>
           <input
             type="text"
-            id="username"
+            id="login-username"
             name="username"
             placeholder="Username"
-            class="input"
-            maxlength="15"
-            required />
+            class="input" />
         </div>
 
         <div class="container-input">
-          <label for="password" style="color: white">Password</label>
+          <label for="login-password" style="color: white">Password</label>
           <input
             type="password"
-            id="password"
+            id="login-password"
             name="password"
             placeholder="Password"
             maxlength="64"
-            class="input"
-            required />
+            class="input" />
         </div>
 
         <button
@@ -40,5 +39,7 @@
     </form>
   </div>
 </div>
+
+<script src="/static/scripts/validationLogin.js" defer></script>
 
 {{template "footer" }}
