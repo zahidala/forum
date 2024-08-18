@@ -179,7 +179,7 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
                         )
                         FROM CommentLikes cl
                         LEFT JOIN Users u3 ON cl.userId = u3.id
-                        WHERE cl.commentId = c.id
+                        WHERE cl.commentId = c.id AND cl.isLike = 1
                     ),
                     'dislikes', (
                         SELECT json_group_array(
@@ -197,7 +197,7 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
                         )
                         FROM CommentDislikes cdl
                         LEFT JOIN Users u4 ON cdl.userId = u4.id
-                        WHERE cdl.commentId = c.id
+                        WHERE cdl.commentId = c.id AND cdl.isDislike = 1
                     )
                 )
             )
