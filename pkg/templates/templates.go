@@ -105,15 +105,36 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 func SubcategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	posts := posts.GetPostsFromSubCategoryHandler(w, r)
 
+	isAuthenticated := utils.IsAuthenticated(r)
+
 	data := map[string]interface{}{
-		"Posts":       posts,
-		"Subcategory": posts[0].Subcategory,
-		"Category":    posts[0].Subcategory.Category,
+		"Posts":           posts,
+		"Subcategory":     posts[0].Subcategory,
+		"Category":        posts[0].Subcategory.Category,
+		"IsAuthenticated": isAuthenticated,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "subcategory.html", data)
 	if err != nil {
 		log.Println("Failed to execute template: subcategory.html")
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	// TODO: Replace this with a proper handler that only gets the subcategory and category
+	posts := posts.GetPostsFromSubCategoryHandler(w, r)
+
+	data := map[string]interface{}{
+		"Subcategory": posts[0].Subcategory,
+		"Category":    posts[0].Subcategory.Category,
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: new-post.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

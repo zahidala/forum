@@ -40,6 +40,7 @@ func main() {
 	http.HandleFunc("GET /", templates.IndexTemplateHandler)
 
 	http.HandleFunc("GET /subcategory/{id}", templates.SubcategoryTemplateHandler)
+	http.HandleFunc("GET /subcategory/{id}/new-post", templates.NewPostTemplateHandler)
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
 	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)

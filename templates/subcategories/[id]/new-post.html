@@ -1,0 +1,87 @@
+{{template "header" }}
+
+<div style="display: flex; flex-direction: column; gap: 1.5rem">
+  <div
+    class="container-subcategory-label"
+    style="border-radius: 5px; padding: 20px"
+  >
+    <span class="sub-category-label">New Post</span>
+  </div>
+
+  <div class="breadcrumb-container">
+    <a href="/" class="home-link">
+      <i class="fa-solid fa-house fa-xs home-icon"></i>
+    </a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <a href="/" class="forums-link">Forums</a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <a
+      href="/category/{{.Category.ID}}"
+      class="subcategory-label"
+      style="text-decoration: none"
+    >
+      <span class="subcategory-label">{{.Category.Name}}</span>
+    </a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <span class="subcategory-label">{{.Subcategory.Name}}</span>
+  </div>
+
+  <div class="post-editor-container">
+    <div class="editor">
+      <div style="display: flex; gap: 0.5rem">
+        <button class="editor-button" id="bold">
+          <i class="fa-solid fa-bold"></i>
+        </button>
+
+        <button class="editor-button" id="italic">
+          <i class="fa-solid fa-italic"></i>
+        </button>
+
+        <button class="editor-button" id="underline">
+          <i class="fa-solid fa-underline"></i>
+        </button>
+
+        <button class="editor-button" id="strikethrough">
+          <i class="fa-solid fa-strikethrough"></i>
+        </button>
+
+        <button class="editor-button" id="image">
+          <i class="fa-regular fa-image"></i>
+        </button>
+
+        <input
+          type="file"
+          id="image-input"
+          style="display: none"
+          accept="image/*"
+        />
+      </div>
+
+      <div class="editor-wrapper">
+        <div id="content" class="editor-textarea" contenteditable="true"></div>
+        <div id="placeholder" class="placeholder">Type your reply here...</div>
+      </div>
+    </div>
+
+    <div class="uploaded-images-container" id="uploaded-images"></div>
+
+    <div>
+      <button
+        type="submit"
+        id="post-reply"
+        class="btn-primary"
+        style="font-size: medium; padding: 10px 15px; cursor: pointer"
+      >
+        New Post
+      </button>
+    </div>
+  </div>
+</div>
+
+{{template "footer" }}
