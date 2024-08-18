@@ -50,7 +50,17 @@
 
     <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
 
-    <span class="subcategory-label">{{.Subcategory.Name}}</span>
+    <a
+      href="/subcategory/{{.Subcategory.ID}}"
+      class="subcategory-label"
+      style="text-decoration: none"
+    >
+      <span class="subcategory-label">{{.Subcategory.Name}}</span>
+    </a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <span class="subcategory-label">{{.Post.Title}}</span>
   </div>
 
   <div class="post-container">
