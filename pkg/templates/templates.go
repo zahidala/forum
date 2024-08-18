@@ -127,9 +127,18 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: Replace this with a proper handler that only gets the subcategory and category
 	posts := posts.GetPostsFromSubCategoryHandler(w, r)
 
+	var user Types.User
+
+	isAuthenticated := utils.IsAuthenticated(r)
+
+	if isAuthenticated {
+		user = utils.GetUserInfoBySession(w, r)
+	}
+
 	data := map[string]interface{}{
 		"Subcategory": posts[0].Subcategory,
 		"Category":    posts[0].Subcategory.Category,
+		"User":        user,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)

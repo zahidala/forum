@@ -5,6 +5,7 @@ import (
 	"forum/pkg/db"
 	"forum/pkg/env"
 	"forum/pkg/handlers/comments"
+	"forum/pkg/handlers/posts"
 	"forum/pkg/handlers/uploads"
 	"forum/pkg/handlers/users"
 	"forum/pkg/templates"
@@ -41,6 +42,7 @@ func main() {
 
 	http.HandleFunc("GET /subcategory/{id}", templates.SubcategoryTemplateHandler)
 	http.HandleFunc("GET /subcategory/{id}/new-post", templates.NewPostTemplateHandler)
+	http.HandleFunc("POST /subcategory/{id}/new-post", posts.CreatePostHandler)
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
 	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)

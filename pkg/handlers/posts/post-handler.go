@@ -6,6 +6,7 @@ import (
 	Types "forum/pkg/types"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type Post struct {
@@ -255,4 +256,49 @@ WHERE p.id = ?;
 	}
 
 	return result
+}
+
+type PostCreateBody struct {
+	UserId  string `json:"userId"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
+func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
+	subcategoryId := r.PathValue("id")
+
+	var body PostCreateBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Println("Error decoding body:", err)
+		return
+	}
+
+	// Prepare the SQL statement
+	query := `INSERT INTO Posts (authorId, subcategoryId, title, content) VALUES (?, ?, ?, ?);`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+	defer stmt.Close()
+
+	result, err := stmt.Exec(body.UserId, subcategoryId, body.Title, body.Content)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
+	postID, err := result.LastInsertId()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error getting last insert ID:", err)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+strconv.Itoa(int(postID)), http.StatusSeeOther)
 }

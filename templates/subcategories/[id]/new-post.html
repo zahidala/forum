@@ -32,7 +32,17 @@
     <span class="subcategory-label">{{.Subcategory.Name}}</span>
   </div>
 
+  <input type="hidden" id="subcategoryId" value="{{.Subcategory.ID}}" />
+  <input type="hidden" id="userId" value="{{.User.ID}}" />
+
   <div class="post-editor-container">
+    <input
+      type="text"
+      id="post-title-input"
+      class="input"
+      placeholder="Post Title"
+    />
+
     <div class="editor">
       <div style="display: flex; gap: 0.5rem">
         <button class="editor-button" id="bold">
@@ -65,7 +75,7 @@
 
       <div class="editor-wrapper">
         <div id="content" class="editor-textarea" contenteditable="true"></div>
-        <div id="placeholder" class="placeholder">Type your reply here...</div>
+        <div id="placeholder" class="placeholder">Type your post here...</div>
       </div>
     </div>
 
@@ -83,5 +93,6 @@
     </div>
   </div>
 </div>
+<script src="/static/scripts/post-editor.js"></script>
 
 {{template "footer" }}
