@@ -287,7 +287,7 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(body.UserId, subcategoryId, body.Title, body.Content)
+	result, err := stmt.Exec(body.UserId, subcategoryId, body.Title, body.Content, body.Images)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)
