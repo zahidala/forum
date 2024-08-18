@@ -262,6 +262,7 @@ type PostCreateBody struct {
 	UserId  string `json:"userId"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
+	Images  string `json:"images,omitempty"`
 }
 
 func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
@@ -276,7 +277,7 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare the SQL statement
-	query := `INSERT INTO Posts (authorId, subcategoryId, title, content) VALUES (?, ?, ?, ?);`
+	query := `INSERT INTO Posts (authorId, subcategoryId, title, content, attachments) VALUES (?, ?, ?, ?);`
 
 	stmt, err := db.GetDB().Prepare(query)
 	if err != nil {
