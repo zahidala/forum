@@ -108,12 +108,15 @@
 
         <button
           type="submit"
-          class="btn-post-action"
-          id="post-dislike"
+          class="btn-post-action {{if .IsPostDislikedByCurrentUser}}post-disliked{{end}}"
+          id="{{if .IsPostDislikedByCurrentUser}}post-remove-dislike{{else}}post-dislike{{end}}"
           style="cursor: pointer"
         >
-          <i class="fa-regular fa-thumbs-down" style="margin-right: 5px"></i>
-          Dislike
+          <i
+            class="{{if .IsPostDislikedByCurrentUser}}fa-solid{{else}}fa-regular{{end}} fa-thumbs-down"
+            style="margin-right: 5px"
+          ></i>
+          {{if .IsPostDislikedByCurrentUser}}Disliked{{else}}Dislike{{end}}
         </button>
 
         <button type="submit" class="btn-post-action" style="cursor: pointer">

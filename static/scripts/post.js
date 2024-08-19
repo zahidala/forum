@@ -87,4 +87,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  const removeDislikeButton = document.getElementById("post-remove-dislike");
+
+  if (removeDislikeButton) {
+    removeDislikeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
+
+      try {
+        const response = await fetch(`/post/${postId}/remove-dislike`, {
+          method: "PUT",
+          body: JSON.stringify({ userId }),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
 });

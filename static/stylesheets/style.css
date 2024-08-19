@@ -355,6 +355,10 @@ html, body {
   color: #2DAAE9;
 }
 
+.post-disliked {
+  color: #FF4500;
+}
+
 .btn-post-action:hover {
   background-color: #23252a;
   color: white;
@@ -362,6 +366,10 @@ html, body {
 
 .post-liked:hover {
   color: #3bb6f4;
+}
+
+.post-disliked:hover {
+  color: #FF6347;
 }
 
 .editor-button {

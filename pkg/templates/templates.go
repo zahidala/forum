@@ -157,20 +157,23 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 	var user Types.User
 	isPostLikedByCurrentUser := false
+	isPostDislikedByCurrentUser := false
 
 	if isAuthenticated {
 		user = utils.GetUserInfoBySession(w, r)
 		isPostLikedByCurrentUser = posts.IsPostLikedByCurrentUserHandler(w, r, post.ID, user.ID)
+		isPostDislikedByCurrentUser = posts.IsPostDisLikedByCurrentUserHandler(w, r, post.ID, user.ID)
 	}
 
 	data := map[string]interface{}{
-		"Post":                     post,
-		"Subcategory":              post.Subcategory,
-		"Category":                 post.Subcategory.Category,
-		"Comments":                 post.Comments,
-		"IsAuthenticated":          isAuthenticated,
-		"User":                     user,
-		"IsPostLikedByCurrentUser": isPostLikedByCurrentUser,
+		"Post":                        post,
+		"Subcategory":                 post.Subcategory,
+		"Category":                    post.Subcategory.Category,
+		"Comments":                    post.Comments,
+		"IsAuthenticated":             isAuthenticated,
+		"User":                        user,
+		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
+		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "post.html", data)
