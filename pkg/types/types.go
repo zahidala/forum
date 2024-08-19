@@ -62,6 +62,7 @@ type Post struct {
 	SubcategoryID int       `json:"subcategoryId"`
 	CreatedAt     time.Time `json:"createdAt"`
 	UpdatedAt     time.Time `json:"updatedAt"`
+	Attachments   string    `json:"attachments"`
 }
 
 type Comment struct {

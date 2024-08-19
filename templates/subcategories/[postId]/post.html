@@ -109,6 +109,19 @@
         </button>
       </div>
       {{end}}
+
+      <input type="hidden" value="{{.Post.ID}}" id="post-id" />
+
+      <input
+        type="hidden"
+        value="{{.Post.Attachments}}"
+        id="post-attachments-{{.Post.ID}}"
+      />
+
+      <div
+        class="uploaded-images-container"
+        id="post-images-{{.Post.ID}}"
+      ></div>
     </div>
   </div>
 
@@ -339,6 +352,7 @@
   {{end}}
 </div>
 <script src="/static/scripts/comment-editor.js"></script>
+<script src="/static/scripts/post.js"></script>
 <script src="/static/scripts/comments.js"></script>
 
 {{template "footer" }}

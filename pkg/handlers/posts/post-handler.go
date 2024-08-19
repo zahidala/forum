@@ -139,6 +139,7 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
             'username', u.username,
             'profilePicture', u.profilePicture
         ),
+				'attachments', p.attachments,
         'subcategory', json_object(
             'id', s.id,
             'name', s.name,
