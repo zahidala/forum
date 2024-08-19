@@ -87,7 +87,7 @@ function validateEmail(emailValue) {
     let isValid = true
 
     if (!regex.test(emailValue)) {
-        setError(email, "Inalid email")
+        setError(email, "Invalid email")
         isValid = false
 
     } else {
