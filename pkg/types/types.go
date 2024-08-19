@@ -24,6 +24,7 @@ type RegValidation struct {
 	Name     string
 	Username string
 	Email    string
+	Password string
 	Errors   map[string]string
 }
 
