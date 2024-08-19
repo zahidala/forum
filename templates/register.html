@@ -13,6 +13,7 @@
             class="input"
             placeholder="Full Name"
             maxlength="50"
+            {{ if .Errors }} value="{{ .Name }}" {{ end }}
             oninput="validateName(this.value.trim())" />
           <div class="error"></div>
         </div>
@@ -25,10 +26,11 @@
             name="username"
             class="input"
             placeholder="Username"
-            maxlength="15"
-            oninput="validateUsername(this.value.trim())" />
+            maxlength="20"
+            {{ if .Errors }} value="{{ .Username }}" {{ end }}
+            oninput="validateUsername(this.value)" />
           <div class="error">
-            {{if eq .Title "username"}} {{.Error.Message}} {{end}}
+            {{ with .Errors.Username }} {{ . }} {{ end }}
           </div>
         </div>
 
@@ -40,9 +42,10 @@
             class="input"
             placeholder="Email"
             maxlength="254"
+            {{ if .Errors }} value="{{ .Email }}" {{ end }}
             oninput="validateEmail(this.value.trim())" />
           <div class="error">
-            {{if eq .Title "email"}} {{.Error.Message}} {{end}}
+            {{ with .Errors.Email }} {{ . }} {{ end }}
           </div>
         </div>
 
@@ -54,8 +57,8 @@
             name="password"
             class="input"
             placeholder="Password"
-            maxlength="64"
-            oninput="validatePassword(this.value.trim())" />
+            maxlength="128"
+            oninput="validatePassword(this.value)" />
           <div class="error"></div>
         </div>
 

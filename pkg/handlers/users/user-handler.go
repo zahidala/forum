@@ -25,13 +25,26 @@ func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	username := r.FormValue("username")
 	name := r.FormValue("name")
+	username := r.FormValue("username")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 
-	isValid, err := RegValidation(w, r)
-	if !isValid || err != nil {
+	data := types.RegValidation{
+		Name:     name,
+		Username: username,
+		Email:    email,
+		Errors:   nil,
+	}
+
+	err := RegValidation(w, r, &data)
+	if err != nil {
+		return
+	}
+
+	if len(data.Errors) != 0 {
+		w.WriteHeader(http.StatusConflict)
+		templates.RegisterTemplateHandler(w, r, data)
 		return
 	}
 
@@ -58,8 +71,9 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
-func RegValidation(w http.ResponseWriter, r *http.Request) (bool, error) {
-	isValid := true
+func RegValidation(w http.ResponseWriter, r *http.Request, data *types.RegValidation) error {
+
+	data.Errors = make(map[string]string)
 
 	username := r.FormValue("username")
 	email := r.FormValue("email")
@@ -69,7 +83,7 @@ func RegValidation(w http.ResponseWriter, r *http.Request) (bool, error) {
 	userStmt, userErr := db.GetDB().Prepare(userQuery)
 	if userErr != nil {
 		http.Error(w, "Error preparing query", http.StatusInternalServerError)
-		return isValid, userErr
+		return userErr
 	}
 	defer userStmt.Close()
 
@@ -78,25 +92,18 @@ func RegValidation(w http.ResponseWriter, r *http.Request) (bool, error) {
 	if findUserErr != nil {
 		log.Println(findUserErr)
 		http.Error(w, "Error querying database", http.StatusInternalServerError)
-		return isValid, findUserErr
+		return findUserErr
 	}
 
 	if userExists {
-		// return user already exists message
-		data := types.ErrorPageProps{
-			Error: types.Error{Message: "User already exists"},
-			Title: "username",
-		}
-		w.WriteHeader(http.StatusConflict)
-		templates.RegisterTemplateHandler(w, r, data)
-		return false, nil
+		data.Errors["Username"] = "User already exists"
 	}
 
 	emailQuery := "SELECT EXISTS(SELECT 1 FROM users WHERE email = ?)"
 	emailStmt, emailErr := db.GetDB().Prepare(emailQuery)
 	if emailErr != nil {
 		http.Error(w, "Error preparing query", http.StatusInternalServerError)
-		return isValid, emailErr
+		return emailErr
 	}
 	defer emailStmt.Close()
 
@@ -105,20 +112,14 @@ func RegValidation(w http.ResponseWriter, r *http.Request) (bool, error) {
 	if findEmailErr != nil {
 		log.Println(findEmailErr)
 		http.Error(w, "Error querying database", http.StatusInternalServerError)
-		return isValid, findEmailErr
+		return findEmailErr
 	}
 
 	if emailExists {
-		// return account already exists message
-		data := types.ErrorPageProps{
-			Error: types.Error{Message: "Account already exists! Please log-in"},
-			Title: "email",
-		}
-		w.WriteHeader(http.StatusConflict)
-		templates.RegisterTemplateHandler(w, r, data)
-		return false, nil
+		data.Errors["Email"] = "Account already exists! Please log-in"
 	}
-	return isValid, nil
+
+	return nil
 }
 
 func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -143,7 +144,6 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		data := types.Error{Message: "User not found"}
 		w.WriteHeader(http.StatusNotFound)
 		templates.LoginTemplateHandler(w, r, data)
-		// http.Error(w, "User not found", http.StatusNotFound)
 		return
 	case findUserErr != nil:
 		http.Error(w, "Error querying database", http.StatusInternalServerError)
@@ -155,7 +155,6 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		data := types.Error{Message: "Incorrect username/password"}
 		w.WriteHeader(http.StatusUnauthorized)
 		templates.LoginTemplateHandler(w, r, data)
-		// http.Error(w, "Invalid password", http.StatusUnauthorized)
 		return
 	}
 

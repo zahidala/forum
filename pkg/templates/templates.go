@@ -83,11 +83,11 @@ func LoginTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.Err
 }
 
 func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
-	var data Types.ErrorPageProps
+	var data Types.RegValidation
 	RegisterTemplateHandler(w, r, data)
 }
 
-func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.ErrorPageProps) {
+func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.RegValidation) {
 	err := GetTemplate().ExecuteTemplate(w, "register.html", data)
 	if err != nil {
 		log.Println("Failed to execute template: register.html")
