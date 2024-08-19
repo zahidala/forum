@@ -18,9 +18,9 @@ registerForm.addEventListener('submit', e => {
 
 function validateInputs() {
     const fullNameValue = fullName.value.trim();
-    const usernameValue = username.value.trim();
+    const usernameValue = username.value;
     const emailValue = email.value.trim();
-    const passwordValue = password.value.trim();
+    const passwordValue = password.value;
 
     let isValidForm = true
 
@@ -57,7 +57,7 @@ function validateName(fullNameValue) {
 }
 
 function validateUsername(usernameValue) {
-    const regex = /^[a-zA-Z\d_]{3,15}$/
+    const regex = /^(?!.*\s)[a-zA-Z\d_]{3,20}$/
 
     let isValid = true
 
@@ -82,7 +82,7 @@ function validateUsername(usernameValue) {
 }
 
 function validateEmail(emailValue) {
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/
+    const regex = /^(?!.*\s)[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/
 
     let isValid = true
 
@@ -98,7 +98,7 @@ function validateEmail(emailValue) {
 }
 
 function validatePassword(passwordValue) {
-    const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}/
+    const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,128}/
 
     let isValid = true
 
@@ -122,16 +122,14 @@ const setError = (element, message) => {
     const errorDisplay = containerInput.querySelector('.error');
 
     containerInput.classList.add('error');
-    // errorDisplay.style.display = 'block'
     errorDisplay.innerText = message;
 }
 
 const setSuccess = (element) => {
     const containerInput = element.parentElement;
     const errorDisplay = containerInput.querySelector('.error');
-    
+
     containerInput.classList.remove('error');
-    // errorDisplay.style.display = 'block'
     errorDisplay.innerText = '';
 }
 

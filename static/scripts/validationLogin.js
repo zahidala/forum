@@ -5,15 +5,15 @@ const passwordLogin = document.getElementById('login-password')
 formLogin.addEventListener('submit', e => {
     e.preventDefault();
     const isFormValid = validateInputs();
-    
+
     if (isFormValid) {
         formLogin.submit()
     }
-    
+
 })
 
 function validateInputs() {
-    
+
     let isValidForm = true
 
     const isValidUsername = validateUsername()
@@ -22,7 +22,7 @@ function validateInputs() {
     if (!isValidUsername || !isValidPassword) {
         isValidForm = false
     }
-    
+
     return isValidForm
 }
 
@@ -31,7 +31,7 @@ function validateUsername() {
 
     let isValid = true
 
-    if (usernameValue.length < 3 || usernameValue.length > 15) {
+    if (usernameValue.length < 3 || usernameValue.length > 20) {
         setError()
         isValid = false
     }
@@ -44,7 +44,7 @@ function validatePassword() {
 
     let isValid = true
 
-    if (passwordValue.length < 8 || passwordValue.length > 64) {
+    if (passwordValue.length < 8 || passwordValue.length > 128) {
         setError()
         isValid = false
     }

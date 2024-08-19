@@ -21,6 +21,13 @@ type ErrorPageProps struct {
 	Title string
 }
 
+type RegValidation struct {
+	Name     string
+	Username string
+	Email    string
+	Errors   map[string]string
+}
+
 type User struct {
 	ID             int    `json:"id"`
 	Name           string `json:"name"`
