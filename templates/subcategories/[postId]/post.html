@@ -93,12 +93,22 @@
 
       {{if .IsAuthenticated}}
       <div class="post-action-container">
-        <button type="submit" class="btn-post-action" style="cursor: pointer">
+        <button
+          type="submit"
+          class="btn-post-action"
+          id="post-like"
+          style="cursor: pointer"
+        >
           <i class="fa-regular fa-thumbs-up" style="margin-right: 5px"></i>
           Like
         </button>
 
-        <button type="submit" class="btn-post-action" style="cursor: pointer">
+        <button
+          type="submit"
+          class="btn-post-action"
+          id="post-dislike"
+          style="cursor: pointer"
+        >
           <i class="fa-regular fa-thumbs-down" style="margin-right: 5px"></i>
           Dislike
         </button>
@@ -117,6 +127,32 @@
         value="{{.Post.Attachments}}"
         id="post-attachments-{{.Post.ID}}"
       />
+
+      {{if .Post.Likes}}
+      <div class="comment-reactions">
+        <i class="fa-solid fa-thumbs-up" style="color: white"></i>
+
+        {{range .Post.Likes}}
+
+        <span style="color: #2daae9; font-size: 0.8rem">
+          {{.Author.Username}}
+        </span>
+
+        {{end}}
+      </div>
+      {{end}} {{if .Post.Dislikes}}
+      <div class="comment-reactions dislike">
+        <i class="fa-solid fa-thumbs-down" style="color: white"></i>
+
+        {{range .Post.Dislikes}}
+
+        <span style="color: #2daae9; font-size: 0.8rem">
+          {{.Author.Username}}
+        </span>
+
+        {{end}}
+      </div>
+      {{end}}
 
       <div
         class="uploaded-images-container"

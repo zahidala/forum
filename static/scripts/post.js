@@ -25,4 +25,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     postAttachmentsContainer.style.display = "flex";
   });
+
+  const likeButton = document.getElementById("post-like");
+  const dislikeButton = document.getElementById("post-dislike");
+
+  likeButton.addEventListener("click", async () => {
+    const userId = document.getElementById("userId").value;
+
+    try {
+      const response = await fetch(`/post/${postId}/like`, {
+        method: "PUT",
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.redirected) {
+        window.location.href = response.url;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  dislikeButton.addEventListener("click", async () => {
+    const userId = document.getElementById("userId").value;
+
+    try {
+      const response = await fetch(`/post/${postId}/dislike`, {
+        method: "PUT",
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.redirected) {
+        window.location.href = response.url;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
 });

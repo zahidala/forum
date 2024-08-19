@@ -116,8 +116,20 @@ type CommentWithMoreDetails struct {
 	Dislikes []CommentDislikeWithAuthor `json:"dislikes,omitempty"`
 }
 
+type PostLikeWithAuthor struct {
+	Types.PostLike
+	Author Types.User `json:"author"`
+}
+
+type PostDislikeWithAuthor struct {
+	Types.PostDisLike
+	Author Types.User `json:"author"`
+}
+
 type PostWithComments struct {
 	Types.Post
+	Likes       []PostLikeWithAuthor     `json:"likes,omitempty"`
+	Dislikes    []PostDislikeWithAuthor  `json:"dislikes,omitempty"`
 	Author      Types.User               `json:"author"`
 	Subcategory Types.Subcategory        `json:"subcategory"`
 	Comments    []CommentWithMoreDetails `json:"comments"`
@@ -133,6 +145,42 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
         'content', p.content,
         'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
         'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
+				'likes', (
+						SELECT json_group_array(
+								json_object(
+										'id', pl.id,
+										'author', json_object(
+												'id', u1.id,
+												'name', u1.name,
+												'username', u1.username,
+												'profilePicture', u1.profilePicture
+										),
+										'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', pl.createdAt),
+										'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', pl.updatedAt)
+								)
+						)
+						FROM PostLikes pl
+						LEFT JOIN Users u1 ON pl.userId = u1.id
+						WHERE pl.postId = p.id AND pl.isLike = 1
+				),
+				'dislikes', (
+						SELECT json_group_array(
+								json_object(
+										'id', pdl.id,
+										'author', json_object(
+												'id', u2.id,
+												'name', u2.name,
+												'username', u2.username,
+												'profilePicture', u2.profilePicture
+										),
+										'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', pdl.createdAt),
+										'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', pdl.updatedAt)
+								)
+						)
+						FROM PostDislikes pdl
+						LEFT JOIN Users u2 ON pdl.userId = u2.id
+						WHERE pdl.postId = p.id AND pdl.isDislike = 1
+				),
         'author', json_object(
             'id', u.id,
             'name', u.name,
@@ -303,4 +351,72 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/post/"+strconv.Itoa(int(postID)), http.StatusSeeOther)
+}
+
+type PostReactionBody struct {
+	UserId string `json:"userId"`
+}
+
+func PostLikeHandler(w http.ResponseWriter, r *http.Request) {
+	postId := r.PathValue("id")
+
+	var body PostReactionBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Println("Error decoding body:", err)
+		return
+	}
+
+	// Prepare the SQL statement
+	query := `INSERT INTO PostLikes (postId, userId, isLike) VALUES (?, ?, ?);`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(postId, body.UserId, 1)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
+}
+
+func PostDislikeHandler(w http.ResponseWriter, r *http.Request) {
+	postId := r.PathValue("id")
+
+	var body PostReactionBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Println("Error decoding body:", err)
+		return
+	}
+
+	// Prepare the SQL statement
+	query := `INSERT INTO PostDislikes (postId, userId, isDislike) VALUES (?, ?, ?);`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(postId, body.UserId, 1)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
 }

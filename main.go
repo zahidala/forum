@@ -46,9 +46,11 @@ func main() {
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
 	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
+	http.HandleFunc("PUT /post/{id}/like", posts.PostLikeHandler)
+	http.HandleFunc("PUT /post/{id}/dislike", posts.PostDislikeHandler)
 
-	http.HandleFunc("POST /comment/{id}/like", comments.CommentLikeHandler)
-	http.HandleFunc("POST /comment/{id}/dislike", comments.CommentDislikeHandler)
+	http.HandleFunc("PUT /comment/{id}/like", comments.CommentLikeHandler)
+	http.HandleFunc("PUT /comment/{id}/dislike", comments.CommentDislikeHandler)
 
 	http.HandleFunc("POST /upload", func(w http.ResponseWriter, r *http.Request) {
 		uploadedImage := uploads.UploadImageHandler(w, r)

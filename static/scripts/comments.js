@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       try {
         const response = await fetch(`/comment/${commentId}/like`, {
-          method: "POST",
+          method: "PUT",
           body: JSON.stringify({ userId, postId }),
         });
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       try {
         const response = await fetch(`/comment/${commentId}/dislike`, {
-          method: "POST",
+          method: "PUT",
           body: JSON.stringify({ userId, postId }),
         });
 
