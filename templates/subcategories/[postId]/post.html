@@ -95,12 +95,15 @@
       <div class="post-action-container">
         <button
           type="submit"
-          class="btn-post-action"
-          id="post-like"
+          class="btn-post-action {{if .IsPostLikedByCurrentUser}}post-liked{{end}}"
+          id="{{if .IsPostLikedByCurrentUser}}post-remove-like{{else}}post-like{{end}}"
           style="cursor: pointer"
         >
-          <i class="fa-regular fa-thumbs-up" style="margin-right: 5px"></i>
-          Like
+          <i
+            class="{{if .IsPostLikedByCurrentUser}}fa-solid{{else}}fa-regular{{end}} fa-thumbs-up"
+            style="margin-right: 5px"
+          ></i>
+          {{if .IsPostLikedByCurrentUser}}Liked{{else}}Like{{end}}
         </button>
 
         <button

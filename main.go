@@ -47,6 +47,7 @@ func main() {
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
 	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
 	http.HandleFunc("PUT /post/{id}/like", posts.PostLikeHandler)
+	http.HandleFunc("PUT /post/{id}/remove-like", posts.PostRemoveLikeHandler)
 	http.HandleFunc("PUT /post/{id}/dislike", posts.PostDislikeHandler)
 
 	http.HandleFunc("PUT /comment/{id}/like", comments.CommentLikeHandler)

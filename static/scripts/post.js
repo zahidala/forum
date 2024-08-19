@@ -29,37 +29,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const likeButton = document.getElementById("post-like");
   const dislikeButton = document.getElementById("post-dislike");
 
-  likeButton.addEventListener("click", async () => {
-    const userId = document.getElementById("userId").value;
+  if (likeButton) { 
+    likeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
 
-    try {
-      const response = await fetch(`/post/${postId}/like`, {
-        method: "PUT",
-        body: JSON.stringify({ userId }),
-      });
+      try {
+        const response = await fetch(`/post/${postId}/like`, {
+          method: "PUT",
+          body: JSON.stringify({ userId }),
+        });
 
-      if (response.redirected) {
-        window.location.href = response.url;
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    });
+  }
 
-  dislikeButton.addEventListener("click", async () => {
-    const userId = document.getElementById("userId").value;
+  if (dislikeButton) {
+    dislikeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
 
-    try {
-      const response = await fetch(`/post/${postId}/dislike`, {
-        method: "PUT",
-        body: JSON.stringify({ userId }),
-      });
+      try {
+        const response = await fetch(`/post/${postId}/dislike`, {
+          method: "PUT",
+          body: JSON.stringify({ userId }),
+        });
 
-      if (response.redirected) {
-        window.location.href = response.url;
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    });
+  }
+
+  const removeLikeButton = document.getElementById("post-remove-like");
+
+  if (removeLikeButton) {
+    removeLikeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
+
+      try {
+        const response = await fetch(`/post/${postId}/remove-like`, {
+          method: "PUT",
+          body: JSON.stringify({ userId }),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
 });

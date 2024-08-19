@@ -389,6 +389,38 @@ func PostLikeHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
 }
 
+func PostRemoveLikeHandler(w http.ResponseWriter, r *http.Request) {
+	postId := r.PathValue("id")
+
+	var body PostReactionBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Println("Error decoding body:", err)
+		return
+	}
+
+	// Prepare the SQL statement
+	query := `DELETE FROM PostLikes WHERE postId = ? AND userId = ?;`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(postId, body.UserId)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
+}
+
 func PostDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	postId := r.PathValue("id")
 
@@ -419,4 +451,27 @@ func PostDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/post/"+postId, http.StatusSeeOther)
+}
+
+func IsPostLikedByCurrentUserHandler(w http.ResponseWriter, r *http.Request, postId int, userId int) bool {
+	// Prepare the SQL statement
+	query := `SELECT COUNT(*) FROM PostLikes WHERE postId = ? AND userId = ?;`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return false
+	}
+	defer stmt.Close()
+
+	var count int
+	err = stmt.QueryRow(postId, userId).Scan(&count)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return false
+	}
+
+	return count > 0
 }

@@ -351,9 +351,17 @@ html, body {
   padding: 5px 10px;
 }
 
+.post-liked {
+  color: #2DAAE9;
+}
+
 .btn-post-action:hover {
   background-color: #23252a;
   color: white;
+}
+
+.post-liked:hover {
+  color: #3bb6f4;
 }
 
 .editor-button {
