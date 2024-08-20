@@ -217,6 +217,7 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
                         SELECT json_group_array(
                             json_object(
                                 'id', cl.id,
+																'commentId', cl.commentId,
                                 'author', json_object(
                                     'id', u3.id,
                                     'name', u3.name,
@@ -235,6 +236,7 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
                         SELECT json_group_array(
                             json_object(
                                 'id', cdl.id,
+																'commentId', cdl.commentId,
                                 'author', json_object(
                                     'id', u4.id,
                                     'name', u4.name,
