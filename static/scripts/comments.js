@@ -157,4 +157,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  const replyButtons = document.querySelectorAll(".reply");
+
+  replyButtons.forEach((replyButton) => {
+    replyButton.addEventListener("click", () => {
+      const editor = document.getElementById("content");
+      editor.scrollIntoView({ behavior: "smooth" });
+    });
+  });
 });

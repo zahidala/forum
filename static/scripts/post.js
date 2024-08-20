@@ -108,4 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  const replyButton = document.querySelector(".reply")
+
+  if (replyButton) {
+    replyButton.addEventListener("click", () => {
+        const editor = document.getElementById("content");
+        editor.scrollIntoView({ behavior: "smooth" });
+    });
+  }
 });
