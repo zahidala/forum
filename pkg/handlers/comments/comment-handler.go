@@ -73,6 +73,24 @@ func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check if user already disliked the comment and remove the like
+
+	dislikeQuery := `DELETE FROM commentdislikes WHERE commentId = ? AND userId = ?`
+
+	dislikeStmt, err := db.GetDB().Prepare(dislikeQuery)
+	if err != nil {
+		log.Println("Error preparing query:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = dislikeStmt.Exec(commentId, commentLikeBody.UserId)
+	if err != nil {
+		log.Println("Error executing query:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
 	query := `INSERT INTO commentlikes (commentId, userId, isLike) VALUES (?, ?, ?)`
 
 	stmt, err := db.GetDB().Prepare(query)
@@ -148,6 +166,24 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	if jsonErr != nil {
 		log.Println(jsonErr)
 		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+		return
+	}
+
+	// check if user already liked the comment and remove the like
+
+	likeQuery := `DELETE FROM commentlikes WHERE commentId = ? AND userId = ?`
+
+	likeStmt, err := db.GetDB().Prepare(likeQuery)
+	if err != nil {
+		log.Println("Error preparing query:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = likeStmt.Exec(commentId, commentDislikeBody.UserId)
+	if err != nil {
+		log.Println("Error executing query:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
