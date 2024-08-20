@@ -55,7 +55,7 @@ func GetTemplate() *template.Template {
 }
 
 // ErrorTemplate renders the error page
-func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
+func ErrorTemplate(w http.ResponseWriter, data Types.ErrorPageProps) {
 	w.WriteHeader(data.Error.Code)
 
 	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
@@ -67,8 +67,13 @@ func ErrorTemplate(w http.ResponseWriter, data *Types.ErrorPageProps) {
 	}
 }
 
-func LoginTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	err := GetTemplate().ExecuteTemplate(w, "login.html", nil)
+func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
+	var data Types.Error
+	LoginTemplateHandler(w, r, data)
+}
+
+func LoginTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.Error) {
+	err := GetTemplate().ExecuteTemplate(w, "login.html", data)
 	if err != nil {
 		log.Println("Failed to execute template: login.html")
 		log.Println(err)
@@ -77,8 +82,13 @@ func LoginTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	err := GetTemplate().ExecuteTemplate(w, "register.html", nil)
+func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
+	var data Types.RegValidation
+	RegisterTemplateHandler(w, r, data)
+}
+
+func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.RegValidation) {
+	err := GetTemplate().ExecuteTemplate(w, "register.html", data)
 	if err != nil {
 		log.Println("Failed to execute template: register.html")
 		log.Println(err)

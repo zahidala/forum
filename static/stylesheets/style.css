@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
-html, body {
+html,
+body {
   margin: 0;
-  font-family: "Noto Sans" ,-apple-system, BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   background-color: #25272C;
 }
 
@@ -57,6 +58,10 @@ html, body {
   color: white;
 }
 
+div.hidden {
+  display: none;
+}
+
 .input {
   background: transparent;
   border: 1px solid #424242;
@@ -76,11 +81,27 @@ html, body {
 }
 
 .card-container {
-  left: 50%;
+  /* left: 50%;
   margin: 0;
   position: absolute;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
+  /*  */
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 76px;
+  min-height: calc(100vh - 76px);
+  height: 80vh; */
+  /*  */
+  display: grid;
+  place-items: center;
+  height: 80vh;
+  /*  */
+  /* position: relative;
+  height: 80vh; */
+  /*  */
+
 }
 
 .card {
@@ -92,35 +113,59 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
 }
 
 .outer-container-input {
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   gap: 2rem
-} 
+}
 
 .container-input {
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   gap: 1rem
 }
 
+.container-input.error .input {
+  border: 1px solid red;
+}
+
+div.hidden {
+  display: none;
+}
+
+.error {
+  color: #ff3860;
+  font-size: 12px;
+}
+
+.login-error {
+  background-color: #fde9e9;
+  color: #c84448;
+  padding: 15px;
+  font-size: 13px;
+}
+
 .home-page-layout {
-  display: grid; 
-  grid-template-columns: 3fr 1fr; 
+  display: grid;
+  grid-template-columns: 3fr 1fr;
   gap: 3rem;
 }
 
 .column-1 {
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   gap: 2rem
 }
 
 .column-2 {
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   gap: 2rem
 }
 
@@ -143,7 +188,8 @@ html, body {
   background-color: #1b1d21;
 }
 
-.categories-label, .sub-category-label {
+.categories-label,
+.sub-category-label {
   color: white;
   font-size: 1.5rem;
   font-weight: 700;
@@ -210,28 +256,28 @@ html, body {
 }
 
 .card-subcategory-content {
-  flex-direction: column; 
-  display: flex; 
+  flex-direction: column;
+  display: flex;
   gap: 0.5rem;
   flex: 1;
 }
 
 .container-new-posts {
-  display: flex; 
-  align-items: center; 
-  height: 50px; 
+  display: flex;
+  align-items: center;
+  height: 50px;
   gap: 1rem;
 }
 
 .new-post {
-  display: flex; 
+  display: flex;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 1rem;
 }
 
 .new-post-content {
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -254,7 +300,7 @@ html, body {
 }
 
 .breadcrumb-container {
-  display: flex; 
+  display: flex;
   gap: 1rem;
   align-items: center;
   background-color: #2e3037;
@@ -276,7 +322,7 @@ html, body {
   color: #90919b;
 }
 
-.forums-link{
+.forums-link {
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: normal;
@@ -387,7 +433,7 @@ html, body {
 }
 
 .editor-button:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .post-editor-container {
@@ -522,7 +568,7 @@ html, body {
 
 @media (max-width: 768px) {
   .home-page-layout {
-    display: flex; 
+    display: flex;
     flex-direction: column;
   }
 

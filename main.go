@@ -30,12 +30,12 @@ func main() {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir("static"))))
 
-	http.HandleFunc("GET /login", templates.LoginTemplateHandler)
+	http.HandleFunc("GET /login", templates.LoginPageHandler)
 	http.HandleFunc("POST /login", users.UserLoginHandler)
 
 	http.HandleFunc("GET /logout", users.UserLogoutHandler)
 
-	http.HandleFunc("GET /register", templates.RegisterTemplateHandler)
+	http.HandleFunc("GET /register", templates.RegisterPageHandler)
 	http.HandleFunc("POST /register", users.CreateUserHandler)
 
 	http.HandleFunc("GET /", templates.IndexTemplateHandler)
