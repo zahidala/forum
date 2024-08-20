@@ -77,4 +77,84 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  const commentLikedByUser = document.querySelectorAll(".comment-liked-by-user");
+
+  if (commentLikedByUser.length > 0) {
+    commentLikedByUser.forEach((comment) => {
+      if (comment.value === "true") {
+        const commentId = comment.dataset.commentId;
+        const commentContainer = document.getElementById(`comment-${commentId}`);
+        const likeButton = commentContainer.querySelector(".like-comment");
+
+        likeButton.classList.add("post-liked");
+        likeButton.classList.remove("like-comment");
+        likeButton.classList.add("remove-like-comment");
+        likeButton.innerHTML = `<i class="fa-solid fa-thumbs-up" style="margin-right: 5px"></i> Liked`;
+      }
+    });
+  }
+
+  const removeLikeCommentButtons = document.querySelectorAll(".remove-like-comment");
+
+  removeLikeCommentButtons.forEach((removeLikeButton) => {
+    removeLikeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
+      const commentId = removeLikeButton.parentNode.id;
+      const postId = document.getElementById("postId").value;
+
+      try {
+        const response = await fetch(`/comment/${commentId}/remove-like`, {
+          method: "PUT",
+          body: JSON.stringify({ userId, postId }),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
+
+  const commentDislikedByUser = document.querySelectorAll(".comment-disliked-by-user");
+
+  if (commentDislikedByUser.length > 0) {
+    commentDislikedByUser.forEach((comment) => {
+      if (comment.value === "true") {
+        const commentId = comment.dataset.commentId;
+        const commentContainer = document.getElementById(`comment-${commentId}`);
+        const dislikeButton = commentContainer.querySelector(".dislike-comment");
+
+        dislikeButton.classList.add("post-disliked");
+        dislikeButton.classList.remove("dislike-comment");
+        dislikeButton.classList.add("remove-dislike-comment");
+        dislikeButton.innerHTML = `<i class="fa-solid fa-thumbs-down" style="margin-right: 5px"></i> Disliked`;
+      }
+    });
+  }
+
+  const removeDislikeCommentButtons = document.querySelectorAll(".remove-dislike-comment");
+
+  removeDislikeCommentButtons.forEach((removeDislikeButton) => {
+    removeDislikeButton.addEventListener("click", async () => {
+      const userId = document.getElementById("userId").value;
+      const commentId = removeDislikeButton.parentNode.id;
+      const postId = document.getElementById("postId").value;
+
+      try {
+        const response = await fetch(`/comment/${commentId}/remove-dislike`, {
+          method: "PUT",
+          body: JSON.stringify({ userId, postId }),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
 });

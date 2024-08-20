@@ -93,6 +93,45 @@ func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/post/"+commentLikeBody.PostId, http.StatusSeeOther)
 }
 
+func CommentRemoveLikeHandler(w http.ResponseWriter, r *http.Request) {
+	commentId := r.PathValue("id")
+
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
+		return
+	}
+
+	var commentLikeBody CommentReactionBody
+
+	jsonErr := json.Unmarshal(reqBody, &commentLikeBody)
+	if jsonErr != nil {
+		log.Println(jsonErr)
+		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+		return
+	}
+
+	query := `DELETE FROM commentlikes WHERE commentId = ? AND userId = ?`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = stmt.Exec(commentId, commentLikeBody.UserId)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+commentLikeBody.PostId, http.StatusSeeOther)
+}
+
 func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	commentId := r.PathValue("id")
 
@@ -122,6 +161,45 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = stmt.Exec(commentId, commentDislikeBody.UserId, 1)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+commentDislikeBody.PostId, http.StatusSeeOther)
+}
+
+func CommentRemoveDislikeHandler(w http.ResponseWriter, r *http.Request) {
+	commentId := r.PathValue("id")
+
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
+		return
+	}
+
+	var commentDislikeBody CommentReactionBody
+
+	jsonErr := json.Unmarshal(reqBody, &commentDislikeBody)
+	if jsonErr != nil {
+		log.Println(jsonErr)
+		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+		return
+	}
+
+	query := `DELETE FROM commentdislikes WHERE commentId = ? AND userId = ?`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = stmt.Exec(commentId, commentDislikeBody.UserId)
 
 	if err != nil {
 		log.Println(err)

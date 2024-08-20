@@ -169,7 +169,7 @@
 
   {{range .Comments}}
 
-  <div class="post-container">
+  <div class="post-container" id="comment-{{.ID}}">
     <div class="post-author-container">
       <img
         src="{{.Author.ProfilePicture}}"
@@ -234,7 +234,18 @@
       <div class="comment-reactions">
         <i class="fa-solid fa-thumbs-up" style="color: white"></i>
 
-        {{range .Likes}}
+        <!-- Check if the comment is liked by the current user, to be used for updating styling in buttons -->
+
+        {{range .Likes}} {{if $.IsAuthenticated}} {{if eq .Author.ID $.User.ID}}
+        <input
+          type="hidden"
+          data-comment-id="{{.CommentID}}"
+          value="true"
+          class="comment-liked-by-user"
+        />
+        {{else}}
+        <input type="hidden" value="false" class="comment-liked-by-user" />
+        {{end}} {{end}}
 
         <span style="color: #2daae9; font-size: 0.8rem">
           {{.Author.Username}}
@@ -246,7 +257,17 @@
       <div class="comment-reactions dislike">
         <i class="fa-solid fa-thumbs-down" style="color: white"></i>
 
-        {{range .Dislikes}}
+        {{range .Dislikes}} {{if $.IsAuthenticated}} {{if eq .Author.ID
+        $.User.ID}}
+        <input
+          type="hidden"
+          data-comment-id="{{.CommentID}}"
+          value="true"
+          class="comment-disliked-by-user"
+        />
+        {{else}}
+        <input type="hidden" value="false" class="comment-disliked-by-user" />
+        {{end}} {{end}}
 
         <span style="color: #2daae9; font-size: 0.8rem">
           {{.Author.Username}}
