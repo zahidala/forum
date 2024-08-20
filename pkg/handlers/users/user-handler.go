@@ -27,11 +27,6 @@ func GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("name")
-	username := r.FormValue("username")
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-
 	data := types.RegValidation{}
 
 	err := RegValidation(w, r, &data)
@@ -47,7 +42,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPassword, hashErr := utils.HashPassword(password)
+	hashedPassword, hashErr := utils.HashPassword(data.Password)
 	if hashErr != nil {
 		log.Println(hashErr)
 		http.Error(w, "Error generating password hash", http.StatusInternalServerError)
@@ -57,9 +52,9 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	query := "INSERT INTO users (name, username, email, password) VALUES (?, ?, ?, ?)"
 
 	userAddExecErr := db.PrepareAndExecute(query,
-		name,
-		username,
-		email,
+		data.Name,
+		data.Username,
+		data.Email,
 		hashedPassword,
 	)
 	if userAddExecErr != nil {
@@ -169,8 +164,15 @@ func RegValidation(w http.ResponseWriter, r *http.Request, data *types.RegValida
 }
 
 func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
-	username := r.FormValue("username")
+	username := strings.TrimSpace(r.FormValue("username"))
 	password := r.FormValue("password")
+
+	if len(username) < 3 || len(username) > 20 || len(password) < 8 || len(password) > 128 {
+		data := types.Error{Message: "Invalid username/password"}
+		w.WriteHeader(http.StatusBadRequest)
+		templates.LoginTemplateHandler(w, r, data)
+		return
+	}
 
 	userQuery := "SELECT id, password FROM users WHERE username = ?"
 
