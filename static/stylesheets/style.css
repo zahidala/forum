@@ -287,6 +287,24 @@ div.hidden {
   font-weight: 700;
 }
 
+.post-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.post-link:hover {
+  color: #2DAAE9;
+  text-decoration: underline;
+}
+
+.post-category-link {
+  color: inherit;
+}
+
+.post-category-link:hover {
+  color: #adafbd;
+}
+
 .post-created {
   color: #A1A3AE;
   font-size: 0.7rem;

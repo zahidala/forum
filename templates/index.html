@@ -47,12 +47,18 @@
       />
 
       <div class="new-post-content">
-        <span class="post-title">{{.Title}}</span>
+        <span class="post-title">
+          <a href="/post/{{.ID}}" class="post-link">{{.Title}}</a>
+        </span>
         <span class="post-created">
           Latest: {{.Author.Username}} -
           <span class="time">{{.CreatedAt}}</span>
         </span>
-        <span class="post-topic">{{.Subcategory.Name}}</span>
+        <span class="post-topic">
+          <a href="/subcategory/{{.Subcategory.ID}}" class="post-category-link">
+            {{.Subcategory.Name}}
+          </a>
+        </span>
       </div>
     </div>
 
