@@ -55,5 +55,13 @@ function validatePassword() {
 function setError() {
     const errorDisplay = document.querySelector('.login-error')
     errorDisplay.classList.remove('hidden')
+    
+    errorDisplay.animate([
+        { opacity: 0 },
+        { opacity: 1 }
+    ], {
+        duration: 300,
+        iterations: 1
+    })
     errorDisplay.innerText = "Invalid username/password"
 }

@@ -120,6 +120,14 @@ function validatePassword(passwordValue) {
 const setError = (element, message) => {
     const containerInput = element.parentElement;
     const errorDisplay = containerInput.querySelector('.error');
+    
+    errorDisplay.animate([
+        { opacity: 0 },
+        { opacity: 1 }
+    ], {
+        duration: 300,
+        iterations: 1
+    })
 
     containerInput.classList.add('error');
     errorDisplay.innerText = message;
