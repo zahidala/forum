@@ -40,7 +40,7 @@ function validateUsername() {
 }
 
 function validatePassword() {
-    const passwordValue = passwordLogin.value.trim()
+    const passwordValue = passwordLogin.value
 
     let isValid = true
 
