@@ -83,7 +83,7 @@ WHERE p.subcategoryId = ?;
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
 		if errJsonUnmarshal != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			log.Println("Error unmarshalling json:", errJsonUnmarshal)
+			log.Println("Error unmarshaling json:", errJsonUnmarshal)
 			return nil
 		}
 
@@ -295,7 +295,7 @@ WHERE p.id = ?;
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
 		if errJsonUnmarshal != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			log.Println("Error unmarshalling json:", errJsonUnmarshal)
+			log.Println("Error unmarshaling json:", errJsonUnmarshal)
 			return PostWithComments{}
 		}
 	}
@@ -567,4 +567,83 @@ func IsPostDisLikedByCurrentUserHandler(w http.ResponseWriter, r *http.Request, 
 	}
 
 	return count > 0
+}
+
+func GetNewPostsHandler(w http.ResponseWriter, r *http.Request) []Post {
+	// Prepare the SQL statement
+	query := `SELECT json_object(
+			'id', p.id,
+			'title', p.title,
+			'content', p.content,
+			'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
+			'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
+			'author', json_object(
+											'id', u.id,
+											'name', u.name,
+											'username', u.username,
+											'profilePicture', u.profilePicture
+			),
+			'subcategory', json_object(
+											'id', s.id,
+											'name', s.name,
+											'description', s.description,
+											'category', json_object(
+																			'id', c.id,
+																			'name', c.name,
+																			'description', c.description
+											)
+			)
+) AS post
+
+FROM Posts p
+LEFT JOIN Users u ON p.authorId = u.id
+LEFT JOIN Subcategories s ON p.subcategoryId = s.id
+LEFT JOIN Categories c ON s.categoryId = c.id
+ORDER BY p.createdAt DESC
+LIMIT 10;
+`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return nil
+	}
+
+	rows, err := stmt.Query()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return nil
+	}
+
+	var results []Post
+
+	for rows.Next() {
+		var jsonString string
+		err := rows.Scan(&jsonString)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error scanning row:", err)
+			return nil
+		}
+
+		var result Post
+		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
+		if errJsonUnmarshal != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error unmarshaling json:", errJsonUnmarshal)
+			return nil
+		}
+
+		results = append(results, result)
+	}
+
+	if rowsErr := rows.Err(); rowsErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error iterating rows:", rowsErr)
+		return nil
+	}
+
+	return results
 }

@@ -99,8 +99,11 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.
 
 func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	categories := categories.GetCategoriesWithSubcategoriesHandler(w, r)
+	newPosts := posts.GetNewPostsHandler(w, r)
+
 	data := map[string]interface{}{
 		"Categories": categories,
+		"NewPosts":   newPosts,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", data)

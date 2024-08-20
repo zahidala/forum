@@ -35,40 +35,28 @@
       <div style="flex: 1; border: 0.5px solid #474c54"></div>
     </div>
 
+    {{range .NewPosts}}
+
     <div class="new-post">
       <img
-        src="https://via.placeholder.com/150"
+        src="{{.Author.ProfilePicture}}"
         alt=""
-        style="border-radius: 5px"
+        style="border-radius: 5px; min-width: 50px"
         width="50"
         height="50"
       />
 
       <div class="new-post-content">
-        <span class="post-title">Best electric cars in 2023?</span>
-        <span class="post-created">Latest: NOSS8 - 23 minutes ago</span>
-        <span class="post-topic">General</span>
-      </div>
-    </div>
-
-    <div class="new-post">
-      <img
-        src="https://via.placeholder.com/150"
-        alt=""
-        style="border-radius: 5px"
-        width="50"
-        height="50"
-      />
-
-      <div class="new-post-content">
-        <span class="post-title"
-          >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat
-          vitae, voluptas.
+        <span class="post-title">{{.Title}}</span>
+        <span class="post-created">
+          Latest: {{.Author.Username}} -
+          <span class="time">{{.CreatedAt}}</span>
         </span>
-        <span class="post-created">Latest: NOSS8 - 23 minutes ago</span>
-        <span class="post-topic">Off-Topic</span>
+        <span class="post-topic">{{.Subcategory.Name}}</span>
       </div>
     </div>
+
+    {{end}}
   </div>
 </div>
 
