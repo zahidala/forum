@@ -93,7 +93,6 @@
 
       {{if .IsAuthenticated}}
       <div class="post-action-container">
-        {{if not .IsPostDislikedByCurrentUser}}
         <button
           type="submit"
           class="btn-post-action {{if .IsPostLikedByCurrentUser}}post-liked{{end}}"
@@ -106,7 +105,7 @@
           ></i>
           {{if .IsPostLikedByCurrentUser}}Liked{{else}}Like{{end}}
         </button>
-        {{end}} {{if not .IsPostLikedByCurrentUser}}
+
         <button
           type="submit"
           class="btn-post-action {{if .IsPostDislikedByCurrentUser}}post-disliked{{end}}"
@@ -119,7 +118,6 @@
           ></i>
           {{if .IsPostDislikedByCurrentUser}}Disliked{{else}}Dislike{{end}}
         </button>
-        {{end}}
 
         <button type="submit" class="btn-post-action" style="cursor: pointer">
           <i class="fa-solid fa-reply" style="margin-right: 5px"></i>

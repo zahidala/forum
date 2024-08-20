@@ -368,6 +368,24 @@ func PostLikeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// check if the user has already disliked the post and remove the dislike
+
+	dislikeQuery := `DELETE FROM PostDislikes WHERE postId = ? AND userId = ?;`
+
+	dislikeStmt, err := db.GetDB().Prepare(dislikeQuery)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+
+	_, err = dislikeStmt.Exec(postId, body.UserId)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
 	// Prepare the SQL statement
 	query := `INSERT INTO PostLikes (postId, userId, isLike) VALUES (?, ?, ?);`
 
@@ -429,6 +447,24 @@ func PostDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		log.Println("Error decoding body:", err)
+		return
+	}
+
+	// check if the user has already liked the post and remove the like
+
+	likeQuery := `DELETE FROM PostLikes WHERE postId = ? AND userId = ?;`
+
+	likeStmt, err := db.GetDB().Prepare(likeQuery)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+
+	_, err = likeStmt.Exec(postId, body.UserId)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
 		return
 	}
 
