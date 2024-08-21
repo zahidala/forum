@@ -86,21 +86,9 @@ WHERE p.subcategoryId = ?;
 	return results
 }
 
-type PostLikeWithAuthor struct {
-	Types.PostLike
-	Author Types.User `json:"author"`
-}
-
-type PostDislikeWithAuthor struct {
-	Types.PostDisLike
-	Author Types.User `json:"author"`
-}
-
 type PostWithMoreDetails struct {
 	Types.Post
-	Likes    []PostLikeWithAuthor    `json:"likes,omitempty"`
-	Dislikes []PostDislikeWithAuthor `json:"dislikes,omitempty"`
-	Author   Types.User              `json:"author"`
+	Author Types.User `json:"author"`
 }
 
 func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithMoreDetails {
@@ -113,42 +101,6 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithMoreDetails 
 	'content', p.content,
 	'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
 	'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
-	'likes', (
-			SELECT json_group_array(
-					json_object(
-							'id', pl.id,
-							'author', json_object(
-									'id', u1.id,
-									'name', u1.name,
-									'username', u1.username,
-									'profilePicture', u1.profilePicture
-							),
-							'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', pl.createdAt),
-							'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', pl.updatedAt)
-					)
-			)
-			FROM PostLikes pl
-			LEFT JOIN Users u1 ON pl.userId = u1.id
-			WHERE pl.postId = p.id AND pl.isLike = 1
-	),
-	'dislikes', (
-			SELECT json_group_array(
-					json_object(
-							'id', pdl.id,
-							'author', json_object(
-									'id', u2.id,
-									'name', u2.name,
-									'username', u2.username,
-									'profilePicture', u2.profilePicture
-							),
-							'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', pdl.createdAt),
-							'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', pdl.updatedAt)
-					)
-			)
-			FROM PostDislikes pdl
-			LEFT JOIN Users u2 ON pdl.userId = u2.id
-			WHERE pdl.postId = p.id AND pdl.isDislike = 1
-	),
 	'author', json_object(
 			'id', u.id,
 			'name', u.name,
@@ -204,6 +156,156 @@ WHERE p.id = ?;
 	}
 
 	return result
+}
+
+type PostLikeWithAuthor struct {
+	Types.PostLike
+	Author Types.User `json:"author"`
+}
+
+func GetPostLikesHandler(w http.ResponseWriter, r *http.Request) []PostLikeWithAuthor {
+	postId := r.PathValue("id")
+
+	// Prepare the SQL statement
+	query := `SELECT json_group_array(
+					json_object(
+									'id', pl.id,
+									'postId', pl.postId,
+									'userId', pl.userId,
+									'author', json_object(
+													'id', u.id,
+													'name', u.name,
+													'username', u.username,
+													'profilePicture', u.profilePicture
+									),
+									'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', pl.createdAt),
+									'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', pl.updatedAt)
+					)
+	)
+	FROM PostLikes pl
+	LEFT JOIN Users u ON pl.userId = u.id
+	WHERE pl.postId = ? AND pl.isLike = 1;
+`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return nil
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(postId)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return nil
+	}
+
+	var results []PostLikeWithAuthor
+
+	for rows.Next() {
+		var jsonString string
+		err := rows.Scan(&jsonString)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error scanning row:", err)
+			return nil
+		}
+
+		var result []PostLikeWithAuthor
+		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
+		if errJsonUnmarshal != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error unmarshaling json:", errJsonUnmarshal)
+			return nil
+		}
+
+		results = append(results, result...)
+	}
+
+	if rowsErr := rows.Err(); rowsErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error iterating rows:", rowsErr)
+		return nil
+	}
+
+	return results
+}
+
+type PostDislikeWithAuthor struct {
+	Types.PostDisLike
+	Author Types.User `json:"author"`
+}
+
+func GetPostDislikesHandler(w http.ResponseWriter, r *http.Request) []PostDislikeWithAuthor {
+	postId := r.PathValue("id")
+
+	// Prepare the SQL statement
+	query := `SELECT json_group_array(
+					json_object(
+									'id', pd.id,
+									'postId', pd.postId,
+									'userId', pd.userId,
+									'author', json_object(
+													'id', u.id,
+													'name', u.name,
+													'username', u.username,
+													'profilePicture', u.profilePicture
+									),
+									'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', pd.createdAt),
+									'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', pd.updatedAt)
+					)
+	)
+	FROM PostDislikes pd
+	LEFT JOIN Users u ON pd.userId = u.id
+	WHERE pd.postId = ? AND pd.isDislike = 1;
+`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return nil
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(postId)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return nil
+	}
+
+	var results []PostDislikeWithAuthor
+
+	for rows.Next() {
+		var jsonString string
+		err := rows.Scan(&jsonString)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error scanning row:", err)
+			return nil
+		}
+
+		var result []PostDislikeWithAuthor
+		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
+		if errJsonUnmarshal != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error unmarshaling json:", errJsonUnmarshal)
+			return nil
+		}
+
+		results = append(results, result...)
+	}
+
+	if rowsErr := rows.Err(); rowsErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error iterating rows:", rowsErr)
+		return nil
+	}
+
+	return results
 }
 
 type PostCreateBody struct {

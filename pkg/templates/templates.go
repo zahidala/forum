@@ -168,6 +168,8 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	post := posts.GetPostHandler(w, r)
+	postLikes := posts.GetPostLikesHandler(w, r)
+	postDislikes := posts.GetPostDislikesHandler(w, r)
 	comments := comments.GetCommentsHandler(w, r)
 
 	subCategoryWithCategory := subcategories.GetSubCategoryWithCategoryHandlerFromPost(w, r, post.ID)
@@ -186,6 +188,8 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"Post":                        post,
+		"Likes":                       postLikes,
+		"Dislikes":                    postDislikes,
 		"Subcategory":                 subCategoryWithCategory.Subcategory,
 		"Category":                    subCategoryWithCategory.Category,
 		"Comments":                    comments,
