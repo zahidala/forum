@@ -2,6 +2,7 @@ package templates
 
 import (
 	"forum/pkg/handlers/categories"
+	"forum/pkg/handlers/comments"
 	"forum/pkg/handlers/posts"
 	"forum/pkg/handlers/subcategories"
 	Types "forum/pkg/types"
@@ -167,6 +168,7 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	post := posts.GetPostHandler(w, r)
+	comments := comments.GetCommentsHandler(w, r)
 
 	subCategoryWithCategory := subcategories.GetSubCategoryWithCategoryHandlerFromPost(w, r, post.ID)
 
@@ -186,7 +188,7 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Post":                        post,
 		"Subcategory":                 subCategoryWithCategory.Subcategory,
 		"Category":                    subCategoryWithCategory.Category,
-		"Comments":                    post.Comments,
+		"Comments":                    comments,
 		"IsAuthenticated":             isAuthenticated,
 		"User":                        user,
 		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
