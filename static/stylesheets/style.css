@@ -287,12 +287,12 @@ div.hidden {
   font-weight: 700;
 }
 
-.post-link {
+.new-post-link {
   text-decoration: none;
   color: inherit;
 }
 
-.post-link:hover {
+.new-post-link:hover {
   color: #2DAAE9;
   text-decoration: underline;
 }
