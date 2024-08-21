@@ -6,6 +6,8 @@
     style="
       border-radius: 5px;
       flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1.5rem;
       justify-content: space-between;
       align-items: center;
     "
@@ -85,7 +87,7 @@
         >
       </div>
 
-      {{range .Posts}}
+      {{if gt (len .Posts) 0}} {{range .Posts}}
 
       <a href="/post/{{.ID}}" class="post-link">
         <div class="new-post" style="padding-inline: 10px">
@@ -112,6 +114,31 @@
       </a>
 
       <div style="flex: 1; border: 0.5px solid #474c54"></div>
+
+      {{end}} {{else}}
+
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 30px;
+          padding-top: 5px;
+          padding-bottom: 20px;
+          flex-direction: column;
+          gap: 1.5rem;
+          border-bottom: 1px solid #474c54;
+        "
+      >
+        <i
+          class="fa-solid fa-circle-exclamation"
+          style="font-size: 5rem; color: #a2a3ae"
+        ></i>
+
+        <span style="color: #a2a3ae; font-size: 1rem; font-weight: bold">
+          No posts found. Be the first to create a post!
+        </span>
+      </div>
 
       {{end}}
     </div>

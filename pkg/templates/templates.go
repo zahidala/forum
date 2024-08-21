@@ -3,6 +3,7 @@ package templates
 import (
 	"forum/pkg/handlers/categories"
 	"forum/pkg/handlers/posts"
+	"forum/pkg/handlers/subcategories"
 	Types "forum/pkg/types"
 	"forum/pkg/utils"
 	"html/template"
@@ -116,14 +117,16 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SubcategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
+
 	posts := posts.GetPostsFromSubCategoryHandler(w, r)
 
 	isAuthenticated := utils.IsAuthenticated(r)
 
 	data := map[string]interface{}{
 		"Posts":           posts,
-		"Subcategory":     posts[0].Subcategory,
-		"Category":        posts[0].Subcategory.Category,
+		"Subcategory":     subCategoryWithCategory.Subcategory,
+		"Category":        subCategoryWithCategory.Category,
 		"IsAuthenticated": isAuthenticated,
 	}
 
@@ -137,8 +140,7 @@ func SubcategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: Replace this with a proper handler that only gets the subcategory and category
-	posts := posts.GetPostsFromSubCategoryHandler(w, r)
+	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
 
 	var user Types.User
 
@@ -149,8 +151,8 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"Subcategory": posts[0].Subcategory,
-		"Category":    posts[0].Subcategory.Category,
+		"Subcategory": subCategoryWithCategory.Subcategory,
+		"Category":    subCategoryWithCategory.Category,
 		"User":        user,
 	}
 
