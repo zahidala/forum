@@ -166,6 +166,8 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
+
 	post := posts.GetPostHandler(w, r)
 
 	isAuthenticated := utils.IsAuthenticated(r)
@@ -182,8 +184,8 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"Post":                        post,
-		"Subcategory":                 post.Subcategory,
-		"Category":                    post.Subcategory.Category,
+		"Subcategory":                 subCategoryWithCategory.Subcategory,
+		"Category":                    subCategoryWithCategory.Category,
 		"Comments":                    post.Comments,
 		"IsAuthenticated":             isAuthenticated,
 		"User":                        user,

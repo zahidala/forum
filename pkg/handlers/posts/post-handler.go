@@ -128,11 +128,10 @@ type PostDislikeWithAuthor struct {
 
 type PostWithComments struct {
 	Types.Post
-	Likes       []PostLikeWithAuthor     `json:"likes,omitempty"`
-	Dislikes    []PostDislikeWithAuthor  `json:"dislikes,omitempty"`
-	Author      Types.User               `json:"author"`
-	Subcategory Types.Subcategory        `json:"subcategory"`
-	Comments    []CommentWithMoreDetails `json:"comments"`
+	Likes    []PostLikeWithAuthor     `json:"likes,omitempty"`
+	Dislikes []PostDislikeWithAuthor  `json:"dislikes,omitempty"`
+	Author   Types.User               `json:"author"`
+	Comments []CommentWithMoreDetails `json:"comments"`
 }
 
 func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
@@ -188,16 +187,6 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
             'profilePicture', u.profilePicture
         ),
 				'attachments', p.attachments,
-        'subcategory', json_object(
-            'id', s.id,
-            'name', s.name,
-            'description', s.description,
-            'category', json_object(
-                'id', c2.id,
-                'name', c2.name,
-                'description', c2.description
-            )
-        ),
         'comments', (
             SELECT json_group_array(
                 json_object(
@@ -260,8 +249,6 @@ func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithComments {
 ) AS post
 FROM Posts p
 LEFT JOIN Users u ON p.authorId = u.id
-LEFT JOIN Subcategories s ON p.subcategoryId = s.id
-LEFT JOIN Categories c2 ON s.categoryId = c2.id
 WHERE p.id = ?;
 `
 

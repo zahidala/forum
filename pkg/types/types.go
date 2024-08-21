@@ -54,12 +54,11 @@ type Category struct {
 }
 
 type Subcategory struct {
-	ID          int      `json:"id"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Icon        string   `json:"icon"`
-	Category    Category `json:"category"`
-	CategoryID  int      `json:"categoryId"`
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Icon        string `json:"icon"`
+	CategoryID  int    `json:"categoryId"`
 }
 
 type Post struct {
