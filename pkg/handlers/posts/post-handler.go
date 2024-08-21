@@ -11,8 +11,7 @@ import (
 
 type Post struct {
 	Types.Post
-	Author      Types.User        `json:"author"`
-	Subcategory Types.Subcategory `json:"subcategory"`
+	Author Types.User `json:"author"`
 }
 
 func GetPostsFromSubCategoryHandler(w http.ResponseWriter, r *http.Request) []Post {
@@ -30,24 +29,12 @@ func GetPostsFromSubCategoryHandler(w http.ResponseWriter, r *http.Request) []Po
 											'name', u.name,
 											'username', u.username,
 											'profilePicture', u.profilePicture
-			),
-			'subcategory', json_object(
-											'id', s.id,
-											'name', s.name,
-											'description', s.description,
-											'category', json_object(
-																			'id', c.id,
-																			'name', c.name,
-																			'description', c.description
-											)
 			)
 ) AS post
 
 FROM Posts p
 
 LEFT JOIN Users u ON p.authorId = u.id
-LEFT JOIN Subcategories s ON p.subcategoryId = s.id
-LEFT JOIN Categories c ON s.categoryId = c.id
 
 WHERE p.subcategoryId = ?;
 `
@@ -315,7 +302,7 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare the SQL statement
-	query := `INSERT INTO Posts (authorId, subcategoryId, title, content, attachments) VALUES (?, ?, ?, ?);`
+	query := `INSERT INTO Posts (authorId, subcategoryId, title, content, attachments) VALUES (?, ?, ?, ?, ?);`
 
 	stmt, err := db.GetDB().Prepare(query)
 	if err != nil {
@@ -556,7 +543,13 @@ func IsPostDisLikedByCurrentUserHandler(w http.ResponseWriter, r *http.Request, 
 	return count > 0
 }
 
-func GetNewPostsHandler(w http.ResponseWriter, r *http.Request) []Post {
+type PostWithSubcategory struct {
+	Types.Post
+	Author      Types.User        `json:"author"`
+	Subcategory Types.Subcategory `json:"subcategory"`
+}
+
+func GetNewPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithSubcategory {
 	// Prepare the SQL statement
 	query := `SELECT json_object(
 			'id', p.id,
@@ -604,7 +597,7 @@ LIMIT 10;
 		return nil
 	}
 
-	var results []Post
+	var results []PostWithSubcategory
 
 	for rows.Next() {
 		var jsonString string
@@ -615,7 +608,7 @@ LIMIT 10;
 			return nil
 		}
 
-		var result Post
+		var result PostWithSubcategory
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
 		if errJsonUnmarshal != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
