@@ -166,9 +166,9 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
-
 	post := posts.GetPostHandler(w, r)
+
+	subCategoryWithCategory := subcategories.GetSubCategoryWithCategoryHandlerFromPost(w, r, post.ID)
 
 	isAuthenticated := utils.IsAuthenticated(r)
 
