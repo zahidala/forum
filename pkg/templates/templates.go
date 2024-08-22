@@ -138,31 +138,30 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-// 	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
+func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	category := categories.GetCategoryHandler(w, r)
 
-// 	var user Types.User
+	var user Types.User
 
-// 	isAuthenticated := utils.IsAuthenticated(r)
+	isAuthenticated := utils.IsAuthenticated(r)
 
-// 	if isAuthenticated {
-// 		user = utils.GetUserInfoBySession(w, r)
-// 	}
+	if isAuthenticated {
+		user = utils.GetUserInfoBySession(w, r)
+	}
 
-// 	data := map[string]interface{}{
-// 		"Subcategory": subCategoryWithCategory.Subcategory,
-// 		"Category":    subCategoryWithCategory.Category,
-// 		"User":        user,
-// 	}
+	data := map[string]interface{}{
+		"Category": category,
+		"User":     user,
+	}
 
-// 	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
-// 	if err != nil {
-// 		log.Println("Failed to execute template: new-post.html")
-// 		log.Println(err)
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// }
+	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: new-post.html")
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
 
 func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	post := posts.GetPostHandler(w, r)

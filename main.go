@@ -5,6 +5,7 @@ import (
 	"forum/pkg/db"
 	"forum/pkg/env"
 	"forum/pkg/handlers/comments"
+	"forum/pkg/handlers/posts"
 	"forum/pkg/handlers/uploads"
 	"forum/pkg/handlers/users"
 	"forum/pkg/templates"
@@ -40,16 +41,15 @@ func main() {
 	http.HandleFunc("GET /", templates.IndexTemplateHandler)
 
 	http.HandleFunc("GET /category/{id}", templates.CategoryTemplateHandler)
-
-	// http.HandleFunc("GET /subcategory/{id}/new-post", templates.NewPostTemplateHandler)
-	// http.HandleFunc("POST /subcategory/{id}/new-post", posts.CreatePostHandler)
+	http.HandleFunc("GET /category/{id}/new-post", templates.NewPostTemplateHandler)
+	http.HandleFunc("POST /category/{id}/new-post", posts.CreatePostHandler)
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
-	// http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
-	// http.HandleFunc("PUT /post/{id}/like", posts.PostLikeHandler)
-	// http.HandleFunc("PUT /post/{id}/remove-like", posts.PostRemoveLikeHandler)
-	// http.HandleFunc("PUT /post/{id}/dislike", posts.PostDislikeHandler)
-	// http.HandleFunc("PUT /post/{id}/remove-dislike", posts.PostRemoveDislikeHandler)
+	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
+	http.HandleFunc("PUT /post/{id}/like", posts.PostLikeHandler)
+	http.HandleFunc("PUT /post/{id}/remove-like", posts.PostRemoveLikeHandler)
+	http.HandleFunc("PUT /post/{id}/dislike", posts.PostDislikeHandler)
+	http.HandleFunc("PUT /post/{id}/remove-dislike", posts.PostRemoveDislikeHandler)
 
 	http.HandleFunc("PUT /comment/{id}/like", comments.CommentLikeHandler)
 	http.HandleFunc("PUT /comment/{id}/dislike", comments.CommentDislikeHandler)

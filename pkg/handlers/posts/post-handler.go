@@ -6,6 +6,7 @@ import (
 	Types "forum/pkg/types"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type Post struct {
@@ -84,78 +85,6 @@ ORDER BY p.createdAt DESC;
 
 	return results
 }
-
-// func GetPostsFromSubCategoryHandler(w http.ResponseWriter, r *http.Request) []Post {
-// 	subcategoryId := r.PathValue("id")
-
-// 	// Prepare the SQL statement
-// 	query := `SELECT json_object(
-// 			'id', p.id,
-// 			'title', p.title,
-// 			'content', p.content,
-// 			'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
-// 			'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
-// 			'author', json_object(
-// 											'id', u.id,
-// 											'name', u.name,
-// 											'username', u.username,
-// 											'profilePicture', u.profilePicture
-// 			)
-// ) AS post
-
-// FROM Posts p
-
-// LEFT JOIN Users u ON p.authorId = u.id
-
-// WHERE p.subcategoryId = ?;
-// `
-
-// 	stmt, err := db.GetDB().Prepare(query)
-// 	if err != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error preparing query:", err)
-// 		return nil
-// 	}
-// 	defer stmt.Close()
-
-// 	rows, err := stmt.Query(subcategoryId)
-// 	if err != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error executing query:", err)
-// 		return nil
-// 	}
-// 	defer rows.Close()
-
-// 	var results []Post
-
-// 	for rows.Next() {
-// 		var jsonString string
-// 		err := rows.Scan(&jsonString)
-// 		if err != nil {
-// 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 			log.Println("Error scanning row:", err)
-// 			return nil
-// 		}
-
-// 		var result Post
-// 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
-// 		if errJsonUnmarshal != nil {
-// 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 			log.Println("Error unmarshaling json:", errJsonUnmarshal)
-// 			return nil
-// 		}
-
-// 		results = append(results, result)
-// 	}
-
-// 	if rowsErr := rows.Err(); rowsErr != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error iterating rows:", rowsErr)
-// 		return nil
-// 	}
-
-// 	return results
-// }
 
 type PostWithMoreDetails struct {
 	Types.Post
@@ -379,51 +308,70 @@ func GetPostDislikesHandler(w http.ResponseWriter, r *http.Request) []PostDislik
 	return results
 }
 
-// type PostCreateBody struct {
-// 	UserId  string `json:"userId"`
-// 	Title   string `json:"title"`
-// 	Content string `json:"content"`
-// 	Images  string `json:"images,omitempty"`
-// }
+type PostCreateBody struct {
+	UserId  string `json:"userId"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Images  string `json:"images,omitempty"`
+}
 
-// func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
-// 	subcategoryId := r.PathValue("id")
+func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
+	categoryId := r.PathValue("id")
 
-// 	var body PostCreateBody
-// 	err := json.NewDecoder(r.Body).Decode(&body)
-// 	if err != nil {
-// 		http.Error(w, "Bad Request", http.StatusBadRequest)
-// 		log.Println("Error decoding body:", err)
-// 		return
-// 	}
+	var body PostCreateBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Println("Error decoding body:", err)
+		return
+	}
 
-// 	// Prepare the SQL statement
-// 	query := `INSERT INTO Posts (authorId, subcategoryId, title, content, attachments) VALUES (?, ?, ?, ?, ?);`
+	// Prepare the SQL statement
+	query := `INSERT INTO Posts (authorId, title, content, attachments) VALUES (?, ?, ?, ?);`
 
-// 	stmt, err := db.GetDB().Prepare(query)
-// 	if err != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error preparing query:", err)
-// 		return
-// 	}
-// 	defer stmt.Close()
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+	defer stmt.Close()
 
-// 	result, err := stmt.Exec(body.UserId, subcategoryId, body.Title, body.Content, body.Images)
-// 	if err != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error executing query:", err)
-// 		return
-// 	}
+	result, err := stmt.Exec(body.UserId, body.Title, body.Content, body.Images)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
 
-// 	postID, err := result.LastInsertId()
-// 	if err != nil {
-// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-// 		log.Println("Error getting last insert ID:", err)
-// 		return
-// 	}
+	postId, err := result.LastInsertId()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error getting last insert id:", err)
+		return
+	}
 
-// 	http.Redirect(w, r, "/post/"+strconv.Itoa(int(postID)), http.StatusSeeOther)
-// }
+	// Prepare the SQL statement
+	categoryQuery := `INSERT INTO PostCategories (postId, categoryId) VALUES (?, ?);`
+
+	categoryStmt, err := db.GetDB().Prepare(categoryQuery)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+
+	_, err = categoryStmt.Exec(postId, categoryId)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+strconv.Itoa(int(postId)), http.StatusSeeOther)
+}
 
 type PostReactionBody struct {
 	UserId string `json:"userId"`
