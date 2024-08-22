@@ -2,9 +2,7 @@ package templates
 
 import (
 	"forum/pkg/handlers/categories"
-	"forum/pkg/handlers/comments"
 	"forum/pkg/handlers/posts"
-	"forum/pkg/handlers/subcategories"
 	Types "forum/pkg/types"
 	"forum/pkg/utils"
 	"html/template"
@@ -100,7 +98,7 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.
 }
 
 func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	categories := categories.GetCategoriesWithSubcategoriesHandler(w, r)
+	categories := categories.GetCategoriesHandler(w, r)
 	newPosts := posts.GetNewPostsHandler(w, r)
 
 	data := map[string]interface{}{
@@ -117,94 +115,93 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func SubcategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
+func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	category := categories.GetCategoryHandler(w, r)
 
-	posts := posts.GetPostsFromSubCategoryHandler(w, r)
+	posts := posts.GetPostsFromCategoryHandler(w, r)
 
 	isAuthenticated := utils.IsAuthenticated(r)
 
 	data := map[string]interface{}{
 		"Posts":           posts,
-		"Subcategory":     subCategoryWithCategory.Subcategory,
-		"Category":        subCategoryWithCategory.Category,
+		"Category":        category,
 		"IsAuthenticated": isAuthenticated,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "subcategory.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "category.html", data)
 	if err != nil {
-		log.Println("Failed to execute template: subcategory.html")
+		log.Println("Failed to execute template: category.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
-func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
+// func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+// 	subCategoryWithCategory := subcategories.GetSubcategoryWithCategoryHandler(w, r)
 
-	var user Types.User
+// 	var user Types.User
 
-	isAuthenticated := utils.IsAuthenticated(r)
+// 	isAuthenticated := utils.IsAuthenticated(r)
 
-	if isAuthenticated {
-		user = utils.GetUserInfoBySession(w, r)
-	}
+// 	if isAuthenticated {
+// 		user = utils.GetUserInfoBySession(w, r)
+// 	}
 
-	data := map[string]interface{}{
-		"Subcategory": subCategoryWithCategory.Subcategory,
-		"Category":    subCategoryWithCategory.Category,
-		"User":        user,
-	}
+// 	data := map[string]interface{}{
+// 		"Subcategory": subCategoryWithCategory.Subcategory,
+// 		"Category":    subCategoryWithCategory.Category,
+// 		"User":        user,
+// 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
-	if err != nil {
-		log.Println("Failed to execute template: new-post.html")
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
+// 	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
+// 	if err != nil {
+// 		log.Println("Failed to execute template: new-post.html")
+// 		log.Println(err)
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+// }
 
-func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	post := posts.GetPostHandler(w, r)
-	postLikes := posts.GetPostLikesHandler(w, r)
-	postDislikes := posts.GetPostDislikesHandler(w, r)
-	comments := comments.GetCommentsHandler(w, r)
+// func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+// 	post := posts.GetPostHandler(w, r)
+// 	postLikes := posts.GetPostLikesHandler(w, r)
+// 	postDislikes := posts.GetPostDislikesHandler(w, r)
+// 	comments := comments.GetCommentsHandler(w, r)
 
-	subCategoryWithCategory := subcategories.GetSubCategoryWithCategoryHandlerFromPost(w, r, post.ID)
+// 	subCategoryWithCategory := subcategories.GetSubCategoryWithCategoryHandlerFromPost(w, r, post.ID)
 
-	isAuthenticated := utils.IsAuthenticated(r)
+// 	isAuthenticated := utils.IsAuthenticated(r)
 
-	var user Types.User
-	isPostLikedByCurrentUser := false
-	isPostDislikedByCurrentUser := false
+// 	var user Types.User
+// 	isPostLikedByCurrentUser := false
+// 	isPostDislikedByCurrentUser := false
 
-	if isAuthenticated {
-		user = utils.GetUserInfoBySession(w, r)
-		isPostLikedByCurrentUser = posts.IsPostLikedByCurrentUserHandler(w, r, post.ID, user.ID)
-		isPostDislikedByCurrentUser = posts.IsPostDisLikedByCurrentUserHandler(w, r, post.ID, user.ID)
-	}
+// 	if isAuthenticated {
+// 		user = utils.GetUserInfoBySession(w, r)
+// 		isPostLikedByCurrentUser = posts.IsPostLikedByCurrentUserHandler(w, r, post.ID, user.ID)
+// 		isPostDislikedByCurrentUser = posts.IsPostDisLikedByCurrentUserHandler(w, r, post.ID, user.ID)
+// 	}
 
-	data := map[string]interface{}{
-		"Post":                        post,
-		"Likes":                       postLikes,
-		"Dislikes":                    postDislikes,
-		"Subcategory":                 subCategoryWithCategory.Subcategory,
-		"Category":                    subCategoryWithCategory.Category,
-		"Comments":                    comments,
-		"IsAuthenticated":             isAuthenticated,
-		"User":                        user,
-		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
-		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
-	}
+// 	data := map[string]interface{}{
+// 		"Post":                        post,
+// 		"Likes":                       postLikes,
+// 		"Dislikes":                    postDislikes,
+// 		"Subcategory":                 subCategoryWithCategory.Subcategory,
+// 		"Category":                    subCategoryWithCategory.Category,
+// 		"Comments":                    comments,
+// 		"IsAuthenticated":             isAuthenticated,
+// 		"User":                        user,
+// 		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
+// 		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
+// 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "post.html", data)
-	if err != nil {
-		log.Println("Failed to execute template: post.html")
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+// 	err := GetTemplate().ExecuteTemplate(w, "post.html", data)
+// 	if err != nil {
+// 		log.Println("Failed to execute template: post.html")
+// 		log.Println(err)
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
 
-}
+// }

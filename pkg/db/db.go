@@ -15,7 +15,7 @@ var once sync.Once
 // Init initializes the database connection
 func Init() {
 	once.Do(func() {
-		conn, err := sql.Open("sqlite3", "./forum.db")
+		conn, err := sql.Open("sqlite3", "./forum-v2.db")
 		if err != nil {
 			log.Fatalf("Error opening the database: %s", err)
 			return

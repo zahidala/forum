@@ -6,13 +6,12 @@
       <span class="categories-label">Categories</span>
     </div>
 
-    {{range .Categories}}
     <div class="container-category">
-      <span class="category-label">{{.Name}}</span>
+      <!-- <span class="category-label">Categories</span> -->
 
       <div class="container-subcategory">
-        {{range .Subcategories}}
-        <a href="/subcategory/{{.ID}}" class="card-subcategory">
+        {{range .Categories}}
+        <a href="/category/{{.ID}}" class="card-subcategory">
           <div class="card-subcategory-icon">
             <i class="fas fa-comments fa-xl" style="color: #a1a3ae"></i>
           </div>
@@ -25,7 +24,6 @@
         {{end}}
       </div>
     </div>
-    {{end}}
   </div>
 
   <div class="column-2">
@@ -55,8 +53,8 @@
           <span class="time">{{.CreatedAt}}</span>
         </span>
         <span class="post-topic">
-          <a href="/subcategory/{{.Subcategory.ID}}" class="post-category-link">
-            {{.Subcategory.Name}}
+          <a href="/category/{{.Category.ID}}" class="post-category-link">
+            {{.Category.Name}}
           </a>
         </span>
       </div>
