@@ -44,7 +44,7 @@ func main() {
 	// http.HandleFunc("GET /subcategory/{id}/new-post", templates.NewPostTemplateHandler)
 	// http.HandleFunc("POST /subcategory/{id}/new-post", posts.CreatePostHandler)
 
-	// http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
+	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
 	// http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
 	// http.HandleFunc("PUT /post/{id}/like", posts.PostLikeHandler)
 	// http.HandleFunc("PUT /post/{id}/remove-like", posts.PostRemoveLikeHandler)

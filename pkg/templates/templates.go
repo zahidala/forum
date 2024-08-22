@@ -2,6 +2,7 @@ package templates
 
 import (
 	"forum/pkg/handlers/categories"
+	"forum/pkg/handlers/comments"
 	"forum/pkg/handlers/posts"
 	Types "forum/pkg/types"
 	"forum/pkg/utils"
@@ -163,45 +164,44 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 // 	}
 // }
 
-// func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-// 	post := posts.GetPostHandler(w, r)
-// 	postLikes := posts.GetPostLikesHandler(w, r)
-// 	postDislikes := posts.GetPostDislikesHandler(w, r)
-// 	comments := comments.GetCommentsHandler(w, r)
+func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	post := posts.GetPostHandler(w, r)
+	postLikes := posts.GetPostLikesHandler(w, r)
+	postDislikes := posts.GetPostDislikesHandler(w, r)
+	comments := comments.GetCommentsHandler(w, r)
 
-// 	subCategoryWithCategory := subcategories.GetSubCategoryWithCategoryHandlerFromPost(w, r, post.ID)
+	category := categories.GetCategoryHandler(w, r)
 
-// 	isAuthenticated := utils.IsAuthenticated(r)
+	isAuthenticated := utils.IsAuthenticated(r)
 
-// 	var user Types.User
-// 	isPostLikedByCurrentUser := false
-// 	isPostDislikedByCurrentUser := false
+	var user Types.User
+	isPostLikedByCurrentUser := false
+	isPostDislikedByCurrentUser := false
 
-// 	if isAuthenticated {
-// 		user = utils.GetUserInfoBySession(w, r)
-// 		isPostLikedByCurrentUser = posts.IsPostLikedByCurrentUserHandler(w, r, post.ID, user.ID)
-// 		isPostDislikedByCurrentUser = posts.IsPostDisLikedByCurrentUserHandler(w, r, post.ID, user.ID)
-// 	}
+	if isAuthenticated {
+		user = utils.GetUserInfoBySession(w, r)
+		isPostLikedByCurrentUser = posts.IsPostLikedByCurrentUserHandler(w, r, post.ID, user.ID)
+		isPostDislikedByCurrentUser = posts.IsPostDisLikedByCurrentUserHandler(w, r, post.ID, user.ID)
+	}
 
-// 	data := map[string]interface{}{
-// 		"Post":                        post,
-// 		"Likes":                       postLikes,
-// 		"Dislikes":                    postDislikes,
-// 		"Subcategory":                 subCategoryWithCategory.Subcategory,
-// 		"Category":                    subCategoryWithCategory.Category,
-// 		"Comments":                    comments,
-// 		"IsAuthenticated":             isAuthenticated,
-// 		"User":                        user,
-// 		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
-// 		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
-// 	}
+	data := map[string]interface{}{
+		"Post":                        post,
+		"Likes":                       postLikes,
+		"Dislikes":                    postDislikes,
+		"Category":                    category,
+		"Comments":                    comments,
+		"IsAuthenticated":             isAuthenticated,
+		"User":                        user,
+		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
+		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
+	}
 
-// 	err := GetTemplate().ExecuteTemplate(w, "post.html", data)
-// 	if err != nil {
-// 		log.Println("Failed to execute template: post.html")
-// 		log.Println(err)
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
+	err := GetTemplate().ExecuteTemplate(w, "post.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: post.html")
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-// }
+}
