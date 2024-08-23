@@ -131,7 +131,6 @@ const setError = (element, message) => {
 
     containerInput.classList.add('error');
     errorDisplay.innerText = message;
-    errorDisplay.style.fontSize = '0.8rem';
 }
 
 const setSuccess = (element) => {

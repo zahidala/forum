@@ -15,7 +15,7 @@
             maxlength="50"
             {{ if .Errors }} value="{{ .Name }}" {{ end }}
             oninput="validateName(this.value.trim())" />
-          <div class="error"></div>
+          <div class="error" style="font-size: 0.8rem"></div>
         </div>
 
         <div class="container-input">
@@ -29,7 +29,7 @@
             maxlength="20"
             {{ if .Errors }} value="{{ .Username }}" {{ end }}
             oninput="validateUsername(this.value)" />
-          <div class="error">
+          <div class="error" style="font-size: 0.8rem">
             {{ with .Errors.Username }} {{ . }} {{ end }}
           </div>
         </div>
@@ -44,7 +44,7 @@
             maxlength="254"
             {{ if .Errors }} value="{{ .Email }}" {{ end }}
             oninput="validateEmail(this.value.trim())" />
-          <div class="error">
+          <div class="error" style="font-size: 0.8rem">
             {{ with .Errors.Email }} {{ . }} {{ end }}
           </div>
         </div>
@@ -59,7 +59,7 @@
             placeholder="Password"
             maxlength="128"
             oninput="validatePassword(this.value)" />
-          <div class="error"></div>
+          <div class="error" style="font-size: 0.8rem"></div>
         </div>
 
         <input
