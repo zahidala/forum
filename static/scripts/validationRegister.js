@@ -70,7 +70,7 @@ function validateUsername(usernameValue) {
         isValid = false
 
     } else if (!regex.test(usernameValue)) {
-        setError(username, "Username must only caontain alphabets, numbers, and/or _")
+        setError(username, "Username must only contain alphabets, numbers, and/or _")
         isValid = false
 
     }
