@@ -622,7 +622,7 @@ LEFT JOIN PostCategories pc ON p.id = pc.postId
 LEFT JOIN categories c ON pc.categoryId = c.id
 GROUP BY p.id
 ORDER BY p.createdAt DESC
-LIMIT 10;
+LIMIT 5;
 `
 
 	stmt, err := db.GetDB().Prepare(query)
