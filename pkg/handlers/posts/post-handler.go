@@ -352,16 +352,82 @@ func GetPostDislikesHandler(w http.ResponseWriter, r *http.Request) []PostDislik
 }
 
 type PostCreateBody struct {
+	UserId             string `json:"userId"`
+	Title              string `json:"title"`
+	Content            string `json:"content"`
+	Images             string `json:"images,omitempty"`
+	SelectedCategories []int  `json:"selectedCategories"`
+}
+
+func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
+	var body PostCreateBody
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Println("Error decoding body:", err)
+		return
+	}
+
+	// Prepare the SQL statement
+	query := `INSERT INTO Posts (authorId, title, content, attachments) VALUES (?, ?, ?, ?);`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+	defer stmt.Close()
+
+	result, err := stmt.Exec(body.UserId, body.Title, body.Content, body.Images)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
+	postId, err := result.LastInsertId()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error getting last insert id:", err)
+		return
+	}
+
+	// Prepare the SQL statement
+	categoryQuery := `INSERT INTO PostCategories (postId, categoryId) VALUES (?, ?);`
+
+	categoryStmt, err := db.GetDB().Prepare(categoryQuery)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+
+	for _, categoryId := range body.SelectedCategories {
+		_, err = categoryStmt.Exec(postId, categoryId)
+
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error executing query:", err)
+			return
+		}
+	}
+
+	http.Redirect(w, r, "/post/"+strconv.Itoa(int(postId)), http.StatusSeeOther)
+}
+
+type PostCreateByCategoryBody struct {
 	UserId  string `json:"userId"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Images  string `json:"images,omitempty"`
 }
 
-func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
+func CreatePostByCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	categoryId := r.PathValue("id")
 
-	var body PostCreateBody
+	var body PostCreateByCategoryBody
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
