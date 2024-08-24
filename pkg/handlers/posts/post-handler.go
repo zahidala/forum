@@ -712,3 +712,73 @@ LIMIT 5;
 
 	return results
 }
+
+func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []Post {
+	query := `SELECT json_group_array(
+		json_object(
+				'id', p.id,
+				'title', p.title,
+				'content', p.content,
+				'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
+				'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
+				'author', json_object(
+						'id', u.id,
+						'name', u.name,
+						'username', u.username,
+						'profilePicture', u.profilePicture
+				)
+		)
+	) AS posts
+	FROM posts p
+	LEFT JOIN users u ON p.authorId = u.id
+	LEFT JOIN PostCategories pc ON p.id = pc.postId
+	LEFT JOIN categories c ON pc.categoryId = c.id
+	GROUP BY p.id
+	ORDER BY p.createdAt DESC;
+	`
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return nil
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return nil
+	}
+	defer rows.Close()
+
+	var results []Post
+	for rows.Next() {
+		var jsonString string
+		err := rows.Scan(&jsonString)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error scanning row:", err)
+			return nil
+		}
+
+		var result []Post
+		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
+		if errJsonUnmarshal != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error unmarshaling json:", errJsonUnmarshal)
+			return nil
+		}
+
+		results = append(results, result...)
+	}
+
+	if rowsErr := rows.Err(); rowsErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error iterating rows:", rowsErr)
+		return nil
+	}
+
+	return results
+}

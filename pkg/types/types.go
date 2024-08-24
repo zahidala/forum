@@ -60,7 +60,7 @@ type Post struct {
 	AuthorID    int       `json:"authorId"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
-	Attachments string    `json:"attachments"`
+	Attachments *string    `json:"attachments"`
 }
 
 type Comment struct {
