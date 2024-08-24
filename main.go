@@ -31,6 +31,11 @@ func main() {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir("static"))))
 
+	http.HandleFunc("GET /", templates.IndexTemplateHandler)
+
+	http.HandleFunc("GET /new-post", templates.NewPostTemplateHandler)
+	http.Handle("POST /new-post", middlewares.AuthRequired(http.HandlerFunc(posts.CreatePostHandler)))
+
 	http.HandleFunc("GET /login", templates.LoginPageHandler)
 	http.HandleFunc("POST /login", users.UserLoginHandler)
 
@@ -39,12 +44,10 @@ func main() {
 	http.HandleFunc("GET /register", templates.RegisterPageHandler)
 	http.HandleFunc("POST /register", users.CreateUserHandler)
 
-	http.HandleFunc("GET /", templates.IndexTemplateHandler)
-
 	http.HandleFunc("GET /category/{id}", templates.CategoryTemplateHandler)
-	http.HandleFunc("GET /category/{id}/new-post", templates.NewPostTemplateHandler)
+	http.HandleFunc("GET /category/{id}/new-post", templates.NewPostByCategoryTemplateHandler)
 
-	http.Handle("POST /category/{id}/new-post", middlewares.AuthRequired(http.HandlerFunc(posts.CreatePostHandler)))
+	http.Handle("POST /category/{id}/new-post", middlewares.AuthRequired(http.HandlerFunc(posts.CreatePostByCategoryHandler)))
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
 

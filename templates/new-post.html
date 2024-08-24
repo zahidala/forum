@@ -1,0 +1,102 @@
+{{template "header" }}
+
+<div style="display: flex; flex-direction: column; gap: 1.5rem">
+  <div
+    class="container-subcategory-label"
+    style="border-radius: 5px; padding: 20px"
+  >
+    <span class="sub-category-label">New Post</span>
+  </div>
+
+  <div class="breadcrumb-container">
+    <a href="/" class="home-link">
+      <i class="fa-solid fa-house fa-xs home-icon"></i>
+    </a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <a href="/" class="forums-link">Forums</a>
+
+    <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
+
+    <span class="subcategory-label">New Post</span>
+  </div>
+
+  <input type="hidden" id="userId" value="{{.User.ID}}" />
+
+  <div class="post-editor-container">
+    <div class="dropdown-select">
+      <button class="dropdown-toggle">
+        Select Categories
+        <i
+          class="fa-solid fa-chevron-down"
+          style="color: white; margin-left: 5px"
+        ></i>
+      </button>
+      <div class="dropdown-menu">
+        {{range .Categories}}
+        <label><input type="checkbox" value="{{.ID}}" /> {{.Name}}</label>
+        {{end}}
+      </div>
+    </div>
+
+    <input
+      type="text"
+      id="post-title-input"
+      class="input"
+      placeholder="Post Title"
+    />
+
+    <div class="editor">
+      <div style="display: flex; gap: 0.5rem">
+        <button class="editor-button" id="bold">
+          <i class="fa-solid fa-bold"></i>
+        </button>
+
+        <button class="editor-button" id="italic">
+          <i class="fa-solid fa-italic"></i>
+        </button>
+
+        <button class="editor-button" id="underline">
+          <i class="fa-solid fa-underline"></i>
+        </button>
+
+        <button class="editor-button" id="strikethrough">
+          <i class="fa-solid fa-strikethrough"></i>
+        </button>
+
+        <button class="editor-button" id="image">
+          <i class="fa-regular fa-image"></i>
+        </button>
+
+        <input
+          type="file"
+          id="image-input"
+          style="display: none"
+          accept="image/*"
+        />
+      </div>
+
+      <div class="editor-wrapper">
+        <div id="content" class="editor-textarea" contenteditable="true"></div>
+        <div id="placeholder" class="placeholder">Type your post here...</div>
+      </div>
+    </div>
+
+    <div class="uploaded-images-container" id="uploaded-images"></div>
+
+    <div>
+      <button
+        type="submit"
+        id="post-reply"
+        class="btn-primary"
+        style="font-size: medium; padding: 10px 15px; cursor: pointer"
+      >
+        New Post
+      </button>
+    </div>
+  </div>
+</div>
+<script src="/static/scripts/post-editor-all-categories.js"></script>
+
+{{template "footer" }}

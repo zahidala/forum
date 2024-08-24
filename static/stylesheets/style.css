@@ -765,6 +765,58 @@ div.hidden {
   border-radius: 6px;
 }
 
+.dropdown-select {
+  position: relative;
+  display: inline-block;
+}
+
+/* Styling for dropdown button */
+.dropdown-toggle {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #424242;
+  border-radius: 5px;
+  color: white;
+  min-width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown-toggle:hover {
+  border: 1px solid #e0e0e0e9;
+}
+
+/* Styling for dropdown menu */
+.dropdown-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  margin-top: 5px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0e9;
+  border-radius: 5px;
+  background-color: #1b1d21;
+  color: white;
+  padding: 10px;
+  z-index: 1;
+  max-height: 200px;
+  overflow-y: auto; /* Scroll if the content is too big */
+}
+
+/* Styling for each checkbox item */
+.dropdown-menu label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Show dropdown menu when open class is added */
+.dropdown-select.open .dropdown-menu {
+  display: block;
+}
+
 @media (max-width: 768px) {
   
   .home-page-layout {

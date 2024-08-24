@@ -2,8 +2,25 @@
 
 <div class="home-page-layout">
   <div class="column-1">
-    <div class="container-categories-label">
+    <div
+      class="container-categories-label"
+      style="display: flex; justify-content: space-between"
+    >
       <span class="categories-label">Categories</span>
+
+      {{if .IsAuthenticated}}
+      <div>
+        <a href="/new-post">
+          <button
+            type="submit"
+            class="btn-primary"
+            style="font-size: medium; padding: 10px 15px; cursor: pointer"
+          >
+            New Post
+          </button>
+        </a>
+      </div>
+      {{end}}
     </div>
 
     <div class="container-category">

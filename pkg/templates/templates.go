@@ -114,11 +114,13 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	categories := categories.GetCategoriesHandler(w, r)
 	newPosts := posts.GetNewPostsHandler(w, r)
 	allPosts := posts.GetAllPostsHandler(w, r)
+	isAuthenticated := utils.IsAuthenticated(r)
 
 	data := map[string]interface{}{
-		"Categories": categories,
-		"NewPosts":   newPosts,
+		"Categories":      categories,
+		"NewPosts":        newPosts,
 		"AllPosts": allPosts,
+		"IsAuthenticated": isAuthenticated,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", data)
@@ -172,6 +174,38 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	var user Types.User
+
+	categories := categories.GetCategoriesHandler(w, r)
+
+	isAuthenticated := utils.IsAuthenticated(r)
+
+	if isAuthenticated {
+		user = utils.GetUserInfoBySession(w, r)
+	}
+
+	data := map[string]interface{}{
+		"User":       user,
+		"Categories": categories,
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: new-post.html")
+		log.Println(err)
+
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		})
+		return
+	}
+}
+
+func NewPostByCategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	category, error := categories.GetCategoryHandler(w, r)
 
 	if error.Error.Code != 200 && error.Error.Code != 0 {
@@ -192,9 +226,9 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"User":     user,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", data)
 	if err != nil {
-		log.Println("Failed to execute template: new-post.html")
+		log.Println("Failed to execute template: new-post-by-category.html")
 		log.Println(err)
 
 		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
