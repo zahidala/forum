@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - {{.Error.Code}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card">
+            <h1 style="color: #FF3860;">Error {{.Error.Code}}</h1>
+            <p style="color: #A1A3AE;">{{.Error.Message}}</p>
+            <a class="btn-outline" href="/">Go Back to Home</a>
+        </div>
+    </div>
+</body>
+
+</html>
