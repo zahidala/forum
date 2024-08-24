@@ -1,21 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error - {{.Error.Code}}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-
-<body>
-    <div class="navbar">
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
-        </div>
-    </div>
+{{template "header" }} 
 
     <div class="card-container">
         <div class="card">
@@ -24,6 +7,5 @@
             <a class="btn-outline" href="/">Go Back to Home</a>
         </div>
     </div>
-</body>
 
-</html>
+{{template "footer" }}
