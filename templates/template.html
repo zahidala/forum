@@ -1,52 +1,67 @@
 {{define "header"}}
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/stylesheets/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Title -->
     <title>Car Forum</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/stylesheets/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico">
+    <link rel="logo" type="image/png" href="/static/assets/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
   </head>
+
   <body>
-    <nav class="navbar">
-      <div style="display: flex; align-items: center; gap: 3rem">
-        <div style="display: flex; align-items: center; gap: 1rem">
-          <!-- <i
-            class="fa-solid fa-bars"
-            style="color: white; font-size: 1.5rem"
-          ></i> -->
 
-          <!-- For forum sidebar -->
+    <header>
 
-          <span style="font-weight: bold; color: white">Car Forum</span>
+      <nav>
+  
+        <ul class="nav-list">
+          <li class="logo"><a href="/"><img src="/static/assets/logo.png" alt="Car Forum Logo"></a></li>
+          <input type="checkbox" id="check">
+          <span class="menu">
+            <li class="nav-link" style="--i: .6s">
+              <a href="/"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e8eaed"><path d="M180-120q-25 0-42.5-17.5T120-180v-76l160-142v278H180Zm140 0v-160h320v160H320Zm360 0v-328L509-600l121-107 190 169q10 9 15 20.5t5 24.5v313q0 25-17.5 42.5T780-120H680ZM120-310v-183q0-13 5-25t15-20l300-266q8-8 18.5-11.5T480-819q11 0 21.5 3.5T520-804l80 71-480 423Z"/></svg>Home</a>
+            </li>
+            
+            <li class="nav-link" style="--i: .85s">
+                <a href="/posts"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e8eaed"><path d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v600L720-240H280ZM80-280v-560q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240L80-280Zm520-240v-280H160v280h440Zm-440 0v-280 280Z"/></svg>Posts</a>
+            </li>
+            
+            <li class="nav-link" style="--i: 1.1s">
+              <a href="/categories"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e8eaed"><path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/></svg>Categories<i class="fas fa-caret-down"></i></a>
+              <div class="dropdown">
+                <ul>
+                  <li class="dropdown-link"><a href="/categories/1">Category 1</a></li>
+                  <li class="dropdown-link"><a href="/categories/2">Category 2</a></li>
+                  <li class="dropdown-link"><a href="/categories/3">Category 3</a></li>
+                  <div class="arrow"></div>
+                </ul>
+              </div>
+            </li>
+            <label for="check" class="close-menu"><i class="fas fa-times"></i></label>
+          </span>
+          <label for="check" class="open-menu"><i class="fas fa-bars"></i></label>
+        </ul>
+    
+        <div class="nav-btn">
+          <a href="/logout" id="logout"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+          <a href="/login" id="login"><i class="fas fa-sign-in-alt"></i> Log In</a>
+          <a href="/register" id="register" class="btn-outline" style="color: white; font-weight: bold">Register</a>
         </div>
+  
+      </nav>
 
-        <div class="nav-links" style="gap: 1.5rem">
-          <a href="/">Home</a>
-          <a href="/">Categories</a>
-        </div>
-      </div>
-
-      <div class="nav-links">
-        <a href="/logout" id="logout">Log Out</a>
-        <a href="/login" id="login">Log In</a>
-        <a
-          href="/register"
-          id="register"
-          class="btn-outline"
-          style="color: white; font-weight: bold"
-        >
-          Register
-        </a>
-      </div>
-    </nav>
+    </header>
 
     <main style="padding: 20px">
       {{end}}
@@ -54,7 +69,9 @@
       <!-- footer -->
       {{define "footer"}}
     </main>
+
   </body>
+
   <script>
     const cookie = document.cookie.includes("sessionId");
     document.getElementById("logout").style.display = cookie ? "block" : "none";
