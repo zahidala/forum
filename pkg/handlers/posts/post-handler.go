@@ -91,7 +91,7 @@ type PostWithMoreDetails struct {
 	Author Types.User `json:"author"`
 }
 
-func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithMoreDetails {
+func GetPostHandler(w http.ResponseWriter, r *http.Request) (PostWithMoreDetails, Types.ErrorPageProps) {
 	postId := r.PathValue("id")
 
 	// Prepare the SQL statement
@@ -116,46 +116,89 @@ WHERE p.id = ?;
 
 	stmt, err := db.GetDB().Prepare(query)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error preparing query:", err)
-		return PostWithMoreDetails{}
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(postId)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)
-		return PostWithMoreDetails{}
+
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 	defer rows.Close()
 
 	var result PostWithMoreDetails
+	var found bool
 
 	for rows.Next() {
+		found = true
 		var jsonString string
 		err := rows.Scan(&jsonString)
 		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			log.Println("Error scanning row:", err)
-			return PostWithMoreDetails{}
+
+			return PostWithMoreDetails{}, Types.ErrorPageProps{
+				Error: Types.Error{
+					Code:    http.StatusInternalServerError,
+					Message: "Internal Server Error",
+				},
+				Title: "Internal Server Error",
+			}
 		}
 
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
 		if errJsonUnmarshal != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			log.Println("Error unmarshaling json:", errJsonUnmarshal)
-			return PostWithMoreDetails{}
+
+			return PostWithMoreDetails{}, Types.ErrorPageProps{
+				Error: Types.Error{
+					Code:    http.StatusInternalServerError,
+					Message: "Internal Server Error",
+				},
+				Title: "Internal Server Error",
+			}
 		}
 	}
 
 	if rowsErr := rows.Err(); rowsErr != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error iterating rows:", rowsErr)
-		return PostWithMoreDetails{}
+
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 
-	return result
+	if !found {
+		log.Println("Post not found for ID:", postId)
+
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusNotFound,
+				Message: "Post not found",
+			},
+			Title: "Post not found",
+		}
+	}
+
+	return result, Types.ErrorPageProps{}
 }
 
 type PostLikeWithAuthor struct {

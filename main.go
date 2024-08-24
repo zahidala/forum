@@ -71,6 +71,7 @@ func main() {
 	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	// 	templates.ExecuteTemplateByName(w, "index", nil)
 	// })))
+	//sss
 
 	log.Println("Server started on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
