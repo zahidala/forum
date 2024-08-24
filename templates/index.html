@@ -50,7 +50,7 @@
       <div style="flex: 1; border: 0.5px solid #474c54"></div>
     </div>
 
-    {{range .NewPosts}}
+    {{if gt (len .NewPosts) 0}} {{range .NewPosts}}
 
     <div class="new-post">
       <img
@@ -69,11 +69,24 @@
           Latest: {{.Author.Username}} -
           <span class="time">{{.CreatedAt}}</span>
         </span>
-        <span class="post-topic">
-          <a href="/category/{{.Category.ID}}" class="post-category-link">
-            {{.Category.Name}}
-          </a>
-        </span>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+          {{range .Categories}}
+          <span class="post-topic">
+            <a href="/category/{{.ID}}" class="post-category-link">
+              {{.Name}}
+            </a>
+          </span>
+          {{end}}
+        </div>
+      </div>
+    </div>
+
+    {{end}} {{else}}
+
+    <div class="new-post">
+      <div class="new-post-content">
+        <span class="post-title">No posts available</span>
       </div>
     </div>
 
