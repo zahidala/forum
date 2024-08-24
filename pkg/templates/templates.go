@@ -55,19 +55,6 @@ func GetTemplate() *template.Template {
 	return templates
 }
 
-// ErrorTemplate renders the error page
-func ErrorTemplate(w http.ResponseWriter, data Types.ErrorPageProps) {
-	w.WriteHeader(data.Error.Code)
-
-	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
-	if err != nil {
-		log.Println("Failed to execute template: error.html")
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
 func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
 	var data Types.Error
 	LoginTemplateHandler(w, r, data)
@@ -78,7 +65,14 @@ func LoginTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.Err
 	if err != nil {
 		log.Println("Failed to execute template: login.html")
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		})
 		return
 	}
 }
@@ -93,12 +87,30 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.
 	if err != nil {
 		log.Println("Failed to execute template: register.html")
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		})
 		return
 	}
 }
 
 func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Message: "Page not found.",
+				Code:    404,
+			},
+			Title: "Page Not Found",
+		})
+		return
+	}
+
 	categories := categories.GetCategoriesHandler(w, r)
 	newPosts := posts.GetNewPostsHandler(w, r)
 
@@ -111,13 +123,25 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Failed to execute template: index.html")
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		})
 		return
 	}
 }
 
 func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	category := categories.GetCategoryHandler(w, r)
+	category, error := categories.GetCategoryHandler(w, r)
+
+	if error.Error.Code != 200 && error.Error.Code != 0 {
+		ErrorTemplateHandler(w, r, error)
+		return
+	}
 
 	posts := posts.GetPostsFromCategoryHandler(w, r)
 
@@ -133,19 +157,25 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Failed to execute template: category.html")
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
 		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
 			Error: Types.Error{
 				Code:    http.StatusInternalServerError,
 				Message: "Internal Server Error",
 			},
+			Title: "Internal Server Error",
 		})
 		return
 	}
 }
 
 func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	category := categories.GetCategoryHandler(w, r)
+	category, error := categories.GetCategoryHandler(w, r)
+
+	if error.Error.Code != 200 && error.Error.Code != 0 {
+		ErrorTemplateHandler(w, r, error)
+		return
+	}
 
 	var user Types.User
 
@@ -164,18 +194,36 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Failed to execute template: new-post.html")
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		})
 		return
 	}
 }
 
 func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	post := posts.GetPostHandler(w, r)
+	post, postErr := posts.GetPostHandler(w, r)
+
+	if postErr.Error.Code != 200 && postErr.Error.Code != 0 {
+		ErrorTemplateHandler(w, r, postErr)
+		return
+	}
+
 	postLikes := posts.GetPostLikesHandler(w, r)
 	postDislikes := posts.GetPostDislikesHandler(w, r)
 	comments := comments.GetCommentsHandler(w, r)
 
-	category := categories.GetCategoryHandler(w, r)
+	category, categoryErr := categories.GetCategoryHandler(w, r)
+
+	if categoryErr.Error.Code != 200 && categoryErr.Error.Code != 0 {
+		ErrorTemplateHandler(w, r, categoryErr)
+		return
+	}
 
 	isAuthenticated := utils.IsAuthenticated(r)
 
@@ -205,18 +253,28 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Failed to execute template: post.html")
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		})
 		return
 	}
 
 }
 
+// ErrorTemplateHandler renders the error page
 func ErrorTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.ErrorPageProps) {
+	w.WriteHeader(data.Error.Code)
+
 	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
 	if err != nil {
 		log.Println("Failed to execute template: error.html")
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 }

@@ -63,7 +63,7 @@ func GetCategoriesHandler(w http.ResponseWriter, r *http.Request) []Types.Catego
 	return results
 }
 
-func GetCategoryHandler(w http.ResponseWriter, r *http.Request) Types.Category {
+func GetCategoryHandler(w http.ResponseWriter, r *http.Request) (Types.Category, Types.ErrorPageProps) {
 	categoryID := r.PathValue("id")
 
 	query := `SELECT json_object(
@@ -78,43 +78,88 @@ func GetCategoryHandler(w http.ResponseWriter, r *http.Request) Types.Category {
 	stmt, err := db.GetDB().Prepare(query)
 	if err != nil {
 		log.Println("Error preparing query:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return Types.Category{}
+
+		return Types.Category{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(categoryID)
 	if err != nil {
 		log.Println("Error executing query:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return Types.Category{}
+
+		return Types.Category{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 	defer rows.Close()
 
 	var category Types.Category
+	var found bool
 
 	for rows.Next() {
+		found = true
 		var jsonString string
 		err := rows.Scan(&jsonString)
+
 		if err != nil {
 			log.Println("Error scanning row:", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return Types.Category{}
+
+			return Types.Category{}, Types.ErrorPageProps{
+				Error: Types.Error{
+					Code:    http.StatusInternalServerError,
+					Message: "Internal Server Error",
+				},
+				Title: "Internal Server Error",
+			}
 		}
 
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &category)
 		if errJsonUnmarshal != nil {
 			log.Println("Error unmarshaling JSON:", errJsonUnmarshal)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return Types.Category{}
+
+			return Types.Category{}, Types.ErrorPageProps{
+				Error: Types.Error{
+					Code:    http.StatusInternalServerError,
+					Message: "Internal Server Error",
+				},
+				Title: "Internal Server Error",
+			}
 		}
 	}
 
 	if rowsErr := rows.Err(); rowsErr != nil {
 		log.Println("Error iterating rows:", rowsErr)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return Types.Category{}
+
+		return Types.Category{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 
-	return category
+	if !found {
+		log.Println("Category not found for ID:", categoryID)
+
+		return Types.Category{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusNotFound,
+				Message: "Category not found",
+			},
+			Title: "Category not found",
+		}
+	}
+
+	return category, Types.ErrorPageProps{}
 }
