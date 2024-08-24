@@ -134,6 +134,12 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("Failed to execute template: category.html")
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+		})
 		return
 	}
 }
@@ -203,4 +209,14 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+func ErrorTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.ErrorPageProps) {
+	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
+	if err != nil {
+		log.Println("Failed to execute template: error.html")
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
