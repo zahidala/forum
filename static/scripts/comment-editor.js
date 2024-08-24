@@ -223,6 +223,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const postId = document.getElementById("postId").value;
     const userId = document.getElementById("userId").value;
     const images = imageUrls.join(",");
+
+    
+    if (!content) {
+      editorContainer.classList.add("editor-error");
+      return;
+    }
+
     try {
       const response = await fetch(`/post/${postId}/comment`, {
         method: "POST",

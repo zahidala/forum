@@ -19,6 +19,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const postTitle = document.getElementById("post-title-input");
 
+  postTitle.addEventListener("input", () => {
+    if (postTitle.classList.contains("post-title-error")) {
+      postTitle.classList.remove("post-title-error");
+    }
+  });
+
+
   const editorContainer = document.querySelector(".editor");
 
   let content = "";
@@ -225,6 +232,22 @@ document.addEventListener("DOMContentLoaded", function () {
       const categoryId = document.getElementById("categoryId").value;
       const userId = document.getElementById("userId").value;
       const images = imageUrls.join(",");
+
+      if (!postTitle.value && !content) {
+        postTitle.classList.add("post-title-error");
+        editorContainer.classList.add("editor-error");
+        return;
+      }
+
+      if (!postTitle.value) {
+        postTitle.classList.add("post-title-error");
+        return;
+      }
+
+      if (!content) {
+        editorContainer.classList.add("editor-error");
+        return;
+      }
     
       try {
         const response = await fetch(`/category/${categoryId}/new-post`, {

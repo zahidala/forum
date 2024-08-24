@@ -638,6 +638,10 @@ div.hidden {
   height: 150px;
 }
 
+.editor-error {
+  border: 1px solid red;
+}
+
 .editor-textarea {
   background-color: transparent;
   color: white;
@@ -746,6 +750,10 @@ div.hidden {
   line-height: 1.5rem; /* Match the font-size */
 }
 
+.post-title-error {
+  border: 1px solid red;
+}
+
 /* SCROLLBAR STYLES */
 ::-webkit-scrollbar {
   width: 8px;
@@ -815,6 +823,10 @@ div.hidden {
 /* Show dropdown menu when open class is added */
 .dropdown-select.open .dropdown-menu {
   display: block;
+}
+
+.dropdown-error {
+  border: 1px solid red;
 }
 
 @media (max-width: 768px) {
