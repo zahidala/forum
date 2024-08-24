@@ -70,7 +70,7 @@ function validateUsername(usernameValue) {
         isValid = false
 
     } else if (!regex.test(usernameValue)) {
-        setError(username, "Username must only caontain alphabets, numbers, and/or _")
+        setError(username, "Username must only contain alphabets, numbers, and/or _")
         isValid = false
 
     }
@@ -107,7 +107,7 @@ function validatePassword(passwordValue) {
         isValid = false
 
     } else if (!regex.test(passwordValue)) {
-        setError(password, "Password must caontain lower-case letter, upper-case letter, and number")
+        setError(password, "Password must contain lower-case letter, upper-case letter, and number")
         isValid = false
 
     } else {

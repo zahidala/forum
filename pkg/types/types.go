@@ -53,23 +53,14 @@ type Category struct {
 	Icon        string `json:"icon"`
 }
 
-type Subcategory struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Icon        string `json:"icon"`
-	CategoryID  int    `json:"categoryId"`
-}
-
 type Post struct {
-	ID            int       `json:"id"`
-	Title         string    `json:"title"`
-	Content       string    `json:"content"`
-	AuthorID      int       `json:"authorId"`
-	SubcategoryID int       `json:"subcategoryId"`
-	CreatedAt     time.Time `json:"createdAt"`
-	UpdatedAt     time.Time `json:"updatedAt"`
-	Attachments   string    `json:"attachments"`
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Content     string    `json:"content"`
+	AuthorID    int       `json:"authorId"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+	Attachments string    `json:"attachments"`
 }
 
 type Comment struct {
@@ -116,6 +107,11 @@ type CommentDisLike struct {
 	IsDislike bool      `json:"isDislike"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+type PostCategories struct {
+	PostID     int `json:"postId"`
+	CategoryID int `json:"categoryId"`
 }
 
 // Image struct

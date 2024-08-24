@@ -14,29 +14,31 @@ type Post struct {
 	Author Types.User `json:"author"`
 }
 
-func GetPostsFromSubCategoryHandler(w http.ResponseWriter, r *http.Request) []Post {
-	subcategoryId := r.PathValue("id")
+func GetPostsFromCategoryHandler(w http.ResponseWriter, r *http.Request) []Post {
+	categoryId := r.PathValue("id")
 
-	// Prepare the SQL statement
-	query := `SELECT json_object(
+	query := `SELECT json_group_array(
+	json_object(
 			'id', p.id,
 			'title', p.title,
 			'content', p.content,
 			'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
 			'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
 			'author', json_object(
-											'id', u.id,
-											'name', u.name,
-											'username', u.username,
-											'profilePicture', u.profilePicture
+					'id', u.id,
+					'name', u.name,
+					'username', u.username,
+					'profilePicture', u.profilePicture
 			)
-) AS post
-
-FROM Posts p
-
-LEFT JOIN Users u ON p.authorId = u.id
-
-WHERE p.subcategoryId = ?;
+	)
+) AS posts
+FROM posts p
+LEFT JOIN users u ON p.authorId = u.id
+LEFT JOIN PostCategories pc ON p.id = pc.postId
+LEFT JOIN categories c ON pc.categoryId = c.id
+WHERE pc.categoryId = ?
+GROUP BY p.id
+ORDER BY p.createdAt DESC;
 `
 
 	stmt, err := db.GetDB().Prepare(query)
@@ -45,15 +47,13 @@ WHERE p.subcategoryId = ?;
 		log.Println("Error preparing query:", err)
 		return nil
 	}
-	defer stmt.Close()
 
-	rows, err := stmt.Query(subcategoryId)
+	rows, err := stmt.Query(categoryId)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)
 		return nil
 	}
-	defer rows.Close()
 
 	var results []Post
 
@@ -66,7 +66,7 @@ WHERE p.subcategoryId = ?;
 			return nil
 		}
 
-		var result Post
+		var result []Post
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
 		if errJsonUnmarshal != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -74,7 +74,7 @@ WHERE p.subcategoryId = ?;
 			return nil
 		}
 
-		results = append(results, result)
+		results = append(results, result...)
 	}
 
 	if rowsErr := rows.Err(); rowsErr != nil {
@@ -91,7 +91,7 @@ type PostWithMoreDetails struct {
 	Author Types.User `json:"author"`
 }
 
-func GetPostHandler(w http.ResponseWriter, r *http.Request) PostWithMoreDetails {
+func GetPostHandler(w http.ResponseWriter, r *http.Request) (PostWithMoreDetails, Types.ErrorPageProps) {
 	postId := r.PathValue("id")
 
 	// Prepare the SQL statement
@@ -116,46 +116,89 @@ WHERE p.id = ?;
 
 	stmt, err := db.GetDB().Prepare(query)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error preparing query:", err)
-		return PostWithMoreDetails{}
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(postId)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)
-		return PostWithMoreDetails{}
+
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 	defer rows.Close()
 
 	var result PostWithMoreDetails
+	var found bool
 
 	for rows.Next() {
+		found = true
 		var jsonString string
 		err := rows.Scan(&jsonString)
 		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			log.Println("Error scanning row:", err)
-			return PostWithMoreDetails{}
+
+			return PostWithMoreDetails{}, Types.ErrorPageProps{
+				Error: Types.Error{
+					Code:    http.StatusInternalServerError,
+					Message: "Internal Server Error",
+				},
+				Title: "Internal Server Error",
+			}
 		}
 
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
 		if errJsonUnmarshal != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			log.Println("Error unmarshaling json:", errJsonUnmarshal)
-			return PostWithMoreDetails{}
+
+			return PostWithMoreDetails{}, Types.ErrorPageProps{
+				Error: Types.Error{
+					Code:    http.StatusInternalServerError,
+					Message: "Internal Server Error",
+				},
+				Title: "Internal Server Error",
+			}
 		}
 	}
 
 	if rowsErr := rows.Err(); rowsErr != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error iterating rows:", rowsErr)
-		return PostWithMoreDetails{}
+
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			},
+			Title: "Internal Server Error",
+		}
 	}
 
-	return result
+	if !found {
+		log.Println("Post not found for ID:", postId)
+
+		return PostWithMoreDetails{}, Types.ErrorPageProps{
+			Error: Types.Error{
+				Code:    http.StatusNotFound,
+				Message: "Post not found",
+			},
+			Title: "Post not found",
+		}
+	}
+
+	return result, Types.ErrorPageProps{}
 }
 
 type PostLikeWithAuthor struct {
@@ -316,7 +359,7 @@ type PostCreateBody struct {
 }
 
 func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
-	subcategoryId := r.PathValue("id")
+	categoryId := r.PathValue("id")
 
 	var body PostCreateBody
 	err := json.NewDecoder(r.Body).Decode(&body)
@@ -327,7 +370,7 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare the SQL statement
-	query := `INSERT INTO Posts (authorId, subcategoryId, title, content, attachments) VALUES (?, ?, ?, ?, ?);`
+	query := `INSERT INTO Posts (authorId, title, content, attachments) VALUES (?, ?, ?, ?);`
 
 	stmt, err := db.GetDB().Prepare(query)
 	if err != nil {
@@ -337,21 +380,40 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(body.UserId, subcategoryId, body.Title, body.Content, body.Images)
+	result, err := stmt.Exec(body.UserId, body.Title, body.Content, body.Images)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)
 		return
 	}
 
-	postID, err := result.LastInsertId()
+	postId, err := result.LastInsertId()
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		log.Println("Error getting last insert ID:", err)
+		log.Println("Error getting last insert id:", err)
 		return
 	}
 
-	http.Redirect(w, r, "/post/"+strconv.Itoa(int(postID)), http.StatusSeeOther)
+	// Prepare the SQL statement
+	categoryQuery := `INSERT INTO PostCategories (postId, categoryId) VALUES (?, ?);`
+
+	categoryStmt, err := db.GetDB().Prepare(categoryQuery)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return
+	}
+
+	_, err = categoryStmt.Exec(postId, categoryId)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return
+	}
+
+	http.Redirect(w, r, "/post/"+strconv.Itoa(int(postId)), http.StatusSeeOther)
 }
 
 type PostReactionBody struct {
@@ -568,44 +630,42 @@ func IsPostDisLikedByCurrentUserHandler(w http.ResponseWriter, r *http.Request, 
 	return count > 0
 }
 
-type PostWithSubcategory struct {
+type PostWithCategory struct {
 	Types.Post
-	Author      Types.User        `json:"author"`
-	Subcategory Types.Subcategory `json:"subcategory"`
+	Category Types.Category `json:"category"`
+	Author   Types.User     `json:"author"`
 }
 
-func GetNewPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithSubcategory {
+func GetNewPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithCategory {
 	// Prepare the SQL statement
-	query := `SELECT json_object(
+	query := `SELECT json_group_array(
+	json_object(
 			'id', p.id,
 			'title', p.title,
 			'content', p.content,
 			'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
 			'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
 			'author', json_object(
-											'id', u.id,
-											'name', u.name,
-											'username', u.username,
-											'profilePicture', u.profilePicture
+					'id', u.id,
+					'name', u.name,
+					'username', u.username,
+					'profilePicture', u.profilePicture
 			),
-			'subcategory', json_object(
-											'id', s.id,
-											'name', s.name,
-											'description', s.description,
-											'category', json_object(
-																			'id', c.id,
-																			'name', c.name,
-																			'description', c.description
-											)
+			'category', json_object(
+					'id', c.id,
+					'name', c.name,
+					'description', c.description,
+					'icon', c.icon
 			)
-) AS post
-
-FROM Posts p
-LEFT JOIN Users u ON p.authorId = u.id
-LEFT JOIN Subcategories s ON p.subcategoryId = s.id
-LEFT JOIN Categories c ON s.categoryId = c.id
+	)
+) AS posts
+FROM posts p
+LEFT JOIN users u ON p.authorId = u.id
+LEFT JOIN PostCategories pc ON p.id = pc.postId
+LEFT JOIN categories c ON pc.categoryId = c.id
+GROUP BY p.id
 ORDER BY p.createdAt DESC
-LIMIT 10;
+LIMIT 5;
 `
 
 	stmt, err := db.GetDB().Prepare(query)
@@ -622,7 +682,7 @@ LIMIT 10;
 		return nil
 	}
 
-	var results []PostWithSubcategory
+	var results []PostWithCategory
 
 	for rows.Next() {
 		var jsonString string
@@ -633,7 +693,7 @@ LIMIT 10;
 			return nil
 		}
 
-		var result PostWithSubcategory
+		var result []PostWithCategory
 		errJsonUnmarshal := json.Unmarshal([]byte(jsonString), &result)
 		if errJsonUnmarshal != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -641,7 +701,7 @@ LIMIT 10;
 			return nil
 		}
 
-		results = append(results, result)
+		results = append(results, result...)
 	}
 
 	if rowsErr := rows.Err(); rowsErr != nil {

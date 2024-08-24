@@ -8,6 +8,7 @@ import (
 	"forum/pkg/handlers/posts"
 	"forum/pkg/handlers/uploads"
 	"forum/pkg/handlers/users"
+	"forum/pkg/middlewares"
 	"forum/pkg/templates"
 	"log"
 	"net/http"
@@ -40,21 +41,24 @@ func main() {
 
 	http.HandleFunc("GET /", templates.IndexTemplateHandler)
 
-	http.HandleFunc("GET /subcategory/{id}", templates.SubcategoryTemplateHandler)
-	http.HandleFunc("GET /subcategory/{id}/new-post", templates.NewPostTemplateHandler)
-	http.HandleFunc("POST /subcategory/{id}/new-post", posts.CreatePostHandler)
+	http.HandleFunc("GET /category/{id}", templates.CategoryTemplateHandler)
+	http.HandleFunc("GET /category/{id}/new-post", templates.NewPostTemplateHandler)
+
+	http.Handle("POST /category/{id}/new-post", middlewares.AuthRequired(http.HandlerFunc(posts.CreatePostHandler)))
 
 	http.HandleFunc("GET /post/{id}", templates.PostTemplateHandler)
-	http.HandleFunc("POST /post/{id}/comment", comments.CreateCommentHandler)
-	http.HandleFunc("PUT /post/{id}/like", posts.PostLikeHandler)
-	http.HandleFunc("PUT /post/{id}/remove-like", posts.PostRemoveLikeHandler)
-	http.HandleFunc("PUT /post/{id}/dislike", posts.PostDislikeHandler)
-	http.HandleFunc("PUT /post/{id}/remove-dislike", posts.PostRemoveDislikeHandler)
 
-	http.HandleFunc("PUT /comment/{id}/like", comments.CommentLikeHandler)
-	http.HandleFunc("PUT /comment/{id}/dislike", comments.CommentDislikeHandler)
-	http.HandleFunc("PUT /comment/{id}/remove-like", comments.CommentRemoveLikeHandler)
-	http.HandleFunc("PUT /comment/{id}/remove-dislike", comments.CommentRemoveDislikeHandler)
+	http.Handle("POST /post/{id}/comment", middlewares.AuthRequired(http.HandlerFunc(comments.CreateCommentHandler)))
+
+	http.Handle("PUT /post/{id}/like", middlewares.AuthRequired(http.HandlerFunc(posts.PostLikeHandler)))
+	http.Handle("PUT /post/{id}/remove-like", middlewares.AuthRequired(http.HandlerFunc(posts.PostRemoveLikeHandler)))
+	http.Handle("PUT /post/{id}/dislike", middlewares.AuthRequired(http.HandlerFunc(posts.PostDislikeHandler)))
+	http.Handle("PUT /post/{id}/remove-dislike", middlewares.AuthRequired(http.HandlerFunc(posts.PostRemoveDislikeHandler)))
+
+	http.Handle("PUT /comment/{id}/like", middlewares.AuthRequired(http.HandlerFunc(comments.CommentLikeHandler)))
+	http.Handle("PUT /comment/{id}/dislike", middlewares.AuthRequired(http.HandlerFunc(comments.CommentDislikeHandler)))
+	http.Handle("PUT /comment/{id}/remove-like", middlewares.AuthRequired(http.HandlerFunc(comments.CommentRemoveLikeHandler)))
+	http.Handle("PUT /comment/{id}/remove-dislike", middlewares.AuthRequired(http.HandlerFunc(comments.CommentRemoveDislikeHandler)))
 
 	http.HandleFunc("POST /upload", func(w http.ResponseWriter, r *http.Request) {
 		uploadedImage := uploads.UploadImageHandler(w, r)
@@ -67,6 +71,7 @@ func main() {
 	// http.Handle("GET /", middlewares.AuthRequired(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	// 	templates.ExecuteTemplateByName(w, "index", nil)
 	// })))
+	//sss
 
 	log.Println("Server started on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

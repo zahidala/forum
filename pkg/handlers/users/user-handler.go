@@ -34,8 +34,6 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// log.Println(data)
-
 	if len(data.Errors) != 0 {
 		w.WriteHeader(http.StatusConflict)
 		templates.RegisterTemplateHandler(w, r, data)
@@ -49,7 +47,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := "INSERT INTO users (name, username, email, password) VALUES (?, ?, ?, ?)"
+	query := "INSERT INTO users (name, username, email, password, profilePicture) VALUES (?, ?, ?, ?, 'https://iili.io/dW44kLG.jpg')"
 
 	userAddExecErr := db.PrepareAndExecute(query,
 		data.Name,
@@ -147,7 +145,7 @@ func RegValidation(w http.ResponseWriter, r *http.Request, data *types.RegValida
 	reLower := regexp.MustCompile(`[a-z]`)
 	reUpper := regexp.MustCompile(`[A-Z]`)
 	reDigit := regexp.MustCompile(`\d`)
-	
+
 	if len(password) < 8 || len(password) > 128 {
 		data.Errors["Password"] = "Password must be between 8 and 128 characters long"
 	} else if !reLower.MatchString(password) {
@@ -158,7 +156,7 @@ func RegValidation(w http.ResponseWriter, r *http.Request, data *types.RegValida
 		data.Errors["Password"] = "Password must contain at least one digit"
 	} else {
 		data.Password = password
-	}	
+	}
 
 	return nil
 }

@@ -222,12 +222,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (postReply) {
     // send new post to the server
     postReply.addEventListener("click", async () => {
-      const subcategoryId = document.getElementById("subcategoryId").value;
+      const categoryId = document.getElementById("categoryId").value;
       const userId = document.getElementById("userId").value;
       const images = imageUrls.join(",");
     
       try {
-        const response = await fetch(`/subcategory/${subcategoryId}/new-post`, {
+        const response = await fetch(`/category/${categoryId}/new-post`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
