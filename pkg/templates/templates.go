@@ -115,12 +115,14 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	newPosts := posts.GetNewPostsHandler(w, r)
 	allPosts := posts.GetAllPostsHandler(w, r)
 	isAuthenticated := utils.IsAuthenticated(r)
+	allPosts := posts.GetAllPostsHandler(w, r)
 
 	data := map[string]interface{}{
 		"Categories":      categories,
 		"NewPosts":        newPosts,
 		"AllPosts": allPosts,
 		"IsAuthenticated": isAuthenticated,
+		"AllPosts": allPosts,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", data)
