@@ -18,6 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
     dropdownMenu.classList.toggle("open");
     dropdownMenu.style.display = "block";
 
+    if (dropdownToggle.classList.contains("dropdown-error")) {
+      dropdownToggle.classList.remove("dropdown-error");
+    }
+
     // close if already open
 
     if (dropdownMenu.classList.contains("open")) {
@@ -80,6 +84,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const editor = document.querySelector(".editor-textarea");
 
   const postTitle = document.getElementById("post-title-input");
+
+  postTitle.addEventListener("input", () => {
+    if (postTitle.classList.contains("post-title-error")) {
+      postTitle.classList.remove("post-title-error");
+    }
+  });
 
   const editorContainer = document.querySelector(".editor");
 
@@ -286,6 +296,28 @@ document.addEventListener("DOMContentLoaded", function () {
     postReply.addEventListener("click", async () => {
       const userId = document.getElementById("userId").value;
       const images = imageUrls.join(",");
+
+      if (!selectedOptions.length && !postTitle.value && !content) {
+        dropdownToggle.classList.add("dropdown-error");
+        postTitle.classList.add("post-title-error");
+        editorContainer.classList.add("editor-error");
+        return;
+      }
+
+      if (!selectedOptions.length) { 
+        dropdownToggle.classList.add("dropdown-error")
+        return;
+      }
+
+      if (!postTitle.value) {
+        postTitle.classList.add("post-title-error");
+        return;
+      }
+
+      if (!content) {
+        editorContainer.classList.add("editor-error");
+        return;
+      }
 
       try {
         const response = await fetch(`/new-post`, {
