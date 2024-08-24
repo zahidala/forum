@@ -698,37 +698,42 @@ func IsPostDisLikedByCurrentUserHandler(w http.ResponseWriter, r *http.Request, 
 
 type PostWithCategory struct {
 	Types.Post
-	Category Types.Category `json:"category"`
-	Author   Types.User     `json:"author"`
+	Categories []Types.Category `json:"categories"`
+	Author     Types.User       `json:"author"`
 }
 
 func GetNewPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithCategory {
 	// Prepare the SQL statement
 	query := `SELECT json_group_array(
-	json_object(
-			'id', p.id,
-			'title', p.title,
-			'content', p.content,
-			'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
-			'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
-			'author', json_object(
-					'id', u.id,
-					'name', u.name,
-					'username', u.username,
-					'profilePicture', u.profilePicture
-			),
-			'category', json_object(
-					'id', c.id,
-					'name', c.name,
-					'description', c.description,
-					'icon', c.icon
-			)
-	)
+    json_object(
+        'id', p.id,
+        'title', p.title,
+        'content', p.content,
+        'createdAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.createdAt),
+        'updatedAt', strftime('%Y-%m-%dT%H:%M:%SZ', p.updatedAt),
+        'author', json_object(
+            'id', u.id,
+            'name', u.name,
+            'username', u.username,
+            'profilePicture', u.profilePicture
+        ),
+        'categories', (
+            SELECT json_group_array(
+                json_object(
+                    'id', c.id,
+                    'name', c.name,
+                    'description', c.description,
+                    'icon', c.icon
+                )
+            )
+            FROM categories c
+            JOIN PostCategories pc ON c.id = pc.categoryId
+            WHERE pc.postId = p.id
+        )
+    )
 ) AS posts
 FROM posts p
 LEFT JOIN users u ON p.authorId = u.id
-LEFT JOIN PostCategories pc ON p.id = pc.postId
-LEFT JOIN categories c ON pc.categoryId = c.id
 GROUP BY p.id
 ORDER BY p.createdAt DESC
 LIMIT 5;
