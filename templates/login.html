@@ -1,4 +1,4 @@
-{{template "header" }}
+{{template "header" .}}
 
 <div class="card-container">
   <div class="card">
@@ -16,7 +16,8 @@
             name="username"
             placeholder="Username"
             maxlength="20"
-            class="input" />
+            class="input"
+          />
         </div>
 
         <div class="container-input">
@@ -27,13 +28,15 @@
             name="password"
             placeholder="Password"
             maxlength="128"
-            class="input" />
+            class="input"
+          />
         </div>
 
         <button
           type="submit"
           class="btn-primary"
-          style="font-size: medium; padding: 10px 15px; cursor: pointer">
+          style="font-size: medium; padding: 10px 15px; cursor: pointer"
+        >
           Log In
         </button>
       </div>
@@ -43,4 +46,4 @@
 
 <script src="/static/scripts/validationLogin.js" defer></script>
 
-{{template "footer" }}
+{{template "footer" .}}
