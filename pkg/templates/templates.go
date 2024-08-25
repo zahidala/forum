@@ -57,7 +57,7 @@ func GetTemplate() *template.Template {
 
 func MergeBaseData(w http.ResponseWriter, r *http.Request, specificData map[string]interface{}) map[string]interface{} {
 	baseData := map[string]interface{}{
-		"Categories": categories.GetCategoriesHandler(nil, r),
+		"Categories": categories.GetCategoriesHandler(w, r),
 	}
 
 	for key, value := range specificData {
