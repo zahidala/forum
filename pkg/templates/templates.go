@@ -132,6 +132,7 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Categories":      categories,
 		"NewPosts":        newPosts,
 		"IsAuthenticated": isAuthenticated,
+		"Title":           "Home",
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))
@@ -166,6 +167,7 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Posts":           posts,
 		"Category":        category,
 		"IsAuthenticated": isAuthenticated,
+		"Title":           category.Name,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "category.html", MergeBaseData(w, r, data))
@@ -198,6 +200,7 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"User":       user,
 		"Categories": categories,
+		"Title":      "New Post",
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "new-post.html", MergeBaseData(w, r, data))
@@ -235,6 +238,7 @@ func NewPostByCategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"Category": category,
 		"User":     user,
+		"Title":    "New Post - " + category.Name,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", MergeBaseData(w, r, data))
@@ -289,6 +293,7 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"User":                        user,
 		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
 		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
+		"Title":                       post.Title,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "post.html", MergeBaseData(w, r, data))
