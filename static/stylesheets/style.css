@@ -829,6 +829,11 @@ div.hidden {
   border: 1px solid red;
 }
 
+#multiple-categories {
+  display: flex;
+  gap: 0.5rem;
+}
+
 @media (max-width: 768px) {
   
   .home-page-layout {

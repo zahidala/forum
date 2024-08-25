@@ -40,13 +40,17 @@
 
     <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
 
-    <a
-      href="/category/{{.Category.ID}}"
-      class="subcategory-label"
-      style="text-decoration: none"
-    >
-      <span class="subcategory-label">{{.Category.Name}}</span>
-    </a>
+    <div id="multiple-categories">
+      {{range .Categories}}
+      <a
+        href="/category/{{.ID}}"
+        class="subcategory-label"
+        style="text-decoration: none"
+      >
+        <span class="subcategory-label">{{.Name}}</span>
+      </a>
+      {{end}}
+    </div>
 
     <i class="fa-solid fa-chevron-right fa-2xs" style="color: #a2a3ae"></i>
 
