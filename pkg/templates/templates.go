@@ -55,6 +55,18 @@ func GetTemplate() *template.Template {
 	return templates
 }
 
+func MergeBaseData(w http.ResponseWriter, r *http.Request, specificData map[string]interface{}) map[string]interface{} {
+	baseData := map[string]interface{}{
+		"Categories": categories.GetCategoriesHandler(nil, r),
+	}
+
+	for key, value := range specificData {
+		baseData[key] = value
+	}
+
+	return baseData
+}
+
 func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
 	var data Types.Error
 	LoginTemplateHandler(w, r, data)
@@ -122,7 +134,7 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"IsAuthenticated": isAuthenticated,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "index.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))
 	if err != nil {
 		log.Println("Failed to execute template: index.html")
 		log.Println(err)
