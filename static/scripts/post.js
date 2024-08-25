@@ -1,6 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   // show uploaded images in post from the server
 
+  const container = document.getElementById("multiple-categories");
+    const links = container.getElementsByTagName("a");
+
+    if (links.length > 1) {
+        for (let i = 0; i < links.length - 1; i++) {
+            const comma = document.createTextNode(", ");
+            links[i].querySelector('span').appendChild(comma);
+        }
+    }
+
   const postId = document.getElementById("post-id").value;
   const postAttachmentsContainer = document.getElementById(`post-images-${postId}`);
   const postAttachments = document.getElementById(`post-attachments-${postId}`).value.split(",").filter((attachment) => attachment !== "");

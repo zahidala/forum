@@ -253,12 +253,7 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	postDislikes := posts.GetPostDislikesHandler(w, r)
 	comments := comments.GetCommentsHandler(w, r)
 
-	category, categoryErr := categories.GetCategoryHandler(w, r)
-
-	if categoryErr.Error.Code != 200 && categoryErr.Error.Code != 0 {
-		ErrorTemplateHandler(w, r, categoryErr)
-		return
-	}
+	categories := categories.GetCategoriesPostHandler(w, r, post.ID)
 
 	isAuthenticated := utils.IsAuthenticated(r)
 
@@ -276,7 +271,7 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Post":                        post,
 		"Likes":                       postLikes,
 		"Dislikes":                    postDislikes,
-		"Category":                    category,
+		"Categories":                  categories,
 		"Comments":                    comments,
 		"IsAuthenticated":             isAuthenticated,
 		"User":                        user,
