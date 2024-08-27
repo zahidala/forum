@@ -37,14 +37,24 @@
     
             <li class="nav-link">
               <a href="/categories"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e8eaed"><path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/></svg>Categories <i class="fas fa-caret-down"></i></a>
-              <div class="dropdown">
+              <!-- <div class="dropdown">
                 <ul>
                   <li class="dropdown-link"><a href="/categories/1">Category 1</a></li>
                   <li class="dropdown-link"><a href="/categories/2">Category 2</a></li>
                   <li class="dropdown-link"><a href="/categories/3">Category 3</a></li>
                   <div class="arrow"></div>
                 </ul>
+              </div> -->
+
+              <i class="fas fa-caret-down" id="open-collapse"></i>
+
+              <div class="collapsible-menu">
+                <div><a href="/categories/1">Category 1</a></div>
+                <div><a href="/categories/2">Category 2</a></div>
+                <div><a href="/categories/3">Category 3</a></div>
+                <div><a href="/categories/4">Category 4</a></div>
               </div>
+
             </li>
             <label for="check" class="close-menu"><i class="fas fa-times"></i></label>
           </span>
@@ -118,6 +128,13 @@
           day: "numeric",
         }
       );
+    });
+
+    const openCollapse = document.getElementById("open-collapse");
+
+    openCollapse.addEventListener("click", () => {
+      const collapsibleMenu = document.querySelector(".collapsible-menu");
+      collapsibleMenu.classList.toggle("open-collapsible-menu");
     });
 
     const formatTime = document.querySelectorAll(".time");

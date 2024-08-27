@@ -869,6 +869,21 @@ div.hidden {
   border-radius: 6px;
 }
 
+.collapsible-menu {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInDown 0.5s ease;
+  gap: 1rem;
+  padding-top: 20px;
+}
+
+.collapsible-menu.open-collapsible-menu {
+  display: flex;
+}
+
 /* RESPONSIVE STYLES */
 @media (max-width: 768px) {
   .home-page-layout {
@@ -947,5 +962,16 @@ div.hidden {
   }
   to {
     transform: scale(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
