@@ -891,6 +891,14 @@ div.hidden {
     flex-direction: column;
   }
 
+  .dropdown {
+    display: none;
+  }
+
+  .menu li:hover .dropdown {
+    display: none;
+  }
+
   .menu {
     display: flex;
     margin: 20px;
@@ -952,6 +960,18 @@ div.hidden {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+}
+
+/* media query for screens larger than phones */
+
+@media (min-width: 768px) {
+  .collapsible-menu {
+    display: none;
+  }
+
+  .collapsible-menu.open-collapsible-menu {
+    display: none;
   }
 }
 
