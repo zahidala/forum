@@ -1,4 +1,4 @@
-{{template "header"}}
+{{template "header" .}}
 
 <div class="card-container" style="top: 55%">
   <div class="card">
@@ -13,7 +13,7 @@
             class="input"
             placeholder="Full Name"
             maxlength="50"
-            {{ if .Errors }} value="{{ .Name }}" {{ end }}
+            {{ if .Obj.Errors }} value="{{ .Obj.Name }}" {{ end }}
             oninput="validateName(this.value.trim())" />
           <div class="error" style="font-size: 0.8rem"></div>
         </div>
@@ -27,10 +27,10 @@
             class="input"
             placeholder="Username"
             maxlength="20"
-            {{ if .Errors }} value="{{ .Username }}" {{ end }}
+            {{ if .Obj.Errors }} value="{{ .Obj.Username }}" {{ end }}
             oninput="validateUsername(this.value)" />
           <div class="error" style="font-size: 0.8rem">
-            {{ with .Errors.Username }} {{ . }} {{ end }}
+            {{ with .Obj.Errors.Username }} {{ . }} {{ end }}
           </div>
         </div>
 
@@ -42,10 +42,10 @@
             class="input"
             placeholder="Email"
             maxlength="254"
-            {{ if .Errors }} value="{{ .Email }}" {{ end }}
+            {{ if .Obj.Errors }} value="{{ .Obj.Email }}" {{ end }}
             oninput="validateEmail(this.value.trim())" />
           <div class="error" style="font-size: 0.8rem">
-            {{ with .Errors.Email }} {{ . }} {{ end }}
+            {{ with .Obj.Errors.Email }} {{ . }} {{ end }}
           </div>
         </div>
 
@@ -74,4 +74,4 @@
 
 <script src="/static/scripts/validationRegister.js" defer></script>
 
-{{template "footer" }}
+{{template "footer" .}}

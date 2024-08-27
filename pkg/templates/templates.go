@@ -55,13 +55,30 @@ func GetTemplate() *template.Template {
 	return templates
 }
 
+func MergeBaseData(w http.ResponseWriter, r *http.Request, specificData map[string]interface{}) map[string]interface{} {
+	baseData := map[string]interface{}{
+		"NavbarOptions": categories.GetCategoriesHandler(w, r),
+	}
+
+	for key, value := range specificData {
+		baseData[key] = value
+	}
+
+	return baseData
+}
+
 func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
 	var data Types.Error
 	LoginTemplateHandler(w, r, data)
 }
 
 func LoginTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.Error) {
-	err := GetTemplate().ExecuteTemplate(w, "login.html", data)
+	dataMap := map[string]interface{}{
+		"Obj": data,
+		"Title": "Login",
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "login.html", MergeBaseData(w, r, dataMap))
 	if err != nil {
 		log.Println("Failed to execute template: login.html")
 		log.Println(err)
@@ -83,7 +100,12 @@ func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.RegValidation) {
-	err := GetTemplate().ExecuteTemplate(w, "register.html", data)
+	dataMap := map[string]interface{}{
+		"Obj": data,
+		"Title": "Register",
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "register.html", MergeBaseData(w, r, dataMap))
 	if err != nil {
 		log.Println("Failed to execute template: register.html")
 		log.Println(err)
@@ -120,9 +142,10 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Categories":      categories,
 		"NewPosts":        newPosts,
 		"IsAuthenticated": isAuthenticated,
+		"Title":           "Home",
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "index.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))
 	if err != nil {
 		log.Println("Failed to execute template: index.html")
 		log.Println(err)
@@ -154,9 +177,10 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Posts":           posts,
 		"Category":        category,
 		"IsAuthenticated": isAuthenticated,
+		"Title":           category.Name,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "category.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "category.html", MergeBaseData(w, r, data))
 	if err != nil {
 		log.Println("Failed to execute template: category.html")
 		log.Println(err)
@@ -186,9 +210,10 @@ func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"User":       user,
 		"Categories": categories,
+		"Title":      "New Post",
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "new-post.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "new-post.html", MergeBaseData(w, r, data))
 	if err != nil {
 		log.Println("Failed to execute template: new-post.html")
 		log.Println(err)
@@ -223,9 +248,10 @@ func NewPostByCategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"Category": category,
 		"User":     user,
+		"Title":    "New Post - " + category.Name,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", MergeBaseData(w, r, data))
 	if err != nil {
 		log.Println("Failed to execute template: new-post-by-category.html")
 		log.Println(err)
@@ -277,9 +303,10 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"User":                        user,
 		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
 		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
+		"Title":                       post.Title,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "post.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "post.html", MergeBaseData(w, r, data))
 	if err != nil {
 		log.Println("Failed to execute template: post.html")
 		log.Println(err)
