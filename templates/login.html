@@ -3,8 +3,8 @@
 <div class="card-container">
   <div class="card">
     <h1 style="margin: 0; color: white">Log In</h1>
-    <div class="login-error {{if not .Message}}hidden{{end}}">
-      {{if .Obj.Message}} {{.Message}} {{end}}
+    <div class="login-error {{if not .Obj.Message}}hidden{{end}}">
+      {{if .Obj.Message}} {{.Obj.Message}} {{end}}
     </div>
     <form id="login-form" action="/login" method="post">
       <div class="outer-container-input">
