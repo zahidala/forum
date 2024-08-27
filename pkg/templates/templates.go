@@ -73,7 +73,12 @@ func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.Error) {
-	err := GetTemplate().ExecuteTemplate(w, "login.html", data)
+	dataMap := map[string]interface{}{
+		"Obj": data,
+		"Title": "Login",
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "login.html", MergeBaseData(w, r, dataMap))
 	if err != nil {
 		log.Println("Failed to execute template: login.html")
 		log.Println(err)
@@ -95,7 +100,12 @@ func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.RegValidation) {
-	err := GetTemplate().ExecuteTemplate(w, "register.html", data)
+	dataMap := map[string]interface{}{
+		"Obj": data,
+		"Title": "Register",
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "register.html", MergeBaseData(w, r, dataMap))
 	if err != nil {
 		log.Println("Failed to execute template: register.html")
 		log.Println(err)
