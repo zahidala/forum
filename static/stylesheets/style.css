@@ -15,7 +15,7 @@ body {
   line-height: 1.6;
 }
 
-/* GLOBAL STYLING FOR EVERY LINK/BUTTON */
+/* GLOBAL LINK AND BUTTON STYLES */
 ul, li, a, button {
   margin: 0;
   padding: 0;
@@ -25,7 +25,7 @@ ul, li, a, button {
   cursor: pointer;
 }
 
-/* NAVIGATION BAR STYLES */
+/* HEADER AND NAVIGATION BAR STYLES */
 header {
   position: sticky;
   top: 0px;
@@ -33,11 +33,10 @@ header {
   z-index: 1000;
 }
 
-
-
 nav {
   margin: 10px;
   display: flex;
+  /* flex-wrap: wrap; */
   background-color: #1b1d21;
   position: relative;
   border-radius: 20px;
@@ -112,6 +111,16 @@ nav:hover::after {
   transform: scaleX(1.1);
 }
 
+.nav-link > a > svg path {
+  display: inline-block;
+  margin-left: 10px;
+  fill: white;
+}
+
+.nav-link > a:hover > svg path {
+  fill: #2DAAE9;
+}
+
 /* NAVBAR DROPDOWNS */
 .dropdown {
   display: none;
@@ -139,14 +148,6 @@ nav:hover::after {
   padding: 10px;
 }
 
-.fas {
-  /* float: right;
-  margin-left: 10px;
-  padding-top: 3px; */
-  
-}
-
-
 /* FOR RESPONSIVE NAVBAR (HAMBURGER MENU) */
 .open-menu , .close-menu {
   display: none;
@@ -173,7 +174,7 @@ nav:hover::after {
 }
 
 /* FOR LOGIN/LOGOUT/REGISTER BUTTON */
-.nav-links {
+.nav-btn {
   display: flex;
   justify-content: right;
   align-items: center;
@@ -182,24 +183,82 @@ nav:hover::after {
   gap: 1rem;
 }
 
-/* .nav-links::before {
-  content: "|";
-  color: #2DAAE9;
-  margin-right: 10px;
-} */
-
-.nav-links a {
-  transition: color 0.3s ease-in-out;
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .5s;
+  box-shadow: 2px 4px 10px rgba(45, 170, 233, 0.5);
+  background-color: transparent;
 }
 
-.nav-links a:hover {
-  color: #2DAAE9;
+/* login/logout sign */
+.sign {
+  width: 100%;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign svg {
+  width: 15px;
+}
+
+.sign svg path {
+  fill: white;
+}
+
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-weight: 600;
+  transition-duration: .3s;
+}
+
+/* hover effect on button width */
+.Btn:hover {
+  background-color: #2DAAE9;
+  width: 100px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 10px;
+}
+
+/* hover effect button's text */
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 5px;
+}
+
+/* button click effect*/
+.Btn:active {
+  transform: translate(2px ,2px);
 }
 
 .btn-outline {
-  border: 2px solid #2DAAE9;
+  border: none;
+  box-shadow: 2px 4px 10px rgba(45, 170, 233, 0.5);
   color: white;
-  padding: 5px 10px;
+  padding: 5px 15px;
   border-radius: 5px;
 }
 
@@ -638,10 +697,6 @@ div.hidden {
   height: 150px;
 }
 
-.editor-error {
-  border: 1px solid red;
-}
-
 .editor-textarea {
   background-color: transparent;
   color: white;
@@ -655,7 +710,6 @@ div.hidden {
 .editor-textarea:focus-visible {
   outline: none;
 }
-
 
 .placeholder {
   position: absolute;
@@ -750,8 +804,50 @@ div.hidden {
   line-height: 1.5rem; /* Match the font-size */
 }
 
-.post-title-error {
-  border: 1px solid red;
+/* Footer Styles */
+.footer {
+  background-color: #1b1d21;
+  padding: 20px;
+  margin-top: 50px;
+  border-radius: 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-section {
+  margin-bottom: 20px;
+  min-width: 200px;
+}
+
+.footer-section h3 {
+  color: #2DAAE9;
+  margin-bottom: 20px;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+  color: #a0a0a0;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #2DAAE9;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #474c54;
 }
 
 /* SCROLLBAR STYLES */
@@ -773,74 +869,36 @@ div.hidden {
   border-radius: 6px;
 }
 
-.dropdown-select {
+.collapsible-menu {
   position: relative;
-  display: inline-block;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInDown 0.5s ease;
+  gap: 1rem;
+  padding-top: 20px;
 }
 
-/* Styling for dropdown button */
-.dropdown-toggle {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid #424242;
-  border-radius: 5px;
-  color: white;
-  min-width: 300px;
+.collapsible-menu.open-collapsible-menu {
   display: flex;
-  justify-content: space-between;
 }
 
-.dropdown-toggle:hover {
-  border: 1px solid #e0e0e0e9;
-}
-
-/* Styling for dropdown menu */
-.dropdown-menu {
-  display: none; /* Hidden by default */
-  position: absolute;
-  background-color: white;
-  min-width: 200px;
-  margin-top: 5px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e0e0e0e9;
-  border-radius: 5px;
-  background-color: #1b1d21;
-  color: white;
-  padding: 10px;
-  z-index: 1;
-  max-height: 200px;
-  overflow-y: auto; /* Scroll if the content is too big */
-}
-
-/* Styling for each checkbox item */
-.dropdown-menu label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-/* Show dropdown menu when open class is added */
-.dropdown-select.open .dropdown-menu {
-  display: block;
-}
-
-.dropdown-error {
-  border: 1px solid red;
-}
-
-#multiple-categories {
-  display: flex;
-  gap: 0.5rem;
-}
-
+/* RESPONSIVE STYLES */
 @media (max-width: 768px) {
-  
   .home-page-layout {
     display: flex;
     flex-direction: column;
   }
-  
+
+  .dropdown {
+    display: none;
+  }
+
+  .menu li:hover .dropdown {
+    display: none;
+  }
+
   .menu {
     display: flex;
     margin: 20px;
@@ -905,11 +963,35 @@ div.hidden {
   }
 }
 
+/* media query for screens larger than phones */
+
+@media (min-width: 768px) {
+  .collapsible-menu {
+    display: none;
+  }
+
+  .collapsible-menu.open-collapsible-menu {
+    display: none;
+  }
+}
+
+/* ANIMATION STYLES */
 @keyframes scaleDown {
   from {
     transform: scale(1);
   }
   to {
     transform: scale(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
