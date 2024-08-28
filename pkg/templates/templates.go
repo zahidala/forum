@@ -56,8 +56,18 @@ func GetTemplate() *template.Template {
 }
 
 func MergeBaseData(w http.ResponseWriter, r *http.Request, specificData map[string]interface{}) map[string]interface{} {
+	var user Types.User
+
+	isAuthenticated := utils.IsAuthenticated(r)
+
+	if isAuthenticated {
+		user = utils.GetUserInfoBySession(w, r)
+	}
+
 	baseData := map[string]interface{}{
-		"NavbarOptions": categories.GetCategoriesHandler(w, r),
+		"NavbarOptions":   categories.GetCategoriesHandler(w, r),
+		"IsAuthenticated": isAuthenticated,
+		"User":            user,
 	}
 
 	for key, value := range specificData {
@@ -74,7 +84,7 @@ func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
 
 func LoginTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.Error) {
 	dataMap := map[string]interface{}{
-		"Obj": data,
+		"Obj":   data,
 		"Title": "Login",
 	}
 
@@ -101,7 +111,7 @@ func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
 
 func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.RegValidation) {
 	dataMap := map[string]interface{}{
-		"Obj": data,
+		"Obj":   data,
 		"Title": "Register",
 	}
 
@@ -136,13 +146,10 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	categories := categories.GetCategoriesHandler(w, r)
 	newPosts := posts.GetNewPostsHandler(w, r)
 
-	isAuthenticated := utils.IsAuthenticated(r)
-
 	data := map[string]interface{}{
-		"Categories":      categories,
-		"NewPosts":        newPosts,
-		"IsAuthenticated": isAuthenticated,
-		"Title":           "Home",
+		"Categories": categories,
+		"NewPosts":   newPosts,
+		"Title":      "Home",
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))
@@ -171,13 +178,10 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 	posts := posts.GetPostsFromCategoryHandler(w, r)
 
-	isAuthenticated := utils.IsAuthenticated(r)
-
 	data := map[string]interface{}{
-		"Posts":           posts,
-		"Category":        category,
-		"IsAuthenticated": isAuthenticated,
-		"Title":           category.Name,
+		"Posts":    posts,
+		"Category": category,
+		"Title":    category.Name,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "category.html", MergeBaseData(w, r, data))
@@ -197,18 +201,10 @@ func CategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewPostTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	var user Types.User
 
 	categories := categories.GetCategoriesHandler(w, r)
 
-	isAuthenticated := utils.IsAuthenticated(r)
-
-	if isAuthenticated {
-		user = utils.GetUserInfoBySession(w, r)
-	}
-
 	data := map[string]interface{}{
-		"User":       user,
 		"Categories": categories,
 		"Title":      "New Post",
 	}
@@ -237,17 +233,8 @@ func NewPostByCategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user Types.User
-
-	isAuthenticated := utils.IsAuthenticated(r)
-
-	if isAuthenticated {
-		user = utils.GetUserInfoBySession(w, r)
-	}
-
 	data := map[string]interface{}{
 		"Category": category,
-		"User":     user,
 		"Title":    "New Post - " + category.Name,
 	}
 
@@ -299,8 +286,6 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Dislikes":                    postDislikes,
 		"Categories":                  categories,
 		"Comments":                    comments,
-		"IsAuthenticated":             isAuthenticated,
-		"User":                        user,
 		"IsPostLikedByCurrentUser":    isPostLikedByCurrentUser,
 		"IsPostDislikedByCurrentUser": isPostDislikedByCurrentUser,
 		"Title":                       post.Title,

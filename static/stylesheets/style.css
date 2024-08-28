@@ -92,9 +92,10 @@ nav:hover::after {
 
 .menu li a:hover {
   color: #2DAAE9;
+  transition: transform 0.3s ease-in-out;
 }
 
-.menu li a::after {
+/* .menu li a::after {
   content: "";
   position: absolute;
   width: 0;
@@ -103,18 +104,25 @@ nav:hover::after {
   bottom: 0;
   left: 0;
   transform: scaleX(0);
-  transition: transform 0.3s ease-in-out;
+  
 }
 
 .menu li a:hover::after {
   width: 100%;
   transform: scaleX(1.1);
+} */
+
+/* SVG ICONS STYLES */
+.nav-link > a > svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  padding-right: 5px;
 }
 
 .nav-link > a > svg path {
   display: inline-block;
   margin-left: 10px;
-  fill: white;
 }
 
 .nav-link > a:hover > svg path {
@@ -124,26 +132,32 @@ nav:hover::after {
 /* NAVBAR DROPDOWNS */
 .dropdown {
   display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-top: 2px solid #2DAAE9;
+  border-bottom: 1px solid #2DAAE9;
+  /* box-shadow: 5px 5px 20px rgba(45, 170, 233, 0.5); */
+  position: absolute;
+  top: 150%;
+  left: 0;
+  background-color: #1b1d21;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 100;
+  transition: all 0.3s ease-in-out;
 }
 
 .menu li:hover .dropdown {
-  display: block;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  /* background-color: #1b1d21; */
-  background-color: #2daae927;
-  border-radius: 10px;
-  padding: 10px;
-  transition: all 0.3s ease-in-out;
+  display: flex;
+  animation: fadeInDown 0.5s ease;
 }
 
 .menu li:hover .dropdown ul {
   display: block;
-  /* margin: 10px; */
 }
 
-.menu li:hover .dropdown ul li {
+.menu li:hover .dropdown ul .dropdown-link {
   width: 150px;
   padding: 10px;
 }
@@ -169,6 +183,21 @@ nav:hover::after {
   left: 20px;
 }
 
+.collapsible-menu {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInDown 0.5s ease;
+  gap: 1rem;
+  padding-top: 20px;
+}
+
+.collapsible-menu.open-collapsible-menu {
+  display: flex;
+}
+
 #check {
   display: none;
 }
@@ -183,7 +212,7 @@ nav:hover::after {
   gap: 1rem;
 }
 
-.Btn {
+.login-btn, .logout-btn {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -195,11 +224,18 @@ nav:hover::after {
   position: relative;
   overflow: hidden;
   transition-duration: .5s;
-  box-shadow: 2px 4px 10px rgba(45, 170, 233, 0.5);
   background-color: transparent;
 }
 
-/* login/logout sign */
+.login-btn {
+  box-shadow: 5px 5px 10px rgba(45, 170, 233, 0.5);
+}
+
+.logout-btn {
+  box-shadow: 5px 5px 10px rgba(255, 65, 65, 0.5);
+}
+
+/* LOGIN/LOGOUT ICON */
 .sign {
   width: 100%;
   transition-duration: .3s;
@@ -216,7 +252,7 @@ nav:hover::after {
   fill: white;
 }
 
-/* text */
+/* BUTTON TEXT */
 .text {
   position: absolute;
   right: 0%;
@@ -227,36 +263,43 @@ nav:hover::after {
   transition-duration: .3s;
 }
 
-/* hover effect on button width */
-.Btn:hover {
+/* HOVER EFFECT ON BUTTON WIDTH */
+.logout-btn:hover {
+  background-color: rgb(255, 65, 65);
+  width: 100px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.login-btn:hover {
   background-color: #2DAAE9;
   width: 100px;
   border-radius: 40px;
   transition-duration: .3s;
 }
 
-.Btn:hover .sign {
+.login-btn:hover .sign, .logout-btn .sign {
   width: 30%;
   transition-duration: .3s;
   padding-left: 10px;
 }
 
-/* hover effect button's text */
-.Btn:hover .text {
+/* HOVER EFFECT BUTTON'S TEXT */
+.login-btn:hover .text, .logout-btn:hover .text {
   opacity: 1;
   width: 70%;
   transition-duration: .3s;
   padding-right: 5px;
 }
 
-/* button click effect*/
-.Btn:active {
+/* BUTTON CLICK EFFECT*/
+.login-btn:active, .logout-btn:active {
   transform: translate(2px ,2px);
 }
 
 .btn-outline {
   border: none;
-  box-shadow: 2px 4px 10px rgba(45, 170, 233, 0.5);
+  box-shadow: 5px 5px 10px rgba(45, 170, 233, 0.5);
   color: white;
   padding: 5px 15px;
   border-radius: 5px;
@@ -265,6 +308,58 @@ nav:hover::after {
 .btn-outline:hover {
   background-color: #2DAAE9;
   color: black;
+}
+
+/* USER-INFO & DROPDOWN */
+.user-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.user-info:hover {
+  color: #2DAAE9;
+  transition: color 0.3s ease-in-out;
+}
+
+.user-info img {
+  width: 30px;
+  height: 30px;
+  box-shadow: 4px 4px 10px rgba(45, 170, 233, 0.5);
+}
+
+.user-info-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #1b1d21;
+  border-radius: 10px;
+  border-top: 2px solid #2DAAE9;
+  border-bottom: 1px solid #2DAAE9;
+  top: 130%;
+  right: 0;
+  padding: 20px;
+  width: 120px;
+  z-index: 100;
+  position: absolute;
+}
+
+.open-user-dropdown {
+  display: flex;
+  animation: fadeInDown 0.5s ease;
+}
+
+.user-dropdown a:hover {
+  color: #2DAAE9;
 }
 
 .btn-primary {
@@ -807,22 +902,21 @@ div.hidden {
 /* Footer Styles */
 .footer {
   background-color: #1b1d21;
-  padding: 20px;
+  padding: 10px;
   margin-top: 50px;
   border-radius: 20px;
 }
 
 .footer-content {
   display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
 .footer-section {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   min-width: 200px;
 }
 
@@ -831,22 +925,37 @@ div.hidden {
   margin-bottom: 20px;
 }
 
-.footer-section ul li {
+.footer-section p {
+  flex: 1;
+  color: #a0a0a0;
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-style: italic;
+  text-align: justify;
+  padding-right: 30px;
+  border-right: 1px solid #474c54;
+}
+
+.links {
+  padding-left: 30px;
+}
+
+.links ul li {
   margin-bottom: 10px;
 }
 
-.footer-section ul li a {
+.links ul li a {
   color: #a0a0a0;
   transition: color 0.3s ease;
 }
 
-.footer-section ul li a:hover {
+.links ul li a:hover {
   color: #2DAAE9;
 }
 
 .footer-bottom {
   text-align: center;
-  padding-top: 20px;
+  padding-top: 5px;
   border-top: 1px solid #474c54;
 }
 
@@ -867,21 +976,6 @@ div.hidden {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(transparent, white);
   border-radius: 6px;
-}
-
-.collapsible-menu {
-  position: relative;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  animation: fadeInDown 0.5s ease;
-  gap: 1rem;
-  padding-top: 20px;
-}
-
-.collapsible-menu.open-collapsible-menu {
-  display: flex;
 }
 
 /* RESPONSIVE STYLES */
