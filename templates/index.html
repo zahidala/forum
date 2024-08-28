@@ -131,16 +131,22 @@
           height="50"
         />
 
-        <div class="new-post-content">
-          <span style="color: white; font-size: 0.8rem">{{.Title}}</span>
-
-          <span style="color: #a2a3ae; font-size: 0.8rem">
-            {{.Author.Username}}
+      <div class="new-post-content">
+        <span class="post-title">
+          <a href="/post/{{.PostID}}" class="new-post-link">{{.Title}}</a>
+        </span>
+        <span class="post-created">
+          {{.Username}} -
+          <span class="time">{{.CreatedAt}}</span>
+        </span>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+          {{ range .Categories}}
+          <span class="post-topic">
+            <a href="/category/{{.CategoryID}}" class="post-category-link">
+              {{ .CategoryName}}
+            </a>
           </span>
-
-          <span style="color: #a2a3ae; font-size: 0.8rem" class="date">
-            {{.CreatedAt}}
-          </span>
+          {{ end }}
         </div>
       </div>
     </a>
