@@ -330,17 +330,22 @@ nav:hover::after {
   box-shadow: 4px 4px 10px rgba(45, 170, 233, 0.5);
 }
 
+.user-info-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .user-dropdown {
   display: none;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 3rem;
+  gap: 1.5rem;
   background-color: #1b1d21;
   border-radius: 10px;
   border-top: 2px solid #2DAAE9;
   border-bottom: 1px solid #2DAAE9;
-  top: 80%;
+  top: 130%;
   right: 0;
   padding: 20px;
   width: 120px;
@@ -348,7 +353,7 @@ nav:hover::after {
   position: absolute;
 }
 
-.user-info:hover .user-dropdown {
+.open-user-dropdown {
   display: flex;
   animation: fadeInDown 0.5s ease;
 }
