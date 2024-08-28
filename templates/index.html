@@ -152,15 +152,15 @@
           {{.Username}} -
           <span class="time">{{.CreatedAt}}</span>
         </span>
-        {{ range .Categories}}
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+          {{ range .Categories}}
           <span class="post-topic">
             <a href="/category/{{.CategoryID}}" class="post-category-link">
               {{ .CategoryName}}
             </a>
           </span>
+          {{ end }}
         </div>
-        {{ end }}
       </div>
     </div>
 
