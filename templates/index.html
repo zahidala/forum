@@ -100,20 +100,11 @@
           background-color: #1b1d21;
           border-bottom: 1px solid #474c54;
         ">
-      <span style="color: #a2a3ae; font-size: 0.85rem; font-weight: bold">ALL
-        POSTS</span>
+      <span style="color: #a2a3ae; font-size: 1.5rem; font-weight: bold">All Posts</span>
+      <!-- <span class="categories-label">ALL POSTS</span> -->
 
       <div class="post-filter">
         <button class="btn-post-filter"><i class="fa-solid fa-filter fa-xl"></i></button>
-
-        <!-- <form id="filter-form" action="/" method="GET">
-            <div>Category:
-              /*{{ range .Categories }}*/
-              <input id="/*{{ .Name }}*/" type="checkbox" name="category" value="/*{{ .ID }}*/">
-              <label for="/*{{ .Name }}*/">/*{{ .Name }}*/</label>
-              /*{{ end }}*/
-            </div> -->
-
         <div class="dropdown-select">
           <button class="dropdown-toggle">
             Select Categories
@@ -128,12 +119,15 @@
               {{end}}
             </div>
         </div>
-
-        <label for="user-posts">My posts</label>
-        <input id="user-posts" name="user-posts" value="true" type="checkbox">
-        <label for="liked-posts">Liked posts</label>
-        <input id="liked-posts" name="liked-posts" value="true" type="checkbox">
-        <button type="submit" class="btn-primary">Apply</button>
+        {{ if .IsAuthenticated }}
+        <label for="user-posts">My posts:
+          <input id="user-posts" name="user-posts" value="true" type="checkbox">
+        </label>
+        <label for="liked-posts">Liked posts:
+          <input id="liked-posts" name="liked-posts" value="true" type="checkbox">
+        </label>
+        {{ end }}
+        <button type="submit" class="btn-primary" style="font-size: medium;">Apply</button>
         </form>
       </div>
 

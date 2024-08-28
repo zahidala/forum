@@ -139,10 +139,10 @@ func GetFilteredPosts(w http.ResponseWriter, r *http.Request) string {
 			if i > 0 {
 				filters += " OR "
 			}
-			// filters += fmt.Sprintf(`categories LIKE '%"categoryID":%s%'`, category)
-			filters += fmt.Sprintf(`categories LIKE '%%"categoryID":%s%%'`, category)
 
+			filters += fmt.Sprintf(`categories LIKE '%%"categoryID":%s%%'`, category)
 		}
+		
 		filters += "\n"
 	}
 
@@ -169,16 +169,3 @@ func GetFilteredPosts(w http.ResponseWriter, r *http.Request) string {
 
 	return filters
 }
-
-// filtering query
-// SELECT * FROM (
-// 	SELECT p.id AS postID , p.title , p.createdAt , p.updatedAt , u.id AS userID , u.username , u.profilePicture , pc.categoryId, c.name
-// 	FROM Posts p
-// 	JOIN Users u ON p.authorId = u.id
-// 	JOIN PostCategories pc ON p.id  = pc.postId
-// 	JOIN Categories c ON pc.categoryId = c.id
-// 	)
-// 	WHERE categoryId IN (1,2) --from query
-// 	AND userID = 2 --from/using session
-// 	AND postID IN (SELECT postId FROM PostLikes pl WHERE userId = 2 AND isLike = 1) -- userId from session
-// 	--GROUP BY postID
