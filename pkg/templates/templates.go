@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	// "fmt"
 )
 
 var templates *template.Template

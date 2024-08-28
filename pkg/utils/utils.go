@@ -1,14 +1,15 @@
 package utils
 
 import (
+	"fmt"
 	"forum/pkg/db"
 	Types "forum/pkg/types"
+	"github.com/gofrs/uuid/v5"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/gofrs/uuid/v5"
-	"golang.org/x/crypto/bcrypt"
+	// "strings"
 )
 
 // GenerateSessionID generates a new UUID for session ID
@@ -114,3 +115,70 @@ func GetUserInfoBySession(w http.ResponseWriter, r *http.Request) Types.User {
 
 	return user
 }
+
+func GetFilteredPosts(w http.ResponseWriter, r *http.Request) string {
+	//protect? against user-input (manually) queries
+
+	params := r.URL.Query()
+	categories := params["category"]
+	userPosts := params.Get("user-posts")
+	likedPosts := params.Get("liked-posts")
+
+	if len(categories) < 1 && userPosts != "true" && likedPosts != "true" {
+		return ""
+	}
+
+	// fmt.Println("Categories:", categories)
+	// fmt.Println("userPosts:", userPosts)
+	// fmt.Println("likedPosts:", likedPosts)
+
+	filters := "\nWHERE "
+
+	if len(categories) > 0 {
+		for i, category := range categories {
+			if i > 0 {
+				filters += " OR "
+			}
+			// filters += fmt.Sprintf(`categories LIKE '%"categoryID":%s%'`, category)
+			filters += fmt.Sprintf(`categories LIKE '%%"categoryID":%s%%'`, category)
+
+		}
+		filters += "\n"
+	}
+
+
+	var userID int
+	if IsAuthenticated(r) {
+		userID = GetUserInfoBySession(w, r).ID
+
+		if userPosts == "true" {
+			if len(filters) > 10 {
+				filters += "AND "
+			}
+			filters += fmt.Sprintf("userID = %d\n", userID)
+		}
+	
+		if likedPosts == "true" {
+			if len(filters) > 10 {
+				filters += "AND "
+			}
+			filters += fmt.Sprintf("postID IN (SELECT postId FROM PostLikes pl WHERE userId = %d AND isLike = 1)\n", userID)
+		}
+	}
+	// if no user cookie, ignore any query other than categories
+
+	return filters
+}
+
+// filtering query
+// SELECT * FROM (
+// 	SELECT p.id AS postID , p.title , p.createdAt , p.updatedAt , u.id AS userID , u.username , u.profilePicture , pc.categoryId, c.name
+// 	FROM Posts p
+// 	JOIN Users u ON p.authorId = u.id
+// 	JOIN PostCategories pc ON p.id  = pc.postId
+// 	JOIN Categories c ON pc.categoryId = c.id
+// 	)
+// 	WHERE categoryId IN (1,2) --from query
+// 	AND userID = 2 --from/using session
+// 	AND postID IN (SELECT postId FROM PostLikes pl WHERE userId = 2 AND isLike = 1) -- userId from session
+// 	--GROUP BY postID

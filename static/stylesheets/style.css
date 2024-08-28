@@ -731,6 +731,17 @@ div.hidden {
   padding: 5px 10px;
 }
 
+.btn-post-filter {
+  background: none;
+  border: none;
+  color: #a2a3ae;
+  cursor: pointer;
+}
+
+.btn-post-filter:hover {
+  color: gainsboro;
+}
+
 .post-liked {
   color: #2DAAE9;
 }
