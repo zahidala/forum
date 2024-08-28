@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	// "fmt"
 )
 
 var templates *template.Template
@@ -119,7 +120,7 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"Categories":      categories,
 		"NewPosts":        newPosts,
-		"AllPosts": allPosts,
+		"AllPosts":        allPosts,
 		"IsAuthenticated": isAuthenticated,
 	}
 

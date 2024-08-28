@@ -2,20 +2,13 @@
 
 <div class="home-page-layout">
   <div class="column-1">
-    <div
-      class="container-categories-label"
-      style="display: flex; justify-content: space-between"
-    >
+    <div class="container-categories-label" style="display: flex; justify-content: space-between">
       <span class="categories-label">Categories</span>
 
       {{if .IsAuthenticated}}
       <div>
         <a href="/new-post">
-          <button
-            type="submit"
-            class="btn-primary"
-            style="font-size: medium; padding: 10px 15px; cursor: pointer"
-          >
+          <button type="submit" class="btn-primary" style="font-size: medium; padding: 10px 15px; cursor: pointer">
             New Post
           </button>
         </a>
@@ -53,13 +46,7 @@
     {{if gt (len .NewPosts) 0}} {{range .NewPosts}}
 
     <div class="new-post">
-      <img
-        src="{{.Author.ProfilePicture}}"
-        alt=""
-        style="border-radius: 5px; min-width: 50px"
-        width="50"
-        height="50"
-      />
+      <img src="{{.Author.ProfilePicture}}" alt style="border-radius: 5px; min-width: 50px" width="50" height="50" />
 
       <div class="new-post-content">
         <span class="post-title">
@@ -94,66 +81,92 @@
   </div>
 </div>
 
-<div style="flex: 1; border: 0.5px solid #474c54; margin-top: 30px;"></div>
+<div style="flex: 1; border: 0.5px solid #474c54; margin: 50px auto;"></div>
 
-<div
-    style="
+<div style="
       display: flex;
       flex-direction: column;
       gap: 0.1rem;
       background-color: #2e3037;
-      margin-top: 30px;
       padding-top: 10px;
-    "
-  >
+    ">
 
-    <div
-      style="padding: 10px; display: flex; gap: 1rem; flex-direction: column"
-    >
-      <div
-        style="
+  <div style="padding: 10px; display: flex; gap: 1rem; flex-direction: column">
+    <div style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
           padding: 10px 20px;
           background-color: #1b1d21;
           border-bottom: 1px solid #474c54;
-        "
-      >
-        <span style="color: #a2a3ae; font-size: 0.85rem; font-weight: bold"
-          >ALL POSTS</span
-        >
+        ">
+      <span style="color: #a2a3ae; font-size: 0.85rem; font-weight: bold">ALL
+        POSTS</span>
+
+      <div class="post-filter">
+        <button class="btn-post-filter"><i class="fa-solid fa-filter fa-xl"></i></button>
+
+        <!-- <form id="filter-form" action="/" method="GET">
+            <div>Category:
+              /*{{ range .Categories }}*/
+              <input id="/*{{ .Name }}*/" type="checkbox" name="category" value="/*{{ .ID }}*/">
+              <label for="/*{{ .Name }}*/">/*{{ .Name }}*/</label>
+              /*{{ end }}*/
+            </div> -->
+
+        <div class="dropdown-select">
+          <button class="dropdown-toggle">
+            Select Categories
+            <i class="fa-solid fa-chevron-down" style="color: white; margin-left: 5px"></i>
+          </button>
+          <form id="filter-form" action="/" method="GET">
+            <div class="dropdown-menu">
+              {{range .Categories}}
+              <label for="{{ .Name }}">
+              <input id="{{ .Name }}" type="checkbox" name="category" value="{{.ID}}"/>
+              {{ .Name }}</label>
+              {{end}}
+            </div>
+        </div>
+
+        <label for="user-posts">My posts</label>
+        <input id="user-posts" name="user-posts" value="true" type="checkbox">
+        <label for="liked-posts">Liked posts</label>
+        <input id="liked-posts" name="liked-posts" value="true" type="checkbox">
+        <button type="submit" class="btn-primary">Apply</button>
+        </form>
       </div>
 
-      {{if gt (len .AllPosts) 0}} {{range .AllPosts}}
+    </div>
 
-      <a href="/post/{{.ID}}" class="post-link">
-        <div class="new-post" style="padding-inline: 10px">
-          <img
-            src="{{.Author.ProfilePicture}}"
-            alt=""
-            style="border-radius: 5px"
-            width="50"
-            height="50"
-          />
+    {{if gt (len .AllPosts) 0}} {{range .AllPosts}}
 
-          <div class="new-post-content">
-            <span style="color: white; font-size: 0.8rem">{{.Title}}</span>
+    <div class="new-post">
+      <img src="{{.ProfilePicture}}" alt style="border-radius: 5px; min-width: 50px" width="50" height="50" />
 
-            <span style="color: #a2a3ae; font-size: 0.8rem">
-              {{.Author.Username}}
-            </span>
-
-            <span style="color: #a2a3ae; font-size: 0.8rem" class="date">
-              {{.CreatedAt}}
-            </span>
-          </div>
+      <div class="new-post-content">
+        <span class="post-title">
+          <a href="/post/{{.PostID}}" class="new-post-link">{{.Title}}</a>
+        </span>
+        <span class="post-created">
+          {{.Username}} -
+          <span class="time">{{.CreatedAt}}</span>
+        </span>
+        {{ range .Categories}}
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+          <span class="post-topic">
+            <a href="/category/{{.CategoryID}}" class="post-category-link">
+              {{ .CategoryName}}
+            </a>
+          </span>
         </div>
-      </a>
+        {{ end }}
+      </div>
+    </div>
 
-      <div style="flex: 1; border: 0.5px solid #474c54"></div>
+    {{end}} {{else}}
 
-      {{end}} {{else}}
-
-      <div
-        style="
+    <div style="
           display: flex;
           justify-content: center;
           align-items: center;
@@ -163,20 +176,17 @@
           flex-direction: column;
           gap: 1.5rem;
           border-bottom: 1px solid #474c54;
-        "
-      >
-        <i
-          class="fa-solid fa-circle-exclamation"
-          style="font-size: 5rem; color: #a2a3ae"
-        ></i>
+        ">
+      <i class="fa-solid fa-circle-exclamation" style="font-size: 5rem; color: #a2a3ae"></i>
 
-        <span style="color: #a2a3ae; font-size: 1rem; font-weight: bold">
-          No posts found. Be the first to create a post!
-        </span>
-      </div>
-
-      {{end}}
+      <span style="color: #a2a3ae; font-size: 1rem; font-weight: bold">
+        No posts found. Be the first to create a post!
+      </span>
     </div>
-  </div>
 
+    {{end}}
+  </div>
+</div>
+
+<script src="/static/scripts/filter.js"></script>
 {{template "footer" }}
