@@ -50,10 +50,9 @@
               <i class="fas fa-caret-down" id="open-collapse"></i>
 
               <div class="collapsible-menu">
-                <div><a href="/categories/1">Category 1</a></div>
-                <div><a href="/categories/2">Category 2</a></div>
-                <div><a href="/categories/3">Category 3</a></div>
-                <div><a href="/categories/4">Category 4</a></div>
+                {{if .NavbarOptions}} {{range .NavbarOptions}}
+                <div><a href="/category/{{.ID}}">{{.Name}}</a></div>
+                {{end}} {{end}}
               </div>
             </li>
             <label for="check" class="close-menu"><i class="fas fa-times"></i></label>
