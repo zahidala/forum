@@ -1061,6 +1061,10 @@ div.hidden {
     flex-direction: column;
   }
 
+  #category-toggle:checked ~ .dropdown {
+    display: none;
+  }
+
   .dropdown {
     display: none;
   }
