@@ -150,10 +150,10 @@
 
     {{if gt (len .AllPosts) 0}} {{range .AllPosts}}
 
-    <a href="/post/{{.ID}}" class="post-link">
+    <a href="/post/{{.PostID}}" class="post-link">
       <div class="new-post" style="padding-inline: 10px">
         <img
-          src="{{.Author.ProfilePicture}}"
+          src="{{.ProfilePicture}}"
           alt=""
           style="border-radius: 5px"
           width="50"
