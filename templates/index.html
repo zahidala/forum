@@ -150,15 +150,8 @@
 
     {{if gt (len .AllPosts) 0}} {{range .AllPosts}}
 
-    <a href="/post/{{.PostID}}" class="post-link">
-      <div class="new-post" style="padding-inline: 10px">
-        <img
-          src="{{.ProfilePicture}}"
-          alt=""
-          style="border-radius: 5px"
-          width="50"
-          height="50"
-        />
+    <div class="new-post">
+      <img src="{{.ProfilePicture}}" alt style="border-radius: 5px; min-width: 50px" width="50" height="50" />
 
       <div class="new-post-content">
         <span class="post-title">
@@ -178,29 +171,22 @@
           {{ end }}
         </div>
       </div>
-    </a>
-
-    <div style="flex: 1; border: 0.5px solid #474c54"></div>
+    </div>
 
     {{end}} {{else}}
 
-    <div
-      style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 30px;
-        padding-top: 5px;
-        padding-bottom: 20px;
-        flex-direction: column;
-        gap: 1.5rem;
-        border-bottom: 1px solid #474c54;
-      "
-    >
-      <i
-        class="fa-solid fa-circle-exclamation"
-        style="font-size: 5rem; color: #a2a3ae"
-      ></i>
+    <div style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 30px;
+          padding-top: 5px;
+          padding-bottom: 20px;
+          flex-direction: column;
+          gap: 1.5rem;
+          border-bottom: 1px solid #474c54;
+        ">
+      <i class="fa-solid fa-circle-exclamation" style="font-size: 5rem; color: #a2a3ae"></i>
 
       <span style="color: #a2a3ae; font-size: 1rem; font-weight: bold">
         No posts found. Be the first to create a post!
