@@ -12,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
-	// "fmt"
 )
 
 var templates *template.Template
@@ -154,7 +153,6 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"NewPosts":        newPosts,
 		"AllPosts":        allPosts,
 		"IsAuthenticated": isAuthenticated,
-		"Title":           "Home",
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))
