@@ -94,4 +94,122 @@
   </div>
 </div>
 
-{{template "footer" .}}
+<div style="flex: 1; border: 0.5px solid #474c54; margin-top: 30px"></div>
+
+<div
+  style="
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    background-color: #2e3037;
+    margin-top: 30px;
+    padding-top: 10px;
+  "
+>
+  <div style="padding: 10px; display: flex; gap: 1rem; flex-direction: column">
+    <div style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          background-color: #1b1d21;
+          border-bottom: 1px solid #474c54;
+        ">
+      <span style="color: #a2a3ae; font-size: 1.5rem; font-weight: bold">All Posts</span>
+      <!-- <span class="categories-label">ALL POSTS</span> -->
+
+      <div class="post-filter">
+        <button class="btn-post-filter"><i class="fa-solid fa-filter fa-xl"></i></button>
+        <div class="dropdown-select">
+          <button class="dropdown-toggle">
+            Select Categories
+            <i class="fa-solid fa-chevron-down" style="color: white; margin-left: 5px"></i>
+          </button>
+          <form id="filter-form" action="/" method="GET">
+            <div class="dropdown-menu">
+              {{range .Categories}}
+              <label for="{{ .Name }}">
+              <input id="{{ .Name }}" type="checkbox" name="category" value="{{.ID}}"/>
+              {{ .Name }}</label>
+              {{end}}
+            </div>
+        </div>
+        {{ if .IsAuthenticated }}
+        <label for="user-posts">My posts:
+          <input id="user-posts" name="user-posts" value="true" type="checkbox">
+        </label>
+        <label for="liked-posts">Liked posts:
+          <input id="liked-posts" name="liked-posts" value="true" type="checkbox">
+        </label>
+        {{ end }}
+        <button type="submit" class="btn-primary" style="font-size: medium;">Apply</button>
+        </form>
+      </div>
+
+    </div>
+
+    {{if gt (len .AllPosts) 0}} {{range .AllPosts}}
+
+    <a href="/post/{{.ID}}" class="post-link">
+      <div class="new-post" style="padding-inline: 10px">
+        <img
+          src="{{.Author.ProfilePicture}}"
+          alt=""
+          style="border-radius: 5px"
+          width="50"
+          height="50"
+        />
+
+      <div class="new-post-content">
+        <span class="post-title">
+          <a href="/post/{{.PostID}}" class="new-post-link">{{.Title}}</a>
+        </span>
+        <span class="post-created">
+          {{.Username}} -
+          <span class="time">{{.CreatedAt}}</span>
+        </span>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+          {{ range .Categories}}
+          <span class="post-topic">
+            <a href="/category/{{.CategoryID}}" class="post-category-link">
+              {{ .CategoryName}}
+            </a>
+          </span>
+          {{ end }}
+        </div>
+      </div>
+    </a>
+
+    <div style="flex: 1; border: 0.5px solid #474c54"></div>
+
+    {{end}} {{else}}
+
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+        padding-top: 5px;
+        padding-bottom: 20px;
+        flex-direction: column;
+        gap: 1.5rem;
+        border-bottom: 1px solid #474c54;
+      "
+    >
+      <i
+        class="fa-solid fa-circle-exclamation"
+        style="font-size: 5rem; color: #a2a3ae"
+      ></i>
+
+      <span style="color: #a2a3ae; font-size: 1rem; font-weight: bold">
+        No posts found. Be the first to create a post!
+      </span>
+    </div>
+
+    {{end}}
+  </div>
+</div>
+
+<script src="/static/scripts/filter.js"></script>
+{{template "footer" }}

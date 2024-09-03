@@ -145,11 +145,14 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 	categories := categories.GetCategoriesHandler(w, r)
 	newPosts := posts.GetNewPostsHandler(w, r)
+	allPosts := posts.GetAllPostsHandler(w, r)
+	isAuthenticated := utils.IsAuthenticated(r)
 
 	data := map[string]interface{}{
-		"Categories": categories,
-		"NewPosts":   newPosts,
-		"Title":      "Home",
+		"Categories":      categories,
+		"NewPosts":        newPosts,
+		"AllPosts":        allPosts,
+		"IsAuthenticated": isAuthenticated,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))
@@ -238,7 +241,7 @@ func NewPostByCategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Title":    "New Post - " + category.Name,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", MergeBaseData(w, r, data))
+	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", data)
 	if err != nil {
 		log.Println("Failed to execute template: new-post-by-category.html")
 		log.Println(err)

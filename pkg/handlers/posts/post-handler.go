@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"forum/pkg/db"
 	Types "forum/pkg/types"
+	utils "forum/pkg/utils"
 	"log"
 	"net/http"
 	"strconv"
+	// "fmt"
 )
 
 type Post struct {
@@ -736,7 +738,7 @@ FROM posts p
 LEFT JOIN users u ON p.authorId = u.id
 GROUP BY p.id
 ORDER BY p.createdAt DESC
-LIMIT 5;
+LIMIT 3;
 `
 
 	stmt, err := db.GetDB().Prepare(query)
@@ -782,4 +784,105 @@ LIMIT 5;
 	}
 
 	return results
+}
+
+type PostWithFilter struct {
+	PostID         int
+	Title          string
+	CreatedAt      string
+	UpdatedAt      string
+	UserID         int
+	Username       string
+	ProfilePicture string
+ 	Categories     []Category `json:"categories"`
+}
+
+type Category struct {
+    CategoryID   int    `json:"categoryID"`
+    CategoryName string `json:"categoryName"`
+}
+
+
+func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter {
+
+	// query := ` SELECT * FROM (
+	// SELECT p.id AS postID , p.title , p.createdAt , p.updatedAt , u.id AS userID , u.username , u.profilePicture , pc.categoryId, c.name 
+	// FROM Posts p
+	// JOIN Users u ON p.authorId = u.id
+	// JOIN PostCategories pc ON p.id  = pc.postId
+	// JOIN Categories c ON pc.categoryId = c.id
+	// ) `
+
+	query := `SELECT * FROM (
+	SELECT p.id AS postID , p.title , p.createdAt , p.updatedAt , u.id AS userID , u.username , u.profilePicture ,
+	JSON_GROUP_ARRAY(
+		JSON_OBJECT(
+		'categoryID', pc.categoryId,
+		'categoryName', c.name 
+		)
+		) AS categories
+	FROM Posts p
+	JOIN Users u ON p.authorId = u.id
+	JOIN PostCategories pc ON p.id  = pc.postId
+	JOIN Categories c ON pc.categoryId = c.id
+	GROUP BY p.id
+	)`
+
+	query += utils.GetFilteredPosts(w, r)
+
+	// fmt.Println("\nQuery:", query)
+
+	stmt, err := db.GetDB().Prepare(query)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing query:", err)
+		return nil
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error executing query:", err)
+		return nil
+	}
+	defer rows.Close()
+
+	var posts []PostWithFilter
+
+	for rows.Next() {
+		var post PostWithFilter
+		var categoriesJSON string
+	
+		err := rows.Scan(
+			&post.PostID,
+			&post.Title,
+			&post.CreatedAt,
+			&post.UpdatedAt,
+			&post.UserID,
+			&post.Username,
+			&post.ProfilePicture,
+			&categoriesJSON,
+		)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			log.Println("Error scanning row:", err)
+			return nil
+		}
+
+		err = json.Unmarshal([]byte(categoriesJSON), &post.Categories)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		posts = append(posts, post)
+	}
+
+	if rowsErr := rows.Err(); rowsErr != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error iterating rows:", rowsErr)
+		return nil
+	}
+
+	return posts
 }

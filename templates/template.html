@@ -13,29 +13,63 @@
     <link rel="stylesheet" href="/static/stylesheets/style.css" />
     <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico" />
     <link rel="logo" type="image/png" href="/static/assets/logo.png" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
-
   <body>
     <header>
       <nav>
         <ul class="nav-list">
           <li class="logo">
-            <a href="/"><img src="/static/assets/logo.png" alt="Car Forum Logo"/></a>
+            <a href="/"
+              ><img src="/static/assets/logo.png" alt="Car Forum Logo"
+            /></a>
           </li>
 
           <input type="checkbox" id="check" />
           <span class="menu">
             <li class="nav-link">
-              <a href="/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M180-120q-25 0-42.5-17.5T120-180v-76l160-142v278H180Zm140 0v-160h320v160H320Zm360 0v-328L509-600l121-107 190 169q10 9 15 20.5t5 24.5v313q0 25-17.5 42.5T780-120H680ZM120-310v-183q0-13 5-25t15-20l300-266q8-8 18.5-11.5T480-819q11 0 21.5 3.5T520-804l80 71-480 423Z"/></svg>Home</a>
+              <a href="/"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                >
+                  <path
+                    d="M180-120q-25 0-42.5-17.5T120-180v-76l160-142v278H180Zm140 0v-160h320v160H320Zm360 0v-328L509-600l121-107 190 169q10 9 15 20.5t5 24.5v313q0 25-17.5 42.5T780-120H680ZM120-310v-183q0-13 5-25t15-20l300-266q8-8 18.5-11.5T480-819q11 0 21.5 3.5T520-804l80 71-480 423Z"
+                  /></svg
+                >Home</a
+              >
             </li>
 
             <li class="nav-link">
-              <a href="/posts"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v600L720-240H280ZM80-280v-560q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240L80-280Zm520-240v-280H160v280h440Zm-440 0v-280 280Z"/></svg>Posts</a>
+              <a href="/posts"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                >
+                  <path
+                    d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v600L720-240H280ZM80-280v-560q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240L80-280Zm520-240v-280H160v280h440Zm-440 0v-280 280Z"
+                  /></svg
+                >Posts</a
+              >
             </li>
 
             <li class="nav-link">
-              <a href="/categories"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/></svg>Categories</a>
+              <a href="/categories"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                >
+                  <path
+                    d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"
+                  /></svg
+                >Categories</a
+              >
               <div class="dropdown">
                 <ul>
                   {{if .NavbarOptions}} {{range .NavbarOptions}}
@@ -56,17 +90,26 @@
                 <div><a href="/categories/4">Category 4</a></div>
               </div>
             </li>
-            <label for="check" class="close-menu"><i class="fas fa-times"></i></label>
+            <label for="check" class="close-menu"
+              ><i class="fas fa-times"></i
+            ></label>
           </span>
-          <label for="check" class="open-menu"><i class="fas fa-bars"></i></label>
+          <label for="check" class="open-menu"
+            ><i class="fas fa-bars"></i
+          ></label>
         </ul>
 
         <div class="nav-btn">
-
           {{if .IsAuthenticated}}
           <div class="user-info-wrapper">
             <div class="user-info">
-              <img src="{{.User.ProfilePicture}}" alt="" style="border-radius: 5px" width="30" height="30"/>
+              <img
+                src="{{.User.ProfilePicture}}"
+                alt=""
+                style="border-radius: 5px"
+                width="30"
+                height="30"
+              />
               <span>{{.User.Username}}</span>
 
               <div class="user-dropdown">
@@ -75,7 +118,9 @@
                   <button class="logout-btn">
                     <div class="sign">
                       <svg viewBox="0 0 512 512">
-                        <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                        <path
+                          d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"
+                        ></path>
                       </svg>
                     </div>
                     <div class="text">Logout</div>
@@ -89,14 +134,22 @@
             <button class="login-btn">
               <div class="sign">
                 <svg viewBox="0 0 512 512">
-                  <path d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"></path>
+                  <path
+                    d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"
+                  ></path>
                 </svg>
               </div>
               <div class="text">Login</div>
             </button>
           </a>
 
-          <a href="/register" id="register" class="btn-outline" style="color: white; font-weight: bold">Register</a>
+          <a
+            href="/register"
+            id="register"
+            class="btn-outline"
+            style="color: white; font-weight: bold"
+            >Register</a
+          >
           {{end}}
         </div>
       </nav>
@@ -110,7 +163,15 @@
       <div class="footer-content">
         <div class="footer-section">
           <h3>About Us</h3>
-          <p>The Car Forum is an online community for automotive enthusiasts to discuss, share knowledge, and connect with other car lovers. The forum covers a wide range of topics including general car discussions, maintenance/repairs, modifications, racing, buying/selling vehicles, and regional sections. It provides a friendly, knowledgeable environment for car fans to learn, share their passions, and interact with like-minded members.</p>
+          <p>
+            The Car Forum is an online community for automotive enthusiasts to
+            discuss, share knowledge, and connect with other car lovers. The
+            forum covers a wide range of topics including general car
+            discussions, maintenance/repairs, modifications, racing,
+            buying/selling vehicles, and regional sections. It provides a
+            friendly, knowledgeable environment for car fans to learn, share
+            their passions, and interact with like-minded members.
+          </p>
         </div>
         <div class="footer-section">
           <div class="links">
@@ -149,7 +210,6 @@
     const userInfoWrapper = document.querySelector(".user-info-wrapper");
     const userDropdown = document.querySelector(".user-dropdown");
     let hideTimeout;
-
 
     if (userInfoWrapper) {
       userInfoWrapper.addEventListener("mouseenter", () => {
