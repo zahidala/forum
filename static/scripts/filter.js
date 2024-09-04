@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Get the dropdown elements
-  const dropdownToggle = document.querySelector(".dropdown-toggle");
   const dropdownMenu = document.querySelector(".dropdown-menu");
   const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+  const dropdownSelect = document.querySelector(".dropdown-select");
+  const dropdownToggle = dropdownSelect.querySelector(".dropdown-toggle");
 
   let selectedOptions = [];
 
