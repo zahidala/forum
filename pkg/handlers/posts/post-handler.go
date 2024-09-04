@@ -794,19 +794,18 @@ type PostWithFilter struct {
 	UserID         int
 	Username       string
 	ProfilePicture string
- 	Categories     []Category `json:"categories"`
+	Categories     []Category `json:"categories"`
 }
 
 type Category struct {
-    CategoryID   int    `json:"categoryID"`
-    CategoryName string `json:"categoryName"`
+	CategoryID   int    `json:"categoryID"`
+	CategoryName string `json:"categoryName"`
 }
 
-
-func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter {
+func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) ([]PostWithFilter, utils.Filters) {
 
 	// query := ` SELECT * FROM (
-	// SELECT p.id AS postID , p.title , p.createdAt , p.updatedAt , u.id AS userID , u.username , u.profilePicture , pc.categoryId, c.name 
+	// SELECT p.id AS postID , p.title , p.createdAt , p.updatedAt , u.id AS userID , u.username , u.profilePicture , pc.categoryId, c.name
 	// FROM Posts p
 	// JOIN Users u ON p.authorId = u.id
 	// JOIN PostCategories pc ON p.id  = pc.postId
@@ -828,7 +827,8 @@ func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter
 	GROUP BY p.id
 	)`
 
-	query += utils.GetFilteredPosts(w, r)
+	filterQuery, filters := utils.GetFilteredPosts(w, r)
+	query += filterQuery
 
 	// fmt.Println("\nQuery:", query)
 
@@ -836,7 +836,7 @@ func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error preparing query:", err)
-		return nil
+		return nil, filters
 	}
 	defer stmt.Close()
 
@@ -844,7 +844,7 @@ func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error executing query:", err)
-		return nil
+		return nil, filters
 	}
 	defer rows.Close()
 
@@ -853,7 +853,7 @@ func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter
 	for rows.Next() {
 		var post PostWithFilter
 		var categoriesJSON string
-	
+
 		err := rows.Scan(
 			&post.PostID,
 			&post.Title,
@@ -867,7 +867,7 @@ func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			log.Println("Error scanning row:", err)
-			return nil
+			return nil, filters
 		}
 
 		err = json.Unmarshal([]byte(categoriesJSON), &post.Categories)
@@ -881,8 +881,8 @@ func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) []PostWithFilter
 	if rowsErr := rows.Err(); rowsErr != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Println("Error iterating rows:", rowsErr)
-		return nil
+		return nil, filters
 	}
 
-	return posts
+	return posts, filters
 }

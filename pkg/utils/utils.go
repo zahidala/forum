@@ -116,8 +116,16 @@ func GetUserInfoBySession(w http.ResponseWriter, r *http.Request) Types.User {
 	return user
 }
 
-func GetFilteredPosts(w http.ResponseWriter, r *http.Request) string {
+type Filters struct {
+	Categories []string
+	UserPosts  bool
+	LikedPosts bool
+}
+
+func GetFilteredPosts(w http.ResponseWriter, r *http.Request) (string, Filters) {
 	//protect? against user-input (manually) queries
+
+	var filters Filters
 
 	params := r.URL.Query()
 	categories := params["category"]
@@ -125,47 +133,58 @@ func GetFilteredPosts(w http.ResponseWriter, r *http.Request) string {
 	likedPosts := params.Get("liked-posts")
 
 	if len(categories) < 1 && userPosts != "true" && likedPosts != "true" {
-		return ""
+		return "", filters
 	}
 
 	// fmt.Println("Categories:", categories)
 	// fmt.Println("userPosts:", userPosts)
 	// fmt.Println("likedPosts:", likedPosts)
 
-	filters := "\nWHERE "
+	query := "\nWHERE "
 
 	if len(categories) > 0 {
 		for i, category := range categories {
 			if i > 0 {
-				filters += " OR "
+				query += " OR "
 			}
 
-			filters += fmt.Sprintf(`categories LIKE '%%"categoryID":%s%%'`, category)
+			query += fmt.Sprintf(`categories LIKE '%%"categoryID":%s%%'`, category)
 		}
-		
-		filters += "\n"
-	}
 
+		query += "\n"
+		filters.Categories = categories
+	}
 
 	var userID int
 	if IsAuthenticated(r) {
 		userID = GetUserInfoBySession(w, r).ID
 
 		if userPosts == "true" {
-			if len(filters) > 10 {
-				filters += "AND "
+			if len(query) > 10 {
+				query += "AND "
 			}
-			filters += fmt.Sprintf("userID = %d\n", userID)
+			query += fmt.Sprintf("userID = %d\n", userID)
+			filters.UserPosts = true
 		}
-	
+
 		if likedPosts == "true" {
-			if len(filters) > 10 {
-				filters += "AND "
+			if len(query) > 10 {
+				query += "AND "
 			}
-			filters += fmt.Sprintf("postID IN (SELECT postId FROM PostLikes pl WHERE userId = %d AND isLike = 1)\n", userID)
+			query += fmt.Sprintf("postID IN (SELECT postId FROM PostLikes pl WHERE userId = %d AND isLike = 1)\n", userID)
+			filters.LikedPosts = true
 		}
 	}
 	// if no user cookie, ignore any query other than categories
 
-	return filters
+	return query, filters
 }
+
+// func Contains(item string, list []string) bool {
+// 	for _, v := range list {
+// 		if v == item {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }

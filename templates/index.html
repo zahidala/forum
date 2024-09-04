@@ -4,8 +4,7 @@
   <div class="column-1">
     <div
       class="container-categories-label"
-      style="display: flex; justify-content: space-between"
-    >
+      style="display: flex; justify-content: space-between">
       <span class="categories-label">Categories</span>
 
       {{if .IsAuthenticated}}
@@ -14,8 +13,7 @@
           <button
             type="submit"
             class="btn-primary"
-            style="font-size: medium; padding: 10px 15px; cursor: pointer"
-          >
+            style="font-size: medium; padding: 10px 15px; cursor: pointer">
             New Post
           </button>
         </a>
@@ -55,11 +53,10 @@
     <div class="new-post">
       <img
         src="{{.Author.ProfilePicture}}"
-        alt=""
+        alt
         style="border-radius: 5px; min-width: 50px"
         width="50"
-        height="50"
-      />
+        height="50" />
 
       <div class="new-post-content">
         <span class="post-title">
@@ -104,8 +101,7 @@
     background-color: #2e3037;
     margin-top: 30px;
     padding-top: 10px;
-  "
->
+  ">
   <div style="padding: 10px; display: flex; gap: 1rem; flex-direction: column">
     <div style="
           display: flex;
@@ -115,34 +111,40 @@
           background-color: #1b1d21;
           border-bottom: 1px solid #474c54;
         ">
-      <span style="color: #a2a3ae; font-size: 1.5rem; font-weight: bold">All Posts</span>
-      <!-- <span class="categories-label">ALL POSTS</span> -->
+      <span style="color: #a2a3ae; font-size: 1.5rem; font-weight: bold">All
+        Posts</span>
 
       <div class="post-filter">
-        <button class="btn-post-filter"><i class="fa-solid fa-filter fa-xl"></i></button>
+        <button class="btn-post-filter"><i
+            class="fa-solid fa-filter fa-xl"></i></button>
         <div class="dropdown-select">
           <button class="dropdown-toggle">
             Select Categories
-            <i class="fa-solid fa-chevron-down" style="color: white; margin-left: 5px"></i>
+            <i class="fa-solid fa-chevron-down"
+              style="color: white; margin-left: 5px"></i>
           </button>
           <form id="filter-form" action="/" method="GET">
             <div class="dropdown-menu">
               {{range .Categories}}
               <label for="{{ .Name }}">
-              <input id="{{ .Name }}" type="checkbox" name="category" value="{{.ID}}"/>
-              {{ .Name }}</label>
+                <input id="{{ .Name }}" type="checkbox" name="category"
+                  value="{{.ID}}" />
+                {{ .Name }}</label>
               {{end}}
             </div>
-        </div>
-        {{ if .IsAuthenticated }}
-        <label for="user-posts">My posts:
-          <input id="user-posts" name="user-posts" value="true" type="checkbox">
-        </label>
-        <label for="liked-posts">Liked posts:
-          <input id="liked-posts" name="liked-posts" value="true" type="checkbox">
-        </label>
-        {{ end }}
-        <button type="submit" class="btn-primary" style="font-size: medium;">Apply</button>
+          </div>
+          {{ if .IsAuthenticated }}
+          <label for="user-posts">My posts:
+            <input id="user-posts" name="user-posts" value="true"
+              type="checkbox">
+          </label>
+          <label for="liked-posts">Liked posts:
+            <input id="liked-posts" name="liked-posts" value="true"
+              type="checkbox">
+          </label>
+          {{ end }}
+          <button type="submit" class="btn-primary"
+            style="font-size: medium;">Apply</button>
         </form>
       </div>
 
@@ -150,8 +152,13 @@
 
     {{if gt (len .AllPosts) 0}} {{range .AllPosts}}
 
-    <div class="new-post">
-      <img src="{{.ProfilePicture}}" alt style="border-radius: 5px; min-width: 50px" width="50" height="50" />
+    <div class="new-post" style="padding-inline: 10px">
+      <img
+        src="{{.ProfilePicture}}"
+        alt
+        style="border-radius: 5px"
+        width="50"
+        height="50" />
 
       <div class="new-post-content">
         <span class="post-title">
@@ -161,17 +168,20 @@
           {{.Username}} -
           <span class="time">{{.CreatedAt}}</span>
         </span>
+
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
-          {{ range .Categories}}
+          {{range .Categories}}
           <span class="post-topic">
             <a href="/category/{{.CategoryID}}" class="post-category-link">
-              {{ .CategoryName}}
+              {{.CategoryName}}
             </a>
           </span>
-          {{ end }}
+          {{end}}
         </div>
       </div>
     </div>
+
+    <div style="flex: 1; border: 0.5px solid #474c54"></div>
 
     {{end}} {{else}}
 
@@ -186,7 +196,8 @@
           gap: 1.5rem;
           border-bottom: 1px solid #474c54;
         ">
-      <i class="fa-solid fa-circle-exclamation" style="font-size: 5rem; color: #a2a3ae"></i>
+      <i class="fa-solid fa-circle-exclamation"
+        style="font-size: 5rem; color: #a2a3ae"></i>
 
       <span style="color: #a2a3ae; font-size: 1rem; font-weight: bold">
         No posts found. Be the first to create a post!

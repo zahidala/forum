@@ -5,7 +5,7 @@ import (
 	"forum/pkg/handlers/comments"
 	"forum/pkg/handlers/posts"
 	Types "forum/pkg/types"
-	"forum/pkg/utils"
+	utils "forum/pkg/utils"
 	"html/template"
 	"log"
 	"net/http"
@@ -145,17 +145,24 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 	categories := categories.GetCategoriesHandler(w, r)
 	newPosts := posts.GetNewPostsHandler(w, r)
-	allPosts := posts.GetAllPostsHandler(w, r)
+	allPosts, filters := posts.GetAllPostsHandler(w, r)
 	isAuthenticated := utils.IsAuthenticated(r)
 
 	data := map[string]interface{}{
 		"Categories":      categories,
 		"NewPosts":        newPosts,
 		"AllPosts":        allPosts,
+		"Filters":         filters,
 		"IsAuthenticated": isAuthenticated,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))
+	// tmpl := template.Must(template.New("index.html").Funcs(template.FuncMap{
+	// 	"Contains": utils.Contains,
+	// }).ParseFiles("index.html"))
+
+	// err := tmpl.Execute(w, data)
+
 	if err != nil {
 		log.Println("Failed to execute template: index.html")
 		log.Println(err)
