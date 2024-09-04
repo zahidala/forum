@@ -60,34 +60,26 @@
             </li>
 
             <li class="nav-link">
-              <a href="/categories"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 -960 960 960"
-                >
-                  <path
-                    d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"
-                  /></svg
-                >Categories</a
-              >
+              <input type="checkbox" id="category-toggle" class="dropdown-toggle" />
+              <label for="category-toggle" class="category-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/></svg>Categories
+                <i class="fas fa-caret-down" id="open-collapse"></i>
+              </label>
               <div class="dropdown">
+                <div class="arrow"></div>
                 <ul>
                   {{if .NavbarOptions}} {{range .NavbarOptions}}
                   <li class="dropdown-link">
                     <a href="/category/{{.ID}}">{{.Name}}</a>
                   </li>
-                  <div class="arrow"></div>
                   {{end}} {{end}}
                 </ul>
               </div>
 
-              <i class="fas fa-caret-down" id="open-collapse"></i>
-
               <div class="collapsible-menu">
-                <div><a href="/categories/1">Category 1</a></div>
-                <div><a href="/categories/2">Category 2</a></div>
-                <div><a href="/categories/3">Category 3</a></div>
-                <div><a href="/categories/4">Category 4</a></div>
+                {{if .NavbarOptions}} {{range .NavbarOptions}}
+                <div><a href="/category/{{.ID}}">{{.Name}}</a></div>
+                {{end}} {{end}}
               </div>
             </li>
             <label for="check" class="close-menu"
@@ -102,30 +94,21 @@
         <div class="nav-btn">
           {{if .IsAuthenticated}}
           <div class="user-info-wrapper">
-            <div class="user-info">
-              <img
-                src="{{.User.ProfilePicture}}"
-                alt=""
-                style="border-radius: 5px"
-                width="30"
-                height="30"
-              />
-              <span>{{.User.Username}}</span>
+            <input type="checkbox" id="user-toggle" class="dropdown-toggle" />
+            <label for="user-toggle" class="user-info">
+              <img src="{{.User.ProfilePicture}}" alt="" style="border-radius: 5px" width="30" height="30"/>
+              <span>{{.User.Username}}<i class="fas fa-caret-down"></i></span>
+            </label>
 
               <div class="user-dropdown">
-                <a href="/profile">Profile</a>
-                <a href="/logout" id="logout">
-                  <button class="logout-btn">
-                    <div class="sign">
-                      <svg viewBox="0 0 512 512">
-                        <path
-                          d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="text">Logout</div>
-                  </button>
+                <div class="arrow"></div>
+                
+                <a href="/logout" id="logout" class="logout-btn"> 
+                  <svg viewBox="0 0 512 512">
+                    <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                  </svg>Logout
                 </a>
+                
               </div>
             </div>
           </div>
@@ -179,7 +162,6 @@
             <ul>
               <li><a href="/">Home</a></li>
               <li><a href="/posts">Posts</a></li>
-              <li><a href="/categories">Categories</a></li>
             </ul>
           </div>
         </div>
