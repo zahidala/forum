@@ -121,7 +121,7 @@ nav:hover::after {
   fill: #2DAAE9;
 }
 
-.nav-link > .category-link > svg {
+.category-link > svg {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -130,7 +130,7 @@ nav:hover::after {
   transition: fill 0.3s ease-in-out;
 }
 
-.nav-link > .category-link:hover > svg path {
+.category-link:hover > svg path {
   fill: #2DAAE9;
 }
 
@@ -170,11 +170,11 @@ nav:hover::after {
 }
 
 /* Show the dropdowns when the corresponding checkbox is checked */
-#category-toggle:checked ~ .dropdown,
+/* #category-toggle:checked ~ .dropdown,
 #user-toggle:checked ~ .user-dropdown {
   display: flex;
   animation: fadeInDown 0.5s ease;
-}
+} */
 
 /* ARROW ABOVE THE DROPDOWNS */
 .dropdown .arrow, .user-dropdown .arrow {
@@ -225,9 +225,13 @@ nav:hover::after {
   display: flex;
 }
 
-#check, #category-toggle, #user-toggle {
+#check {
   display: none;
 }
+
+/* #check, #category-toggle, #user-toggle {
+  display: none;
+} */
 
 /* FOR LOGIN/USER/LOGOUT/REGISTER BUTTON */
 .nav-btn {
@@ -1107,6 +1111,16 @@ div.hidden {
   animation: fadeInDown 0.5s ease;
 }
 
+.categories-wrapper {
+  display: block;
+  position: relative;
+}
+
+.dropdown.open-dropdown {
+  display: flex;
+  animation: fadeInDown 0.5s ease;
+}
+
 /* RESPONSIVE STYLES */
 @media (max-width: 768px) {
   
@@ -1115,9 +1129,9 @@ div.hidden {
     flex-direction: column;
   }
 
-  #category-toggle:checked ~ .dropdown {
+  /* #category-toggle:checked ~ .dropdown {
     display: none;
-  }
+  } */
 
   .logo img {
     width: 80px;
@@ -1127,6 +1141,10 @@ div.hidden {
   }
 
   .dropdown {
+    display: none;
+  }
+
+  .dropdown.open-dropdown {
     display: none;
   }
 
