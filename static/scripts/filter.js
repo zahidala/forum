@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Get the dropdown elements
+  // Get the dropdown elements
   const dropdownMenu = document.querySelector(".dropdown-menu");
   const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
   const dropdownSelect = document.querySelector(".dropdown-select");
@@ -11,16 +11,17 @@ document.addEventListener("DOMContentLoaded", function () {
   dropdownToggle.addEventListener("click", function (event) {
     event.stopPropagation(); // Prevent click from propagating to document
     dropdownMenu.classList.toggle("open");
-    dropdownMenu.style.display = "block";
+
+    // close if open
+
+    if (dropdownMenu.classList.contains("open")) {
+      dropdownMenu.style.display = "block";
+    } else {
+      dropdownMenu.style.display = "none";
+    }
 
     if (dropdownToggle.classList.contains("dropdown-error")) {
       dropdownToggle.classList.remove("dropdown-error");
-    }
-
-    // close if already open
-
-    if (dropdownMenu.classList.contains("open")) {
-      dropdownMenu.style.display = "none";
     }
   });
 
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     selectedOptions = Array.from(checkboxes)
       .filter((checkbox) => checkbox.checked)
       .map((checkbox) => +checkbox.value);
-  
+
     if (selectedOptionsLabel.length > 0) {
       dropdownToggle.textContent =
         selectedOptionsLabel.length > 2
@@ -66,8 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-//   if (!selectedOptions.length) {
-//     dropdownToggle.classList.add("dropdown-error");
-//     return;
-//   }
-})
+  //   if (!selectedOptions.length) {
+  //     dropdownToggle.classList.add("dropdown-error");
+  //     return;
+  //   }
+});

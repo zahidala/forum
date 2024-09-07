@@ -18,15 +18,16 @@ document.addEventListener("DOMContentLoaded", function () {
     event.stopPropagation(); // Prevent click from propagating to document
     dropdownMenu.classList.toggle("open");
 
-    if (dropdownToggle.classList.contains("dropdown-error")) {
-      dropdownToggle.classList.remove("dropdown-error");
+    // close if open
+
+    if (dropdownMenu.classList.contains("open")) {
+      dropdownMenu.style.display = "block";
+    } else {
+      dropdownMenu.style.display = "none";
     }
 
-    // close if already open
-    if (!dropdownMenu.classList.contains("open")) {
-      dropdownMenu.style.display = "none";
-    } else {
-      dropdownMenu.style.display = "block";
+    if (dropdownToggle.classList.contains("dropdown-error")) {
+      dropdownToggle.classList.remove("dropdown-error");
     }
   });
 
