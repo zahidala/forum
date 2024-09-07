@@ -1102,6 +1102,11 @@ div.hidden {
   border: 1px solid red;
 }
 
+.open-user-dropdown {
+  display: flex;
+  animation: fadeInDown 0.5s ease;
+}
+
 /* RESPONSIVE STYLES */
 @media (max-width: 768px) {
   
