@@ -545,8 +545,7 @@ div.hidden {
 
 .categories-label,
 .sub-category-label {
-  color: #a2a3ae;
-  /* color: white; */
+  color: white;
   font-size: 1.5rem;
   font-weight: 700;
 }
