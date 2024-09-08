@@ -133,6 +133,7 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.
 
 func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
+	categoriesChosen := params["category"]
 	userPostsTicked := params.Get("user-posts")
 	likedPostsTicked := params.Get("liked-posts")
 
@@ -154,6 +155,7 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"Categories":       categories,
+		"CategoriesChosen": categoriesChosen,
 		"LikedPostsTicked": likedPostsTicked,
 		"UserPostsTicked":  userPostsTicked,
 		"NewPosts":         newPosts,

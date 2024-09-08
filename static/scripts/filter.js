@@ -5,7 +5,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const dropdownSelect = document.querySelector(".dropdown-select");
   const dropdownToggle = dropdownSelect.querySelector(".dropdown-toggle");
 
+  const categoriesChosen = document.querySelector("#categories-chosen");
+  
   let selectedOptions = [];
+
+  if (categoriesChosen) {
+    const categoriesChosenValue = categoriesChosen.value;
+    const cleanedValue = categoriesChosenValue.replace(/[\[\]]/g, "").trim();
+    const selectedOptions = cleanedValue.split(" ").map(Number);
+
+    checkboxes.forEach((checkbox) => {
+      if (selectedOptions.includes(+checkbox.value)) {
+        checkbox.checked = true;
+      }
+    });
+
+    updateDropdownText();
+  }
+
 
   // Toggle dropdown menu on button click
   dropdownToggle.addEventListener("click", function (event) {

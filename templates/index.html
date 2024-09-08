@@ -114,6 +114,10 @@
       <span style="color: #a2a3ae; font-size: 1.5rem; font-weight: bold">All
         Posts</span>
 
+      {{if .CategoriesChosen}}
+      <input type="hidden" id="categories-chosen" value="{{.CategoriesChosen}}">
+      {{end}}
+
       <div class="post-filter">
         <button class="btn-post-filter"><i
             class="fa-solid fa-filter fa-xl"></i></button>
