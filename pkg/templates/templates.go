@@ -132,6 +132,10 @@ func RegisterTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.
 }
 
 func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	params := r.URL.Query()
+	userPostsTicked := params.Get("user-posts")
+	likedPostsTicked := params.Get("liked-posts")
+
 	if r.URL.Path != "/" {
 		ErrorTemplateHandler(w, r, Types.ErrorPageProps{
 			Error: Types.Error{
@@ -149,11 +153,13 @@ func IndexTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	isAuthenticated := utils.IsAuthenticated(r)
 
 	data := map[string]interface{}{
-		"Categories":      categories,
-		"NewPosts":        newPosts,
-		"AllPosts":        allPosts,
-		"Filters":         filters,
-		"IsAuthenticated": isAuthenticated,
+		"Categories":       categories,
+		"LikedPostsTicked": likedPostsTicked,
+		"UserPostsTicked":  userPostsTicked,
+		"NewPosts":         newPosts,
+		"AllPosts":         allPosts,
+		"Filters":          filters,
+		"IsAuthenticated":  isAuthenticated,
 	}
 
 	err := GetTemplate().ExecuteTemplate(w, "index.html", MergeBaseData(w, r, data))

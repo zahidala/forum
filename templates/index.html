@@ -135,12 +135,22 @@
           </div>
           {{ if .IsAuthenticated }}
           <label for="user-posts">My posts:
-            <input id="user-posts" name="user-posts" value="true"
-              type="checkbox">
+            <input 
+              id="user-posts" 
+              name="user-posts" 
+              value="true"
+              {{if $.UserPostsTicked}}checked{{end}}
+              type="checkbox"
+            >
           </label>
           <label for="liked-posts">Liked posts:
-            <input id="liked-posts" name="liked-posts" value="true"
-              type="checkbox">
+            <input 
+              id="liked-posts" 
+              name="liked-posts" 
+              value="true"
+              {{if $.LikedPostsTicked}}checked{{end}}
+              type="checkbox"
+            >
           </label>
           {{ end }}
           <button type="submit" class="btn-primary"
