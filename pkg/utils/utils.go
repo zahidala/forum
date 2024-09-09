@@ -143,6 +143,7 @@ func GetFilteredPosts(w http.ResponseWriter, r *http.Request) (string, Filters) 
 	query := "\nWHERE "
 
 	if len(categories) > 0 {
+		query += "("
 		for i, category := range categories {
 			if i > 0 {
 				query += " OR "
@@ -151,7 +152,7 @@ func GetFilteredPosts(w http.ResponseWriter, r *http.Request) (string, Filters) 
 			query += fmt.Sprintf(`categories LIKE '%%"categoryID":%s%%'`, category)
 		}
 
-		query += "\n"
+		query += ")\n"
 		filters.Categories = categories
 	}
 
@@ -175,16 +176,5 @@ func GetFilteredPosts(w http.ResponseWriter, r *http.Request) (string, Filters) 
 			filters.LikedPosts = true
 		}
 	}
-	// if no user cookie, ignore any query other than categories
-
 	return query, filters
 }
-
-// func Contains(item string, list []string) bool {
-// 	for _, v := range list {
-// 		if v == item {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
