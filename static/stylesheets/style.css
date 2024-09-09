@@ -225,13 +225,9 @@ nav:hover::after {
   display: flex;
 }
 
-#check {
+#check, #user-posts, #liked-posts {
   display: none;
 }
-
-/* #check, #category-toggle, #user-toggle {
-  display: none;
-} */
 
 /* FOR LOGIN/USER/LOGOUT/REGISTER BUTTON */
 .nav-btn {
@@ -401,17 +397,47 @@ nav:hover::after {
 }
 
 .btn-primary {
-  background-color: #2DAAE9;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: none;
+  position: relative;
+  padding: 8px 15px;
+  border: 2px ridge #2DAAE9;
+  outline: none;
+  background-color: transparent;
+  transition: 1s;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 3%;
+  width: 95%;
+  height: 40%;
+  background-color: #1b1d21;
+  transition: 0.5s;
+  transform-origin: center;
+}
+
+.btn-primary::before {
+  content: "";
+  transform-origin: center;
+  position: absolute;
+  top: 80%;
+  left: 3%;
+  width: 95%;
+  height: 40%;
+  background-color: #1b1d21;
+  transition: 0.5s;
+}
+
+.btn-primary:hover::before, .btn-primary:hover::after {
+  transform: scale(0)
 }
 
 .btn-primary:hover {
-  background-color: #3bb6f4;
-  color: white;
+  box-shadow: inset 0px 0px 25px #2DAAE9;
 }
 
 div.hidden {
@@ -770,7 +796,6 @@ div.hidden {
   padding: 5px 10px;
 }
 
-
 .post-filter {
     display: flex;
     flex-wrap: wrap;
@@ -778,7 +803,7 @@ div.hidden {
     /* background-color: #f9f9f9; Light background color for contrast */
     padding: 10px; /* Space around the content */
     border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Soft shadow */
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); Soft shadow */
     gap: 15px; /* Space between elements */
 }
 
@@ -837,7 +862,7 @@ div.hidden {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background-color: #2e3035;
+  background-color: #1b1d21;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   padding: 20px;
@@ -1056,32 +1081,35 @@ div.hidden {
   cursor: pointer;
   background: transparent;
   border: 1px solid #424242;
-  border-radius: 5px;
+  border-radius: 10px;
   color: white;
   min-width: 300px;
   display: flex;
   justify-content: space-between;
+  transition: border 0.3s ease-in-out;
 }
 
 .dropdown-toggle:hover {
-  border: 1px solid #e0e0e0e9;
+  border: 1px solid #2DAAE9;
 }
 
 .dropdown-menu {
   display: none;
   position: absolute;
   background-color: white;
-  min-width: 200px;
-  margin-top: 5px;
+  min-width: 280px;
+  margin-top: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e0e0e0e9;
-  border-radius: 5px;
+  border-top: 2px solid #2DAAE9;
+  border-bottom: 1px solid #2DAAE9;
+  border-radius: 10px;
   background-color: #1b1d21;
   color: white;
   padding: 10px;
   z-index: 1;
   max-height: 200px;
   overflow-y: auto;
+  animation: fadeInDown 0.5s ease;
 }
 
 .dropdown-menu label {
@@ -1095,6 +1123,79 @@ div.hidden {
 
 .dropdown-error {
   border: 1px solid red;
+}
+
+.checkbox, .category-checkbox {
+  cursor: pointer;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
+}
+
+.checkbox:before, .category-checkbox:before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #1b1d21;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.checkbox svg, .category-checkbox svg {
+  position: relative;
+  z-index: 1;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #c8ccd4;
+  stroke-width: 1.5;
+  transform: translate3d(0, 0, 0);
+  transition: all 0.2s ease;
+}
+
+.checkbox svg path, .category-checkbox svg path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 0;
+}
+
+.checkbox svg polyline, .category-checkbox svg polyline {
+  stroke-dasharray: 22;
+  stroke-dashoffset: 66;
+}
+
+.checkbox:hover:before, .category-checkbox:hover:before {
+  opacity: 1;
+}
+
+.checkbox:hover svg, .category-checkbox:hover svg {
+  stroke: #2DAAE9;
+}
+
+#user-posts:checked + .checkbox svg, 
+#liked-posts:checked + .checkbox svg, 
+#category-checkbox:checked + .category-checkbox svg {
+  stroke: #2DAAE9;
+}
+
+#user-posts:checked + .checkbox svg path, 
+#liked-posts:checked + .checkbox svg path, 
+#category-checkbox:checked + .category-checkbox svg path {
+  stroke-dashoffset: 60;
+  transition: all 0.3s linear;
+}
+
+#user-posts:checked + .checkbox svg polyline, 
+#liked-posts:checked + .checkbox svg polyline, 
+#category-checkbox:checked + .category-checkbox svg polyline {
+  stroke-dashoffset: 42;
+  transition: all 0.2s linear;
+  transition-delay: 0.15s;
 }
 
 .post-title-error {
