@@ -476,7 +476,7 @@ div.hidden {
   /*  */
   display: grid;
   place-items: center;
-  height: 80vh;
+  height: 100vh;
   /*  */
   /* position: relative;
   height: 80vh; */
