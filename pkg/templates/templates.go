@@ -330,7 +330,11 @@ func PostTemplateHandler(w http.ResponseWriter, r *http.Request) {
 func ErrorTemplateHandler(w http.ResponseWriter, r *http.Request, data Types.ErrorPageProps) {
 	w.WriteHeader(data.Error.Code)
 
-	err := GetTemplate().ExecuteTemplate(w, "error.html", data)
+	dataMap := map[string]interface{}{
+		"Error": data.Error,
+	}
+
+	err := GetTemplate().ExecuteTemplate(w, "error.html", MergeBaseData(w, r, dataMap))
 	if err != nil {
 		log.Println("Failed to execute template: error.html")
 		log.Println(err)
