@@ -73,6 +73,12 @@ nav:hover::after {
   padding-left: 20px;
 }
 
+main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
 /* LOGO STYLES */
 .logo img {
   margin-left: 20px;
@@ -461,27 +467,15 @@ div.hidden {
 }
 
 .card-container {
-  /* left: 50%;
-  margin: 0;
-  position: absolute;
+  left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); */
-  /*  */
-  /* display: flex;
+  transform: translate(-50%, -50%);
+  display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 76px;
-  min-height: calc(100vh - 76px);
-  height: 80vh; */
-  /*  */
-  display: grid;
-  place-items: center;
-  height: 100vh;
-  /*  */
-  /* position: relative;
-  height: 80vh; */
-  /*  */
-
+  position: absolute;
+  flex-direction: column;
+  margin-top: 50px;
 }
 
 .card {
