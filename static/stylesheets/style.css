@@ -1069,6 +1069,30 @@ div.hidden {
   border-radius: 6px;
 }
 
+.container-all-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  background-color: #2e3037;
+  margin-top: 30px;
+  padding-top: 10px;
+}
+
+.all-posts {
+  padding: 10px; 
+  display: flex; 
+  gap: 1rem; 
+  flex-direction: column;
+}
+
+.all-posts-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #1b1d21;
+  border-bottom: 1px solid #474c54;
+}
+
 .dropdown-select {
   position: relative;
   display: inline-block;
@@ -1124,7 +1148,7 @@ div.hidden {
   border: 1px solid red;
 }
 
-.checkbox, .category-checkbox {
+.checkbox {
   cursor: pointer;
   position: relative;
   width: 18px;
@@ -1133,7 +1157,7 @@ div.hidden {
   transform: translate3d(0, 0, 0);
 }
 
-.checkbox:before, .category-checkbox:before {
+.checkbox:before {
   content: "";
   position: absolute;
   top: -15px;
@@ -1146,7 +1170,7 @@ div.hidden {
   transition: opacity 0.2s ease;
 }
 
-.checkbox svg, .category-checkbox svg {
+.checkbox svg {
   position: relative;
   z-index: 1;
   fill: none;
@@ -1158,40 +1182,37 @@ div.hidden {
   transition: all 0.2s ease;
 }
 
-.checkbox svg path, .category-checkbox svg path {
+.checkbox svg path {
   stroke-dasharray: 60;
   stroke-dashoffset: 0;
 }
 
-.checkbox svg polyline, .category-checkbox svg polyline {
+.checkbox svg polyline {
   stroke-dasharray: 22;
   stroke-dashoffset: 66;
 }
 
-.checkbox:hover:before, .category-checkbox:hover:before {
+.checkbox:hover:before {
   opacity: 1;
 }
 
-.checkbox:hover svg, .category-checkbox:hover svg {
+.checkbox:hover svg {
   stroke: #2DAAE9;
 }
 
 #user-posts:checked + .checkbox svg, 
-#liked-posts:checked + .checkbox svg, 
-#category-checkbox:checked + .category-checkbox svg {
+#liked-posts:checked + .checkbox svg {
   stroke: #2DAAE9;
 }
 
 #user-posts:checked + .checkbox svg path, 
-#liked-posts:checked + .checkbox svg path, 
-#category-checkbox:checked + .category-checkbox svg path {
+#liked-posts:checked + .checkbox svg path {
   stroke-dashoffset: 60;
   transition: all 0.3s linear;
 }
 
 #user-posts:checked + .checkbox svg polyline, 
-#liked-posts:checked + .checkbox svg polyline, 
-#category-checkbox:checked + .category-checkbox svg polyline {
+#liked-posts:checked + .checkbox svg polyline {
   stroke-dashoffset: 42;
   transition: all 0.2s linear;
   transition-delay: 0.15s;
@@ -1298,9 +1319,29 @@ div.hidden {
     transition: color 0.3s ease-in-out;
   }
 
+  .all-posts-header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .dropdown-toggle {
+    min-width: 100%;
+  }
+
+  .dropdown-menu {
+    min-width: 100%;
+  }
+  
+  .post-filter {
+    display: flex;
+    flex-direction: row;
+  }
+
   .footer-content {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
 
   #check:checked ~ .menu {
@@ -1346,6 +1387,18 @@ div.hidden {
   .collapsible-menu.open-collapsible-menu {
     display: none;
   }
+
+  /* .all-posts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .post-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  } */
 }
 
 /* ANIMATION STYLES */

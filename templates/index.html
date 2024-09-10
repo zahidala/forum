@@ -93,24 +93,9 @@
 
 <div style="flex: 1; border: 0.5px solid #474c54; margin-top: 30px"></div>
 
-<div
-  style="
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    background-color: #2e3037;
-    margin-top: 30px;
-    padding-top: 10px;
-  ">
-  <div style="padding: 10px; display: flex; gap: 1rem; flex-direction: column">
-    <div style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 10px 20px;
-          background-color: #1b1d21;
-          border-bottom: 1px solid #474c54;
-        ">
+<div class="container-all-posts">
+  <div class="all-posts">
+    <div class="all-posts-header">
       <span style="color: #a2a3ae; font-size: 1.5rem; font-weight: bold">All
         Posts</span>
 
@@ -128,7 +113,7 @@
               style="color: white; margin-left: 5px"></i>
           </button>
           <form id="filter-form" action="/" method="GET">
-            <div id="category-checkbox" class="dropdown-menu">
+            <div class="dropdown-menu">
               {{range .Categories}}
               <label for="{{ .Name }}">
                 <svg width="18px" height="18px" viewBox="0 0 18 18"></svg>
