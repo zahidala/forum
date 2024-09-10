@@ -256,7 +256,7 @@ func NewPostByCategoryTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		"Title":    "New Post - " + category.Name,
 	}
 
-	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", data)
+	err := GetTemplate().ExecuteTemplate(w, "new-post-by-category.html", MergeBaseData(w, r, data))
 	if err != nil {
 		log.Println("Failed to execute template: new-post-by-category.html")
 		log.Println(err)
