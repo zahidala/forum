@@ -1261,6 +1261,10 @@ div.hidden {
     margin-right: 30px;
   }
 
+  .card-container {
+    display: flex;
+  }
+
   .dropdown {
     display: none;
   }
