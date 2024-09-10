@@ -252,9 +252,6 @@ nav:hover::after {
   overflow: hidden;
   transition-duration: .5s;
   background-color: transparent;
-}
-
-.login-btn {
   box-shadow: 5px 5px 10px rgba(45, 170, 233, 0.5);
 }
 
@@ -399,6 +396,7 @@ nav:hover::after {
 .btn-primary {
   position: relative;
   padding: 8px 15px;
+  color: white;
   border: 2px ridge #2DAAE9;
   outline: none;
   background-color: transparent;
@@ -490,7 +488,8 @@ div.hidden {
   width: 300px;
   padding: 30px;
   border: 1px solid #424242;
-  background-color: #1f2125;
+  background-color: #1b1d21;
+  box-shadow: 8px 8px 20px rgba(45, 170, 233, 0.5);
   border-radius: 5px;
   display: flex;
   flex-direction: column;
