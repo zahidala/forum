@@ -170,7 +170,11 @@ func GetFilteredPosts(w http.ResponseWriter, r *http.Request) (string, Filters) 
 
 		if likedPosts == "true" {
 			if len(query) > 10 {
-				query += "AND "
+				if userPosts == "true" {
+					query += "OR "
+				} else {
+					query += "AND "
+				}
 			}
 			query += fmt.Sprintf("postID IN (SELECT postId FROM PostLikes pl WHERE userId = %d AND isLike = 1)\n", userID)
 			filters.LikedPosts = true
