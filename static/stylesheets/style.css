@@ -1088,6 +1088,7 @@ div.hidden {
 .all-posts-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
   background-color: #1b1d21;
   border-bottom: 1px solid #474c54;
@@ -1323,7 +1324,6 @@ div.hidden {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: flex-start;
   }
 
   .dropdown-toggle {
