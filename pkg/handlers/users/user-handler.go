@@ -204,6 +204,15 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Look for existing sessions and delete them
+	sessionDeleteQuery := "DELETE FROM sessions WHERE userId = ?"
+
+	sessionDeleteExecErr := db.PrepareAndExecute(sessionDeleteQuery, userId)
+	if sessionDeleteExecErr != nil {
+		http.Error(w, "Error deleting session", http.StatusInternalServerError)
+		return
+	}
+
 	sessionId := utils.GenerateSessionID()
 
 	createdAt := time.Now()

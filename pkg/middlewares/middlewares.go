@@ -63,6 +63,39 @@ func AuthRequired(next http.Handler) http.Handler {
 			return
 		}
 
+		// check if user has more than one session
+		// if so, delete all sessions except the current one
+
+		moreThanOneSessionQuery := "SELECT userId FROM sessions WHERE id = ?"
+		var userId int
+
+		moreThanOneSessionStmt, moreThanOneSessionError := db.GetDB().Prepare(moreThanOneSessionQuery)
+		if moreThanOneSessionError != nil {
+			log.Println(moreThanOneSessionError)
+			http.Error(w, "Error preparing query", http.StatusInternalServerError)
+			return
+		}
+		defer moreThanOneSessionStmt.Close()
+
+		moreThanOneSessionError = moreThanOneSessionStmt.QueryRow(cookie.Value).Scan(&userId)
+
+		if moreThanOneSessionError != nil {
+			log.Println(moreThanOneSessionError)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+
+		// delete all sessions except the current one
+
+		deleteAllSessionsQuery := "DELETE FROM sessions WHERE userId = ? AND id != ?"
+
+		deleteAllSessionsExecErr := db.PrepareAndExecute(deleteAllSessionsQuery, userId, cookie.Value)
+		if deleteAllSessionsExecErr != nil {
+			log.Println(deleteAllSessionsExecErr)
+			http.Error(w, "Error deleting sessions", http.StatusInternalServerError)
+			return
+		}
+
 		next.ServeHTTP(w, r)
 	})
 }
