@@ -829,8 +829,7 @@ func GetAllPostsHandler(w http.ResponseWriter, r *http.Request) ([]PostWithFilte
 
 	filterQuery, filters := utils.GetFilteredPosts(w, r)
 	query += filterQuery
-
-	// fmt.Println("\nQuery:", query)
+	// query += "AS subquery\nORDER BY createdAt DESC"
 
 	stmt, err := db.GetDB().Prepare(query)
 	if err != nil {

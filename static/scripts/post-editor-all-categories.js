@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const userId = document.getElementById("userId").value;
       const images = imageUrls.join(",");
 
-      if (!selectedOptions.length && !postTitle.value && !content) {
+      if (!selectedOptions.length && postTitle.value.trim() === "" && content.textContent.trim() === "") {
         dropdownToggle.classList.add("dropdown-error");
         postTitle.classList.add("post-title-error");
         editorContainer.classList.add("editor-error");
@@ -220,12 +220,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      if (!postTitle.value) {
+      if (postTitle.value.trim() === "") {
         postTitle.classList.add("post-title-error");
         return;
       }
 
-      if (!content) {
+      if (content.textContent.trim() === "") {
         editorContainer.classList.add("editor-error");
         return;
       }
