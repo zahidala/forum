@@ -467,15 +467,10 @@ div.hidden {
 }
 
 .card-container {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
   flex-direction: column;
-  margin-top: 50px;
 }
 
 .card {
@@ -1254,12 +1249,7 @@ div.hidden {
     margin-left: 30px;
     margin-right: 30px;
   }
-
-  .card-container {
-    display: flex;
-    justify-content: center;
-  }
-
+  
   .dropdown {
     display: none;
   }
