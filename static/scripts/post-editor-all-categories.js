@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const userId = document.getElementById("userId").value;
       const images = imageUrls.join(",");
 
-      if (!selectedOptions.length && postTitle.value.trim() === "" && content.textContent.trim() === "") {
+      if (!selectedOptions.length && postTitle.value.trim() === "" && !content) {
         dropdownToggle.classList.add("dropdown-error");
         postTitle.classList.add("post-title-error");
         editorContainer.classList.add("editor-error");
@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      if (content.textContent.trim() === "") {
+      if (!content) {
         editorContainer.classList.add("editor-error");
         return;
       }
